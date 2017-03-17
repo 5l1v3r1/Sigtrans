@@ -9,7 +9,7 @@ export default class CustomSubmit extends React.Component{
         return (
             <div className="pure-control-group">
                 <label></label>
-                <Button type="submit" >{this.props.label}</Button>
+                <Button type="submit">{this.props.label}</Button>
             </div>
         );
     }

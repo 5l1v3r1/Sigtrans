@@ -7,17 +7,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import {Router,Route,browserHistory,IndexRoute} from 'react-router';
+import EventBox from './Event';
 import Home from './Home';
-import AutorBox from './Autor';
-import LivroBox from './Livro';
 
-ReactDOM.render(
-    (<Router history={browserHistory}>
+ReactDOM.render((
+    <Router history={browserHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={Home}/>
-            <Route path="/autor" component={AutorBox}/>
-            <Route path="/livro" component={LivroBox}/>
+            <Route path="/ocorrencias" component={EventBox}>
+                <Route path="/ocorrencias/abertas" component={EventBox}/>
+                <Route path="/ocorrencias/fechadas" component={EventBox}/>
+            </Route>
+            <Route path="/livro"/>
         </Route>
-    </Router>),
-    document.getElementById('root')
+    </Router>
+    ), document.getElementById('root')
 );

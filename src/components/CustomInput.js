@@ -14,7 +14,7 @@ export default class CustomInput extends Component{
 				<FormGroup controlId={this.props.id}>
 					<ControlLabel>{this.props.label}</ControlLabel>
 					<FormControl {...this.props}/>
-					<span className="error">{this.state.msgErro}</span>
+					{/*<span className="error">{this.state.msgErro}</span>*/}
 				</FormGroup>
 		);
 	}
