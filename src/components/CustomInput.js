@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PubSub from 'pubsub-js';
+import {FormControl, FormGroup, ControlLabel} from 'react-bootstrap';
 
-export default class InputCustomizado extends Component{
+export default class CustomInput extends Component{
 
 	constructor(){
 		super();
@@ -10,11 +11,11 @@ export default class InputCustomizado extends Component{
 
 	render() {
 		return (
-			<div className="pure-control-group">
-				<label htmlFor={this.props.id}>{this.props.label}</label>
-				<input {...this.props}/>
-				<span className="error">{this.state.msgErro}</span>
-			</div>
+				<FormGroup controlId={this.props.id}>
+					<ControlLabel>{this.props.label}</ControlLabel>
+					<FormControl {...this.props}/>
+					<span className="error">{this.state.msgErro}</span>
+				</FormGroup>
 		);
 	}
 
