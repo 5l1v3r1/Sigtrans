@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import CustomSubmit from './components/CustomSubmit'
 import CustomInput from './components/CustomInput'
-import PubSub from 'pubsub-js';
-import ErrHandler from  './ErrHandler';
+// import PubSub from 'pubsub-js';
+// import ErrHandler from  './ErrHandler';
 import {Form, Grid, Row, Col, PageHeader} from 'react-bootstrap';
 
 class FormOcorrencia extends Component{
@@ -11,15 +11,15 @@ class FormOcorrencia extends Component{
 	constructor() {
 		super();
 		this.state = {
-						date:"",					street:"",						number:"",					cross:"",	
+						date:'',					street:'',						number:'',					cross:'',
 						acidentType:'',				pavementType:'',				surface:'',					accidentClassification:'',
 						roadState:'',				roadProfile:'',					roadCondition:'',			climaticCondition:'',
-						verticalSinalization:'', 	horizontalSinalization:'',		direction:'',				lt:"",
-						zone:'', 					cause:'',						additionalInfo:'',			lng:"",
+						verticalSinalization:'', 	horizontalSinalization:'',		direction:'',				lt:'',
+						zone:'', 					cause:'',						additionalInfo:'',			lng:'',
 						carPlate:'',				carStatus:'', 					carBrand:'', 				carModel:'',
 						damageLevel:'',				licenseLevel:'', 				firstLicense:'', 			expireDate:'',
 						involvedName:'',			involvedAge:'',					involvedSex:'',				involvedStreet:'',
-						involvedNumber:'',			involvedCorner:'',				involvedNeighborhood:'',	middleName:"",
+						involvedNumber:'',			involvedCorner:'',				involvedNeighborhood:'',	middleName:'',
 						involvedMom:'',				involvedReference:'',			involvedSituation:'',		involvedVehicleType:'',
 						involvedVehiclePosition:'',	involvedSecurityCondition:'',	involvedInjuryLevel:'',		involvedEvolution:''
 		};
@@ -28,8 +28,9 @@ class FormOcorrencia extends Component{
 
 	handleEventSubmit(e){
 		e.preventDefault();
+		/* Alterar
 		$.ajax({
-			url:'http://cdc-react.herokuapp.com/api/autores',
+			url:'',
 			contentType:'application/json',
 			dataType:'json',
 			type:'post',
@@ -46,7 +47,7 @@ class FormOcorrencia extends Component{
 			beforeSend: function(){
 				PubSub.publish("limpa-erros",{});
 			}
-		});
+		});*/
 	}
 
 	saveAlteration(inputName, e){  
@@ -54,14 +55,18 @@ class FormOcorrencia extends Component{
 	}
 
 	render() {
+        var acidentTypes = this.props.acidentTypes.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
 			return (
 				<Grid>
 					<Row>
 						<Form onSubmit={this.handleEventSubmit} method="post">
-							<Col xs={12} md={12} sm={12}>
-								{/*<pre>
+								<pre>
 									{JSON.stringify(this.state,undefined,4)}
-								</pre>*/}
+								</pre>
+							<Col xs={12} md={12} sm={12}>
+
 
 								<Row>
 									<Col xs={1} xsOffset={11}>
@@ -110,12 +115,16 @@ class FormOcorrencia extends Component{
 									<Row>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="acidentType">Tipo de Acidente</label>
-											<select name="acidentType" id="acidentType" className="form-control control-label" >
+											<select value={this.state.acidentType} name="acidentType" id="acidentType" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'acidentType')}>
+												<option value="">Selecione</option>
+                                                {acidentTypes}
+											</select>
+											{/*<select name="acidentType" id="acidentType" className="form-control control-label" >
 												<option value="">Escolha uma opção</option>
 												<option value="opt1">Opção 1</option>
 												<option value="opt2">Opção 2</option>
 												<option value="optn">...</option>
-											</select>
+											</select>*/}
 										</Col>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="pavementType">Tipo de Pavimento</label>
@@ -301,7 +310,7 @@ class FormOcorrencia extends Component{
 											<CustomInput type="text" id="involvedName" required="required" onChange={this.saveAlteration.bind(this,'involvedName')} label="Nome"/>											
 										</ Col>
 										<Col xs={4}>
-											<CustomInput type="text" id="involvedAge" required="required" onChange={this.saveAlteration.bind(this,'involvedAge')} label="Idade"/>
+											<CustomInput type="number" id="involvedAge" required="required" onChange={this.saveAlteration.bind(this,'involvedAge')} label="Idade"/>
 										</ Col>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="involvedSex">Sexo</label>
@@ -417,33 +426,35 @@ class FormOcorrencia extends Component{
 
 export default class EventBox extends Component {
 
-	constructor() {
-		super();
-		this.state = {lista : []};
+	constructor(props) {
+		super(props);
+		this.state = {acidentTypes : []};
 	}
+
 
 	componentDidMount(){
-		$.ajax({
-				url:"http://cdc-react.herokuapp.com/api/autores",
-				dataType: 'json',
-				success:function(resposta){
-					this.setState({lista:resposta});
-				}.bind(this)
-			}
-		);
 
-		PubSub.subscribe('update-events-list',function(topico,novaLista){
+        $.ajax({
+            url:'http://sigtrans.unioeste.br:39000/AccidentType',
+            dataType: 'json',
+            type:'get',
+            success: function(data) {
+            	console.log(JSON.stringify(data));
+                this.setState({acidentTypes: data});
+            }.bind(this)
+        });
+
+		/*PubSub.subscribe('update-events-list',function(topico,novaLista){
 			this.setState({lista:novaLista});
-		}.bind(this));
+		}.bind(this));*/
 	}
-
 
 	render(){
 		return (
 			<div>
 				<PageHeader className="centered">Cadastro de Ocorrência</PageHeader>
 				<div className="content" id="content">
-					<FormOcorrencia/>
+					<FormOcorrencia acidentTypes={this.state.acidentTypes}/>
 				</div>
 
 			</div>
