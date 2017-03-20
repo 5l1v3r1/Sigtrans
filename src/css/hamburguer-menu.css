@@ -18,7 +18,7 @@
 /* Navigation Menu - List items */
 .nav-item {
 	/* non-critical appearance styles */
-	width: 200px;
+	width: 230px;
 	border-top: 1px solid #111;
 	border-bottom: 1px solid #000;
 }
@@ -67,16 +67,15 @@
 label[for="nav-trigger"] {
 	/* critical positioning styles */
 	position: fixed;
-	left: 15px;
-	top: 15px;
+	left: 15px; top: 15px;
 	z-index: 2;
 	/* non-critical apperance styles */
-	width: 30px !important;
-	height: 52.5px !important;
+
+	height: 25px;
+	width: 25px;
 	cursor: pointer;
-	padding: 15px 15px 0;
-	/*background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>");*/
-	/*background-size: contain;*/
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>");
+	background-size: contain;
 }
 
 /* Make the Magic Happen */
@@ -125,6 +124,9 @@ code {
 	border-right: 5px solid #1ABB9C;
 }
 
+.metismenu-link{
+	font-size:12px;
+}
 
 /* Micro reset */
 *,*:before,*:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0;}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
+// import $ from 'jquery';
 import CustomSubmit from './components/CustomSubmit'
 import CustomInput from './components/CustomInput'
 // import PubSub from 'pubsub-js';
@@ -12,7 +12,7 @@ class FormOcorrencia extends Component{
 		super();
 		this.state = {
 						date:'',					street:'',						number:'',					cross:'',
-						acidentType:'',				pavementType:'',				surface:'',					accidentClassification:'',
+						accidentType:'',			pavementType:'',				surface:'',					accidentClassification:'',
 						roadState:'',				roadProfile:'',					roadCondition:'',			climaticCondition:'',
 						verticalSinalization:'', 	horizontalSinalization:'',		direction:'',				lt:'',
 						zone:'', 					cause:'',						additionalInfo:'',			lng:'',
@@ -55,7 +55,7 @@ class FormOcorrencia extends Component{
 	}
 
 	render() {
-        var acidentTypes = this.props.acidentTypes.map(function(type){
+        var accidentTypes = this.props.accidentTypes.map(function(type){
             return <option key={type.id} value={type.id}>{type.classification}</option>;
         });
 			return (
@@ -85,7 +85,7 @@ class FormOcorrencia extends Component{
 											<CustomInput type="text" id="street" required="required" onChange={this.saveAlteration.bind(this,'street')} label="Rua"/>
 										</Col>
 										<Col xs={4}>
-											<CustomInput type="number" id="number" required="required" onChange={this.saveAlteration.bind(this,'number')} label="Numero"/>
+											<CustomInput type="text" id="number" required="required" onChange={this.saveAlteration.bind(this,'number')} label="Numero"/>
 										</Col>
 									</Row>
 
@@ -114,10 +114,10 @@ class FormOcorrencia extends Component{
 									<h4>Dados estatísticos</h4>
 									<Row>
 										<Col xs={4}>
-											<label className="control-label" htmlFor="acidentType">Tipo de Acidente</label>
-											<select value={this.state.acidentType} name="acidentType" id="acidentType" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'acidentType')}>
+											<label className="control-label" htmlFor="accidentType">Tipo de Acidente</label>
+											<select value={this.state.accidentType} name="accidentType" id="accidentType" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'accidentType')}>
 												<option value="">Selecione</option>
-                                                {acidentTypes}
+                                                {accidentTypes}
 											</select>
 											{/*<select name="acidentType" id="acidentType" className="form-control control-label" >
 												<option value="">Escolha uma opção</option>
@@ -327,7 +327,7 @@ class FormOcorrencia extends Component{
 											<CustomInput type="text" id="involvedStreet" required="required" onChange={this.saveAlteration.bind(this,'involvedStreet')} label="Rua"/>
 										</Col>
 										<Col xs={4}>
-											<CustomInput type="number" id="involvedNumber" required="required" onChange={this.saveAlteration.bind(this,'involvedNumber')} label="Numero"/>
+											<CustomInput type="text" id="involvedNumber" required="required" onChange={this.saveAlteration.bind(this,'involvedNumber')} label="Numero"/>
 										</Col>
 										<Col xs={4}>
 											<CustomInput type="text" id="involvedCorner" required="required" onChange={this.saveAlteration.bind(this,'involvedCorner')} label="Esquina"/>
@@ -428,21 +428,23 @@ export default class EventBox extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {acidentTypes : []};
+		this.state = {accidentTypes : [{"id":1,"classification":"Queda de Bicicleta"},{"id":2,"classification":"Colisao"},{"id":3,"classification":"Acidente Complexo"},{"id":4,"classification":"Choque"},{"id":5,"classification":"Queda de Motocicleta"},{"id":6,"classification":"Engavetamento"},{"id":7,"classification":"Capotamento"},{"id":8,"classification":"Atropelamento"},{"id":9,"classification":"Nao Apurado"}]};
 	}
 
 
 	componentDidMount(){
 
-        $.ajax({
-            url:'http://sigtrans.unioeste.br:39000/AccidentType',
-            dataType: 'json',
-            type:'get',
+		/*$.ajax({
+            url:'http://sigtrans.unioeste.br:39000/AccidentType?callback=?',
+            dataType: 'jsonp',
+            jsonp: 'jsonp_callback',
+            type:'GET',
+            crossDomain: true,
             success: function(data) {
-            	console.log(JSON.stringify(data));
-                this.setState({acidentTypes: data});
+            	console.log(data);
+                this.setState({accidentTypes: data});
             }.bind(this)
-        });
+        });*/
 
 		/*PubSub.subscribe('update-events-list',function(topico,novaLista){
 			this.setState({lista:novaLista});
@@ -454,7 +456,7 @@ export default class EventBox extends Component {
 			<div>
 				<PageHeader className="centered">Cadastro de Ocorrência</PageHeader>
 				<div className="content" id="content">
-					<FormOcorrencia acidentTypes={this.state.acidentTypes}/>
+					<FormOcorrencia accidentTypes={this.state.accidentTypes}/>
 				</div>
 
 			</div>
