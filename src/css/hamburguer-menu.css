@@ -16,15 +16,15 @@
 }
 
 /* Navigation Menu - List items */
-.nav-item {
-	/* non-critical appearance styles */
+/*.nav-item {
+	 non-critical appearance styles 
 	width: 230px;
 	border-top: 1px solid #111;
 	border-bottom: 1px solid #000;
-}
+}*/
 
-.nav-item a {
-	/* non-critical appearance styles */
+/*.nav-item a {
+	non-critical appearance styles 
 	display: block;
 	padding: 1em;
 	background: linear-gradient(135deg, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);
@@ -32,19 +32,19 @@
 	font-size: 1.2em;
 	text-decoration: none;
 	transition: color 0.2s, background 0.5s;
-}
+}*/
 
-.nav-item a:hover {
+/*.nav-item a:hover {
 	color: #c74438;
 	background: linear-gradient(135deg, rgba(0,0,0,0) 0%,rgba(75,20,20,0.65) 100%);
-}
+}*/
 
 /* Site Wrapper - Everything that isn't navigation */
 .site-wrap {
 	/* Critical position and size styles */
 	min-height: 100vh;
 	min-width: 100%;
-	background-color: white; /* Needs a background or else the nav will show through */
+	background-color: #f7f7f7; /* Needs a background or else the nav will show through */
 	position: relative;
 	top: 0;
 	bottom: 100%;
@@ -71,11 +71,11 @@ label[for="nav-trigger"] {
 	z-index: 2;
 	/* non-critical apperance styles */
 
-	height: 25px;
+/*	height: 25px;
 	width: 25px;
 	cursor: pointer;
 	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>");
-	background-size: contain;
+	background-size: contain;*/
 }
 
 /* Make the Magic Happen */
@@ -131,3 +131,17 @@ code {
 /* Micro reset */
 *,*:before,*:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0;}
 html, body { height: 100%; width: 100%; font-family: Helvetica, Arial, sans-serif; }
+
+/* Rules for sizing the icon. */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
