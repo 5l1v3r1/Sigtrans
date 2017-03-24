@@ -1,78 +1,75 @@
 import React, { Component } from 'react';
-// import $ from 'jquery';
 import CustomSubmit from './components/CustomSubmit'
 import CustomInput from './components/CustomInput'
+import {Form, Grid, Row, Col, PageHeader} from 'react-bootstrap';
+import ReactTable from 'react-table';
+import Button from 'react-toolbox/lib/button/Button';
+import {Modal} from 'react-bootstrap';
+//import $ from 'jquery';
 // import PubSub from 'pubsub-js';
 // import ErrHandler from  './ErrHandler';
-import {Form, Grid, Row, Col, PageHeader} from 'react-bootstrap';
 
-class FormOcorrencia extends Component{
-	
-	constructor() {
-		super();
-		this.state = {
-						date:'',					street:'',						number:'',					cross:'',
-						accidentType:'',			pavementType:'',				surface:'',					accidentClassification:'',
-						roadState:'',				roadProfile:'',					roadCondition:'',			climaticCondition:'',
-						verticalSinalization:'', 	horizontalSinalization:'',		direction:'',				lt:'',
-						zone:'', 					cause:'',						additionalInfo:'',			lng:'',
-						carPlate:'',				carStatus:'', 					carBrand:'', 				carModel:'',
-						damageLevel:'',				licenseLevel:'', 				firstLicense:'', 			expireDate:'',
-						involvedName:'',			involvedAge:'',					involvedSex:'',				involvedStreet:'',
-						involvedNumber:'',			involvedCorner:'',				involvedNeighborhood:'',	middleName:'',
-						involvedMom:'',				involvedReference:'',			involvedSituation:'',		involvedVehicleType:'',
-						involvedVehiclePosition:'',	involvedSecurityCondition:'',	involvedInjuryLevel:'',		involvedEvolution:''
-		};
-		this.handleEventSubmit = this.handleEventSubmit.bind(this);
-	}
+class EventForm extends Component{
 
-	handleEventSubmit(e){
-		e.preventDefault();
+    constructor() {
+        super();
+        this.state = {
+            date:'',					street:'',						number:'',					cross:'',
+            accidentType:'',			pavementType:'',				surface:'',					accidentClassification:'',
+            roadState:'',				roadProfile:'',					roadCondition:'',			climaticCondition:'',
+            verticalSinalization:'', 	horizontalSinalization:'',		direction:'',				lat:'',
+            zone:'', 					cause:'',						additionalInfo:'',			lng:'',
+            carPlate:'',				carStatus:'', 					carBrand:'', 				carModel:'',
+            damageLevel:'',				licenseLevel:'', 				firstLicense:'', 			expireDate:'',
+            involvedName:'',			involvedAge:'',					involvedSex:'',				involvedStreet:'',
+            involvedNumber:'',			involvedCorner:'',				involvedNeighborhood:'',	middleName:'',
+            involvedMom:'',				involvedReference:'',			involvedSituation:'',		involvedVehicleType:'',
+            involvedVehiclePosition:'',	involvedSecurityCondition:'',	involvedInjuryLevel:'',		involvedEvolution:''
+        };
+        this.handleEventSubmit = this.handleEventSubmit.bind(this);
+    }
+
+    handleEventSubmit(e){
+        e.preventDefault();
 		/* Alterar
-		$.ajax({
-			url:'',
-			contentType:'application/json',
-			dataType:'json',
-			type:'post',
-			data: JSON.stringify({nome:this.state.nome,email:this.state.email,senha:this.state.senha}),
-			success: function(novaListagem){
-				PubSub.publish('atualiza-lista-autores',novaListagem);
-				this.setState({nome:'',email:'',senha:''});
-			}.bind(this),
-			error: function(resposta){
-				if(resposta.status === 400) {
-					new ErrHandler().publicaErros(resposta.responseJSON);
-				}
-			},
-			beforeSend: function(){
-				PubSub.publish("limpa-erros",{});
-			}
-		});*/
-	}
+		 $.ajax({
+		 url:'',
+		 contentType:'application/json',
+		 dataType:'json',
+		 type:'post',
+		 data: JSON.stringify({nome:this.state.nome,email:this.state.email,senha:this.state.senha}),
+		 success: function(novaListagem){
+		 PubSub.publish('atualiza-lista-autores',novaListagem);
+		 this.setState({nome:'',email:'',senha:''});
+		 }.bind(this),
+		 error: function(resposta){
+		 if(resposta.status === 400) {
+		 new ErrHandler().publicaErros(resposta.responseJSON);
+		 }
+		 },
+		 beforeSend: function(){
+		 PubSub.publish("limpa-erros",{});
+		 }
+		 });*/
+    }
 
-	saveAlteration(inputName, e){  
-		this.setState({[inputName]:e.target.value});
-	}
+    saveAlteration(inputName, e){
+        this.setState({[inputName]:e.target.value});
+    }
 
-	render() {
+    render() {
         var accidentTypes = this.props.accidentTypes.map(function(type){
             return <option key={type.id} value={type.id}>{type.classification}</option>;
         });
-			return (
+        return (
+			<div className="clearfix">
 				<Grid>
-					<Row>
+					<Row className="clearfix">
 						<Form onSubmit={this.handleEventSubmit} method="post">
-								<pre>
-									{JSON.stringify(this.state,undefined,4)}
-								</pre>
+							{/*<pre>
+							 {JSON.stringify(this.state,undefined,4)}
+							 </pre>*/}
 							<Col xs={12} md={12} sm={12}>
-
-
-								<Row>
-									<Col xs={1} xsOffset={11}>
-										<CustomSubmit label="Gravar"/>
-									</Col>
-								</Row>
 
 								{/*Geral*/}
 								<Row className="form-group">
@@ -94,7 +91,7 @@ class FormOcorrencia extends Component{
 											<CustomInput type="text" id="cross" required="required" onChange={this.saveAlteration.bind(this,'cross')} label="Cruzamento"/>
 										</Col>
 										<Col xs={4}>
-											<CustomInput type="number" id="lt" required="required" onChange={this.saveAlteration.bind(this,'lt')} label="Latitude"/>
+											<CustomInput type="number" id="lat" required="required" onChange={this.saveAlteration.bind(this,'lat')} label="Latitude"/>
 										</Col>
 										<Col xs={4}>
 											<CustomInput type="number" id="lng" required="required" onChange={this.saveAlteration.bind(this,'lng')} label="Longitude"/>
@@ -117,14 +114,14 @@ class FormOcorrencia extends Component{
 											<label className="control-label" htmlFor="accidentType">Tipo de Acidente</label>
 											<select value={this.state.accidentType} name="accidentType" id="accidentType" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'accidentType')}>
 												<option value="">Selecione</option>
-                                                {accidentTypes}
+												{accidentTypes}
 											</select>
 											{/*<select name="acidentType" id="acidentType" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
-											</select>*/}
+											 <option value="">Escolha uma opção</option>
+											 <option value="opt1">Opção 1</option>
+											 <option value="opt2">Opção 2</option>
+											 <option value="optn">...</option>
+											 </select>*/}
 										</Col>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="pavementType">Tipo de Pavimento</label>
@@ -307,7 +304,7 @@ class FormOcorrencia extends Component{
 									<h4>Envolvidos</h4>
 									<Row>
 										<Col xs={4}>
-											<CustomInput type="text" id="involvedName" required="required" onChange={this.saveAlteration.bind(this,'involvedName')} label="Nome"/>											
+											<CustomInput type="text" id="involvedName" required="required" onChange={this.saveAlteration.bind(this,'involvedName')} label="Nome"/>
 										</ Col>
 										<Col xs={4}>
 											<CustomInput type="number" id="involvedAge" required="required" onChange={this.saveAlteration.bind(this,'involvedAge')} label="Idade"/>
@@ -415,51 +412,175 @@ class FormOcorrencia extends Component{
 									</Row>
 								</Row>
 
+								<Row>
+
+									<Col xs={1} xsOffset={11}>
+										<CustomSubmit label="Gravar"/>
+									</Col>
+								</Row>
 							</Col>
-							
+
 						</Form>
 					</Row>
 				</Grid>
-			);
-		}
+			</div>
+        );
+    }
+
+}
+
+export class EventTable extends Component{
+    constructor(props){
+    	super(props);
+    	this.state={
+            showModal: false,
+            accidentTypes : [{"id":1,"classification":"Queda de Bicicleta"},{"id":2,"classification":"Colisao"},{"id":3,"classification":"Acidente Complexo"},{"id":4,"classification":"Choque"},{"id":5,"classification":"Queda de Motocicleta"},{"id":6,"classification":"Engavetamento"},{"id":7,"classification":"Capotamento"},{"id":8,"classification":"Atropelamento"},{"id":9,"classification":"Nao Apurado"}],
+            selectedEvent:'',
+    	};
+        this.handleToggle = this.handleToggle.bind(this);
+	}
+
+    handleToggle(e){
+        this.setState({showModal: !this.state.showModal, selectedEvent:e.target.id});
+    };
+
+	render(){
+
+        const tableData = [{
+            id:1,
+            data: '1/10/2016',
+            street: 'Castro Alves',
+            number: '2011',
+            cross: 'Av. Brasil',
+            neighborhood: 'Centro',
+            reference:'Proximo á loja MM',
+        },{
+            id:2,
+            data: '1/10/2016',
+            street: 'Joao Alves',
+            number: '2543',
+            cross: 'Av. Brasil',
+            neighborhood: 'Neva',
+            reference:'Proximo á loja MM',
+        },{
+            id:3,
+            data: '1/02/2017',
+            street: 'Castro Alves',
+            number: '2161',
+            cross: 'Av. Brasil',
+            neighborhood: 'Centro',
+            reference:'Proximo á loja MM',
+        }];
+        const columns = [{
+            header: 'Ocorrencias Abertas',
+            headerClassName: 'open-events',
+            columns: [{
+                style:{textAlign:"center"},
+                header: 'ID',
+                accessor: 'id'
+			},{
+                style:{textAlign:"center"},
+                header: 'Data',
+                accessor: 'data'
+            },{
+                style:{textAlign:"center"},
+                header: 'Rua',
+                accessor: 'street'
+            }, {
+                style:{textAlign:"center"},
+                header: 'Numero/KM',
+                accessor: 'number'
+            },{
+                style:{textAlign:"center"},
+                header: 'Cruzamento com',
+                accessor: 'cross'
+            },{
+                style:{textAlign:"center"},
+                header: 'Bairro',
+                accessor: 'neighborhood'
+            },{
+                style:{textAlign:"center"},
+                header: 'Referencia',
+                accessor: 'reference'
+            },{
+            	style:{textAlign:"center"},
+                header: 'Editar',
+				accessor: 'id',
+                render: props => (
+						<Button icon="edit" primary id={props.value} onClick={this.handleToggle}/>
+                )
+            }]
+        }];
+
+        return(
+			<div>
+				<PageHeader>Ocorrências <small>(Abertas)</small> </PageHeader>
+				<div className="content" id="content">
+					<ReactTable
+						data={tableData}
+						columns={columns}
+						defaultPageSize={5}
+					/>
+					<div className="modal-container">
+						<Modal show={this.state.showModal}
+							   onHide={this.handleToggle}
+							   container={this}
+							   dialogClassName="custom-modal"
+							   aria-labelledby="contained-modal-title">
+							<Modal.Header closeButton>
+								<Modal.Title id="contained-modal-title">Ocorrência <small>Id da ocorrência: {this.state.selectedEvent}</small></Modal.Title>
+							</Modal.Header>
+
+							<Modal.Body>
+								<EventForm accidentTypes={this.state.accidentTypes}/>
+							</Modal.Body>
+
+							<Modal.Footer>
+								{/*<Button onClick={this.handleToggle}>Close</Button>*/}
+							</Modal.Footer>
+						</Modal>
+					</div>
+				</div>
+			</div>
+        );
+    }
+
+
 }
 
 export default class EventBox extends Component {
 
-	constructor(props) {
-		super(props);
-		this.state = {accidentTypes : [{"id":1,"classification":"Queda de Bicicleta"},{"id":2,"classification":"Colisao"},{"id":3,"classification":"Acidente Complexo"},{"id":4,"classification":"Choque"},{"id":5,"classification":"Queda de Motocicleta"},{"id":6,"classification":"Engavetamento"},{"id":7,"classification":"Capotamento"},{"id":8,"classification":"Atropelamento"},{"id":9,"classification":"Nao Apurado"}]};
-	}
+    constructor(props) {
+        super(props);
+        this.state = {accidentTypes : [{"id":1,"classification":"Queda de Bicicleta"},{"id":2,"classification":"Colisao"},{"id":3,"classification":"Acidente Complexo"},{"id":4,"classification":"Choque"},{"id":5,"classification":"Queda de Motocicleta"},{"id":6,"classification":"Engavetamento"},{"id":7,"classification":"Capotamento"},{"id":8,"classification":"Atropelamento"},{"id":9,"classification":"Nao Apurado"}]};
+    }
 
-
-	componentDidMount(){
+    componentDidMount(){
 
 		/*$.ajax({
-            url:'http://sigtrans.unioeste.br:39000/AccidentType?callback=?',
-            dataType: 'jsonp',
-            jsonp: 'jsonp_callback',
-            type:'GET',
-            crossDomain: true,
-            success: function(data) {
-            	console.log(data);
-                this.setState({accidentTypes: data});
-            }.bind(this)
-        });*/
+		 url:'http://sigtrans.unioeste.br:39000/AccidentType',
+		 dataType: 'json',
+		 type:'GET',
+		 crossDomain: true,
+		 success: function(data) {
+		 console.log(data);
+		 this.setState({accidentTypes: data});
+		 }.bind(this)
+		 });*/
 
 		/*PubSub.subscribe('update-events-list',function(topico,novaLista){
-			this.setState({lista:novaLista});
-		}.bind(this));*/
-	}
+		 this.setState({lista:novaLista});
+		 }.bind(this));*/
+    }
 
-	render(){
-		return (
+    render(){
+        return (
 			<div>
-				<PageHeader className="centered">Cadastro de Ocorrência</PageHeader>
+				<PageHeader>Criar ocorrência</PageHeader>
 				<div className="content" id="content">
-					<FormOcorrencia accidentTypes={this.state.accidentTypes}/>
+					<EventForm accidentTypes={this.state.accidentTypes}/>
 				</div>
-
 			</div>
-		);
-	}
+        );
+    }
 }
