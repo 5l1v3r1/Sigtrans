@@ -5,7 +5,7 @@ import {Form, Grid, Row, Col, PageHeader} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
 import {Modal} from 'react-bootstrap';
-//import $ from 'jquery';
+// import $ from 'jquery';
 // import PubSub from 'pubsub-js';
 // import ErrHandler from  './ErrHandler';
 
@@ -17,7 +17,7 @@ class EventForm extends Component{
             date:'',					street:'',						number:'',					cross:'',
             accidentType:'',			pavementType:'',				surface:'',					accidentClassification:'',
             roadState:'',				roadProfile:'',					roadCondition:'',			climaticCondition:'',
-            verticalSinalization:'', 	horizontalSinalization:'',		direction:'',				lat:'',
+            verticalSignaling:'', 	horizontalSignaling:'',		direction:'',				lat:'',
             zone:'', 					cause:'',						additionalInfo:'',			lng:'',
             carPlate:'',				carStatus:'', 					carBrand:'', 				carModel:'',
             damageLevel:'',				licenseLevel:'', 				firstLicense:'', 			expireDate:'',
@@ -31,8 +31,8 @@ class EventForm extends Component{
 
     handleEventSubmit(e){
         e.preventDefault();
-		/* Alterar
-		 $.ajax({
+		//TODO Comunicação com a API
+        /* $.ajax({
 		 url:'',
 		 contentType:'application/json',
 		 dataType:'json',
@@ -191,8 +191,8 @@ class EventForm extends Component{
 											</select>
 										</Col>
 										<Col xs={4}>
-											<label className="control-label" htmlFor="verticalSinalization">Sinalização vertical</label>
-											<select name="verticalSinalization" id="verticalSinalization" className="form-control control-label" >
+											<label className="control-label" htmlFor="verticalSignaling">Sinalização vertical</label>
+											<select name="verticalSignaling" id="verticalSignaling" className="form-control control-label" >
 												<option value="">Escolha uma opção</option>
 												<option value="opt1">Opção 1</option>
 												<option value="opt2">Opção 2</option>
@@ -202,8 +202,8 @@ class EventForm extends Component{
 									</Row>
 									<Row>
 										<Col xs={4}>
-											<label className="control-label" htmlFor="horizontalSinalization">Sinalização horizontal</label>
-											<select name="horizontalSinalization" id="horizontalSinalization" className="form-control control-label" >
+											<label className="control-label" htmlFor="horizontalSignaling">Sinalização horizontal</label>
+											<select name="horizontalSignaling" id="horizontalSignaling" className="form-control control-label" >
 												<option value="">Escolha uma opção</option>
 												<option value="opt1">Opção 1</option>
 												<option value="opt2">Opção 2</option>
@@ -436,6 +436,31 @@ export class EventTable extends Component{
             showModal: false,
             accidentTypes : [{"id":1,"classification":"Queda de Bicicleta"},{"id":2,"classification":"Colisao"},{"id":3,"classification":"Acidente Complexo"},{"id":4,"classification":"Choque"},{"id":5,"classification":"Queda de Motocicleta"},{"id":6,"classification":"Engavetamento"},{"id":7,"classification":"Capotamento"},{"id":8,"classification":"Atropelamento"},{"id":9,"classification":"Nao Apurado"}],
             selectedEvent:'',
+			data:[{
+                id:1,
+                data: '1/10/2016',
+                street: 'Castro Alves',
+                number: '2011',
+                cross: 'Av. Brasil',
+                neighborhood: 'Centro',
+                reference:'Proximo á loja MM',
+            },{
+                id:2,
+                data: '1/10/2016',
+                street: 'Joao Alves',
+                number: '2543',
+                cross: 'Av. Brasil',
+                neighborhood: 'Neva',
+                reference:'Proximo á loja MM',
+            },{
+                id:3,
+                data: '1/02/2017',
+                street: 'Castro Alves',
+                number: '2161',
+                cross: 'Av. Brasil',
+                neighborhood: 'Centro',
+                reference:'Proximo á loja MM',
+            }],
     	};
         this.handleToggle = this.handleToggle.bind(this);
 	}
@@ -446,39 +471,10 @@ export class EventTable extends Component{
 
 	render(){
 
-        const tableData = [{
-            id:1,
-            data: '1/10/2016',
-            street: 'Castro Alves',
-            number: '2011',
-            cross: 'Av. Brasil',
-            neighborhood: 'Centro',
-            reference:'Proximo á loja MM',
-        },{
-            id:2,
-            data: '1/10/2016',
-            street: 'Joao Alves',
-            number: '2543',
-            cross: 'Av. Brasil',
-            neighborhood: 'Neva',
-            reference:'Proximo á loja MM',
-        },{
-            id:3,
-            data: '1/02/2017',
-            street: 'Castro Alves',
-            number: '2161',
-            cross: 'Av. Brasil',
-            neighborhood: 'Centro',
-            reference:'Proximo á loja MM',
-        }];
         const columns = [{
             header: 'Ocorrencias Abertas',
             headerClassName: 'open-events',
             columns: [{
-                style:{textAlign:"center"},
-                header: 'ID',
-                accessor: 'id'
-			},{
                 style:{textAlign:"center"},
                 header: 'Data',
                 accessor: 'data'
@@ -517,7 +513,8 @@ export class EventTable extends Component{
 				<PageHeader>Ocorrências <small>(Abertas)</small> </PageHeader>
 				<div className="content" id="content">
 					<ReactTable
-						data={tableData}
+						className="-striped"
+						data={this.state.data}
 						columns={columns}
 						defaultPageSize={5}
 					/>
@@ -556,7 +553,7 @@ export default class EventBox extends Component {
     }
 
     componentDidMount(){
-
+		//TODO API
 		/*$.ajax({
 		 url:'http://sigtrans.unioeste.br:39000/AccidentType',
 		 dataType: 'json',
