@@ -58,17 +58,55 @@ class EventForm extends Component{
     }
 
     render() {
-        var accidentTypes = this.props.accidentTypes.map(function(type){
+        var accidentTypes = this.props.statisticData.accidentTypes.map(function(type){
             return <option key={type.id} value={type.id}>{type.classification}</option>;
         });
+        var pavementTypes = this.props.statisticData.pavementTypes.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+        //TODO FINISH LINKING
+        var surfaces = this.props.statisticData.surfaces.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+        var accidentClassifications = this.props.statisticData.accidentClassifications.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+        var roadStates = this.props.statisticData.roadStates.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+        var roadProfiles = this.props.statisticData.roadProfiles.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+        var roadConditions = this.props.statisticData.roadConditions.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+        var climaticConditions = this.props.statisticData.climaticConditions.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+        var horizontalSignals = this.props.statisticData.horizontalSignals.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+        var verticalSignals = this.props.statisticData.verticalSignals.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+        var directions = this.props.statisticData.directions.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+        var zones = this.props.statisticData.zones.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+        var causes = this.props.statisticData.causes.map(function(type){
+            return <option key={type.id} value={type.id}>{type.classification}</option>;
+        });
+
         return (
 			<div className="clearfix">
 				<Grid>
 					<Row className="clearfix">
 						<Form onSubmit={this.handleEventSubmit} method="post">
-							{/*<pre>
-							 {JSON.stringify(this.state,undefined,4)}
-							 </pre>*/}
+							{/*<pre>*/}
+							 {/*{JSON.stringify(this.state,undefined,4)}*/}
+							 {/*</pre>*/}
 							<Col xs={12} md={12} sm={12}>
 
 								{/*Geral*/}
@@ -116,127 +154,97 @@ class EventForm extends Component{
 												<option value="">Selecione</option>
 												{accidentTypes}
 											</select>
-											{/*<select name="acidentType" id="acidentType" className="form-control control-label" >
-											 <option value="">Escolha uma opção</option>
-											 <option value="opt1">Opção 1</option>
-											 <option value="opt2">Opção 2</option>
-											 <option value="optn">...</option>
-											 </select>*/}
 										</Col>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="pavementType">Tipo de Pavimento</label>
-											<select name="pavementType" id="pavementType" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.pavementType} name="pavementType" id="pavementType" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'pavementType')}>
+												<option value="">Selecione</option>
+                                                {pavementTypes}
 											</select>
 										</Col>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="surface">Superficie</label>
-											<select name="surface" id="surface" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.surface} name="surface" id="surface" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'surface')}>
+												<option value="">Selecione</option>
+                                                {surfaces}
 											</select>
 										</Col>
 									</Row>
 									<Row>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="accidentClassification">Classificação do acidente</label>
-											<select name="accidentClassification" id="accidentClassification" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.accidentClassification} name="accidentClassification" id="accidentClassification" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'accidentClassification')}>
+												<option value="">Selecione</option>
+                                                {accidentClassifications}
 											</select>
 										</Col>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="roadState">Estado da pista</label>
-											<select name="roadState" id="roadState" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.roadState} name="roadState" id="roadState" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'roadState')}>
+												<option value="">Selecione</option>
+                                                {roadStates}
 											</select>
 										</Col>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="roadProfile">Perfil da pista</label>
-											<select name="roadProfile" id="roadProfile" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.roadProfile} name="roadProfile" id="roadProfile" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'roadProfile')}>
+												<option value="">Selecione</option>
+                                                {roadProfiles}
 											</select>
 										</Col>
 									</Row>
 									<Row>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="roadCondition">Condição da pista</label>
-											<select name="roadCondition" id="roadCondition" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.roadCondition} name="roadCondition" id="roadCondition" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'roadCondition')}>
+												<option value="">Selecione</option>
+                                                {roadConditions}
 											</select>
 										</Col>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="climaticCondition">Condição climática</label>
-											<select name="climaticCondition" id="climaticCondition" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.climaticCondition} name="climaticCondition" id="climaticCondition" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'climaticCondition')}>
+												<option value="">Selecione</option>
+                                                {climaticConditions}
 											</select>
 										</Col>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="verticalSignaling">Sinalização vertical</label>
-											<select name="verticalSignaling" id="verticalSignaling" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.verticalSignaling} name="verticalSignaling" id="verticalSignaling" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'verticalSignaling')}>
+												<option value="">Selecione</option>
+                                                {verticalSignals}
 											</select>
 										</Col>
 									</Row>
 									<Row>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="horizontalSignaling">Sinalização horizontal</label>
-											<select name="horizontalSignaling" id="horizontalSignaling" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.horizontalSignaling} name="horizontalSignaling" id="horizontalSignaling" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'horizontalSignaling')}>
+												<option value="">Selecione</option>
+                                                {horizontalSignals}
 											</select>
 										</Col>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="direction">Direção</label>
-											<select name="direction" id="direction" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.direction} name="direction" id="direction" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'direction')}>
+												<option value="">Selecione</option>
+                                                {directions}
 											</select>
 										</Col>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="zone">Zona</label>
-											<select name="zone" id="zone" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.zone} name="zone" id="zone" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'zone')}>
+												<option value="">Selecione</option>
+                                                {zones}
 											</select>
 										</Col>
 									</Row>
 									<Row>
 										<Col xs={4}>
 											<label className="control-label" htmlFor="cause">Causa provável</label>
-											<select name="cause" id="cause" className="form-control control-label" >
-												<option value="">Escolha uma opção</option>
-												<option value="opt1">Opção 1</option>
-												<option value="opt2">Opção 2</option>
-												<option value="optn">...</option>
+											<select value={this.state.cause} name="cause" id="cause" className="form-control control-label" onChange={this.saveAlteration.bind(this, 'cause')}>
+												<option value="">Selecione</option>
+                                                {causes}
 											</select>
 										</Col>
 										<Col className="control-label" xs={8}>
@@ -434,7 +442,13 @@ export class EventTable extends Component{
     	super(props);
     	this.state={
             showModal: false,
-            accidentTypes : [],
+            statisticData : {
+            	accidentTypes:[], pavementTypes:[], surfaces:[],
+                accidentClassifications:[], roadStates:[],
+                roadProfiles:[], roadConditions:[], climaticConditions:[],
+                verticalSignals:[], horizontalSignals:[], directions:[],
+                zones:[], causes:[], additionalInfo:[]
+			},
             selectedEvent:'',
 			data:[{
                 id:1,
@@ -467,12 +481,12 @@ export class EventTable extends Component{
 
     componentDidMount(){
         $.ajax({
-            url:'https://ocorrencias-teste-api.herokuapp.com/api/accidentTypes',
+            url:'https://ocorrencias-teste-api.herokuapp.com/api/statisticData',
             dataType: 'json',
             type:'GET',
             crossDomain: true,
             success: function(data) {
-                this.setState({accidentTypes: data});
+                this.setState({statisticData: data});
             }.bind(this)
         });
 
@@ -545,7 +559,7 @@ export class EventTable extends Component{
 							</Modal.Header>
 
 							<Modal.Body>
-								<EventForm accidentTypes={this.state.accidentTypes}/>
+								<EventForm statisticData={this.state.statisticData}/>
 							</Modal.Body>
 
 							<Modal.Footer>
@@ -564,17 +578,24 @@ export default class EventBox extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {accidentTypes : []};
+        this.state = {
+        	statisticData : {
+				accidentTypes:[], pavementTypes:[], surfaces:[],
+				accidentClassifications:[], roadStates:[],
+				roadProfiles:[], roadConditions:[], climaticConditions:[],
+				verticalSignals:[], horizontalSignals:[], directions:[],
+				zones:[], causes:[], additionalInfo:[]}
+        };
     }
 
     componentDidMount(){
 		 $.ajax({
-			 url:'https://ocorrencias-teste-api.herokuapp.com/api/accidentTypes',
+			 url:'https://ocorrencias-teste-api.herokuapp.com/api/statisticData',
 			 dataType: 'json',
 			 type:'GET',
 			 crossDomain: true,
 			 success: function(data) {
-				 this.setState({accidentTypes: data});
+			 	this.setState({statisticData: data});
 			 }.bind(this)
 		 });
 
@@ -588,7 +609,7 @@ export default class EventBox extends Component {
 			<div>
 				<PageHeader>Criar ocorrência</PageHeader>
 				<div className="content" id="content">
-					<EventForm accidentTypes={this.state.accidentTypes}/>
+					<EventForm statisticData={this.state.statisticData}/>
 				</div>
 			</div>
         );
