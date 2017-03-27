@@ -5,7 +5,7 @@ import {Form, Grid, Row, Col, PageHeader} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
 import {Modal} from 'react-bootstrap';
-// import $ from 'jquery';
+import $ from 'jquery';
 // import PubSub from 'pubsub-js';
 // import ErrHandler from  './ErrHandler';
 
@@ -17,7 +17,7 @@ class EventForm extends Component{
             date:'',					street:'',						number:'',					cross:'',
             accidentType:'',			pavementType:'',				surface:'',					accidentClassification:'',
             roadState:'',				roadProfile:'',					roadCondition:'',			climaticCondition:'',
-            verticalSignaling:'', 	horizontalSignaling:'',		direction:'',				lat:'',
+            verticalSignaling:'', 		horizontalSignaling:'',			direction:'',				lat:'',
             zone:'', 					cause:'',						additionalInfo:'',			lng:'',
             carPlate:'',				carStatus:'', 					carBrand:'', 				carModel:'',
             damageLevel:'',				licenseLevel:'', 				firstLicense:'', 			expireDate:'',
@@ -434,7 +434,7 @@ export class EventTable extends Component{
     	super(props);
     	this.state={
             showModal: false,
-            accidentTypes : [{"id":1,"classification":"Queda de Bicicleta"},{"id":2,"classification":"Colisao"},{"id":3,"classification":"Acidente Complexo"},{"id":4,"classification":"Choque"},{"id":5,"classification":"Queda de Motocicleta"},{"id":6,"classification":"Engavetamento"},{"id":7,"classification":"Capotamento"},{"id":8,"classification":"Atropelamento"},{"id":9,"classification":"Nao Apurado"}],
+            accidentTypes : [],
             selectedEvent:'',
 			data:[{
                 id:1,
@@ -465,9 +465,25 @@ export class EventTable extends Component{
         this.handleToggle = this.handleToggle.bind(this);
 	}
 
+    componentDidMount(){
+        $.ajax({
+            url:'https://ocorrencias-teste-api.herokuapp.com/api/accidentTypes',
+            dataType: 'json',
+            type:'GET',
+            crossDomain: true,
+            success: function(data) {
+                this.setState({accidentTypes: data});
+            }.bind(this)
+        });
+
+		/*PubSub.subscribe('update-events-list',function(topico,novaLista){
+		 this.setState({lista:novaLista});
+		 }.bind(this));*/
+    }
+
     handleToggle(e){
         this.setState({showModal: !this.state.showModal, selectedEvent:e.target.id});
-    };
+    }
 
 	render(){
 
@@ -542,28 +558,25 @@ export class EventTable extends Component{
         );
     }
 
-
 }
 
 export default class EventBox extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {accidentTypes : [{"id":1,"classification":"Queda de Bicicleta"},{"id":2,"classification":"Colisao"},{"id":3,"classification":"Acidente Complexo"},{"id":4,"classification":"Choque"},{"id":5,"classification":"Queda de Motocicleta"},{"id":6,"classification":"Engavetamento"},{"id":7,"classification":"Capotamento"},{"id":8,"classification":"Atropelamento"},{"id":9,"classification":"Nao Apurado"}]};
+        this.state = {accidentTypes : []};
     }
 
     componentDidMount(){
-		//TODO API
-		/*$.ajax({
-		 url:'http://sigtrans.unioeste.br:39000/AccidentType',
-		 dataType: 'json',
-		 type:'GET',
-		 crossDomain: true,
-		 success: function(data) {
-		 console.log(data);
-		 this.setState({accidentTypes: data});
-		 }.bind(this)
-		 });*/
+		 $.ajax({
+			 url:'https://ocorrencias-teste-api.herokuapp.com/api/accidentTypes',
+			 dataType: 'json',
+			 type:'GET',
+			 crossDomain: true,
+			 success: function(data) {
+				 this.setState({accidentTypes: data});
+			 }.bind(this)
+		 });
 
 		/*PubSub.subscribe('update-events-list',function(topico,novaLista){
 		 this.setState({lista:novaLista});
