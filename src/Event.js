@@ -14,15 +14,15 @@ class EventForm extends Component{
     constructor() {
         super();
         this.state = {
-            date:'',					street:'',						number:'',					cross:'',
+            date:'',					street:'',						number:'',					cross:'',						lat:'',			lng:'',			middleName:'',
             accidentType:'',			pavementType:'',				surface:'',					accidentClassification:'',
             roadState:'',				roadProfile:'',					roadCondition:'',			climaticCondition:'',
-            verticalSignaling:'', 		horizontalSignaling:'',			direction:'',				lat:'',
-            zone:'', 					cause:'',						additionalInfo:'',			lng:'',
+            verticalSignaling:'', 		horizontalSignaling:'',			direction:'',
+            zone:'', 					cause:'',						additionalInfo:'',
             carPlate:'',				carStatus:'', 					carBrand:'', 				carModel:'',
             damageLevel:'',				licenseLevel:'', 				firstLicense:'', 			expireDate:'',
             involvedName:'',			involvedAge:'',					involvedSex:'',				involvedStreet:'',
-            involvedNumber:'',			involvedCorner:'',				involvedNeighborhood:'',	middleName:'',
+            involvedNumber:'',			involvedCorner:'',				involvedNeighborhood:'',
             involvedMom:'',				involvedReference:'',			involvedSituation:'',		involvedVehicleType:'',
             involvedVehiclePosition:'',	involvedSecurityCondition:'',	involvedInjuryLevel:'',		involvedEvolution:''
         };
@@ -64,7 +64,6 @@ class EventForm extends Component{
         var pavementTypes = this.props.statisticData.pavementTypes.map(function(type){
             return <option key={type.id} value={type.id}>{type.classification}</option>;
         });
-        //TODO FINISH LINKING
         var surfaces = this.props.statisticData.surfaces.map(function(type){
             return <option key={type.id} value={type.id}>{type.classification}</option>;
         });
@@ -104,9 +103,9 @@ class EventForm extends Component{
 				<Grid>
 					<Row className="clearfix">
 						<Form onSubmit={this.handleEventSubmit} method="post">
-							{/*<pre>*/}
-							 {/*{JSON.stringify(this.state,undefined,4)}*/}
-							 {/*</pre>*/}
+							<pre>
+								 {JSON.stringify(this.state,undefined,4)}
+							</pre>
 							<Col xs={12} md={12} sm={12}>
 
 								{/*Geral*/}
