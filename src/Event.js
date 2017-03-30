@@ -612,7 +612,7 @@ export class EventTable extends Component{
 							<Modal.Footer>
 								{/*<Button onClick={this.handleToggle}>Close</Button>*/}
 							</Modal.Footer>
-						</Modal>
+						</Modal> 
 					</div>
 				</div>
 			</div>
