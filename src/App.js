@@ -38,10 +38,13 @@ const menu=[
 class App extends Component {
    constructor(){
         super();
-        this.state={drawerActive: false,
+        this.state={
+            drawerActive: false,
             drawerPinned: false,
-            sidebarPinned: false};
+            sidebarPinned: false
+        };
     }
+
 /*
     toggleDrawerActive = () => {
         this.setState({ drawerActive: !this.state.drawerActive });
