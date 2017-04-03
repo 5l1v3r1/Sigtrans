@@ -1,13 +1,12 @@
-import React,{Component} from 'react';
-
+import React, {Component} from 'react';
+import {PageHeader} from 'react-bootstrap';
 export default class Home extends Component {
-    render(){
+    render() {
         return (
             <div>
-                <div>
-                    <h1>Bem vindo</h1>
-                </div>
+                <PageHeader>Bem Vindo</PageHeader>
                 <div className="content" id="content">
+                    Sigtrans - Modulo de Ocorrencias
                 </div>
             </div>
 

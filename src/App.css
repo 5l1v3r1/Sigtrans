@@ -24,62 +24,90 @@
 }
 */
 /* Rules for sizing the icon. */
-.material-icons.md-18 { font-size: 18px; }
-.material-icons.md-24 { font-size: 24px; }
-.material-icons.md-36 { font-size: 36px; }
-.material-icons.md-48 { font-size: 48px; }
+.material-icons.md-18 {
+    font-size: 18px;
+}
+
+.material-icons.md-24 {
+    font-size: 24px;
+}
+
+.material-icons.md-36 {
+    font-size: 36px;
+}
+
+.material-icons.md-48 {
+    font-size: 48px;
+}
 
 /* Rules for using icons as black on a light background. */
-.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
-.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+.material-icons.md-dark {
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.material-icons.md-dark.md-inactive {
+    color: rgba(0, 0, 0, 0.26);
+}
 
 /* Rules for using icons as white on a dark background. */
-.material-icons.md-light { color: rgba(255, 255, 255, 1); }
-.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+.material-icons.md-light {
+    color: rgba(255, 255, 255, 1);
+}
+
+.material-icons.md-light.md-inactive {
+    color: rgba(255, 255, 255, 0.3);
+}
 
 h1 small, h4 small {
-  color: #9FAFBF;
+    color: #9FAFBF;
 }
-
 
 .metismenu {
-  background: #2A3F54;
-  position: fixed;
-  width: 100%; /*255px; 230px*/
-  color: #e1e1e2;
-  bottom: 0;
-  left: 0;
-  top: 0;
+    background: #2A3F54;
+    position: fixed;
+    width: 100%; /*255px; 230px*/
+    color: #ffffff;
+    bottom: 0;
+    left: 0;
+    top: 0;
 }
 
-.metismenu-link.has-active-child{
-  border-right: 5px solid #1ABB9C;
+.metismenu-link.has-active-child {
+    border-right: 5px solid #1ABB9C;
+    color: #ffffff;
 }
 
-.metismenu-link{
-  font-size:12px;
+.metismenu-link {
+    font-size: 12px;
+    color: #ffffff;
 }
+
+/*.metismenu-link.active{*/
+/*background: rgba(42,63,84,1);*/
+/*}*/
 
 .modal-container {
-  position: relative;
+    position: relative;
 }
+
 .modal-container .modal, .modal-container .modal-backdrop {
-  position: absolute;
-}
-.custom-modal{
-  width:90vw;
-}
-.spanLine{
-  border-top: 1px solid #eee;
+    position: absolute;
 }
 
-
-.apb{
-  background: #ededed !important;
-  color: #5a738e !important;
+.custom-modal {
+    width: 90vw;
 }
 
-.content-interior{
-  background: #ffffff;
-  padding: 1.8rem;
+.spanLine {
+    border-top: 1px solid #eee;
+}
+
+.apb {
+    background: #ededed !important;
+    color: #5a738e !important;
+}
+
+.content-interior {
+    background: #ffffff;
+    padding: 1.8rem;
 }

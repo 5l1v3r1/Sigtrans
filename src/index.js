@@ -19,24 +19,24 @@ import {EventTable} from './Event';
 import Home from './Home';
 
 //Router
-import {Router,Route,browserHistory,IndexRoute} from 'react-router';
+import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 
 //React Toolbox Themer (PostCSS Issues)
 import theme from './toolbox/theme';
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
 
 ReactDOM.render((
-    <ThemeProvider theme={theme}>
-        <Router history={browserHistory}>
-            <Route path="/" component={App}>
-                <IndexRoute component={Home}/>
-                <Route path="/ocorrencias">
-                    <Route path="/ocorrencias/abertas" component={EventTable}/>
-                    <Route path="/ocorrencias/fechadas" component={EventBox}/>
+        <ThemeProvider theme={theme}>
+            <Router history={browserHistory}>
+                <Route path="/" component={App}>
+                    <IndexRoute component={Home}/>
+                    <Route path="/ocorrencias">
+                        <Route path="/ocorrencias/abertas" component={EventTable}/>
+                        <Route path="/ocorrencias/fechadas" component={EventBox}/>
+                    </Route>
+                    <Route path="/livro"/>
                 </Route>
-                <Route path="/livro"/>
-            </Route>
-        </Router>
-    </ThemeProvider>
+            </Router>
+        </ThemeProvider>
     ), document.getElementById('root')
 );
