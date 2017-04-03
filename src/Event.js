@@ -13,7 +13,7 @@ class EventForm extends Component{
 	constructor(props) {
 
 		super(props);
-			this.state = props.selectedEvent!=null? props.selectedEvent:({
+			this.state = props.selectedEvent? props.selectedEvent:({
 				id:'',
 				general:{
 					date:'',					street:'',						number:'',					cross:'',						lat:'',			lng:'',			middleName:'',
@@ -35,32 +35,32 @@ class EventForm extends Component{
 					involvedVehiclePosition:'',	involvedSecurityCondition:'',	involvedInjuryLevel:'',		involvedProbableConduct:'',		involvedEvolution:''
 				}
 			});
-		this.handleEventSubmit = this.handleEventSubmit.bind(this);
+		// this.handleEventSubmit = this.handleEventSubmit.bind(this);
 	}
 
-	handleEventSubmit(e){
-		e.preventDefault();
-		//TODO Comunicação com a API
-		/* $.ajax({
-		 url:'',
-		 contentType:'application/json',
-		 dataType:'json',
-		 type:'post',
-		 data: JSON.stringify({nome:this.state.nome,email:this.state.email,senha:this.state.senha}),
-		 success: function(novaListagem){
-		 PubSub.publish('atualiza-lista-autores',novaListagem);
-		 this.setState({nome:'',email:'',senha:''});
-		 }.bind(this),
-		 error: function(resposta){
-		 if(resposta.status === 400) {
-		 new ErrHandler().publicaErros(resposta.responseJSON);
-		 }
-		 },
-		 beforeSend: function(){
-		 PubSub.publish("limpa-erros",{});
-		 }
-		 });*/
-	}
+	// handleEventSubmit(e){
+	// 	e.preventDefault();
+	// 	//TODO Comunicação com a API
+	// 	/* $.ajax({
+	// 	 url:'',
+	// 	 contentType:'application/json',
+	// 	 dataType:'json',
+	// 	 type:'post',
+	// 	 data: JSON.stringify({nome:this.state.nome,email:this.state.email,senha:this.state.senha}),
+	// 	 success: function(novaListagem){
+	// 	 PubSub.publish('atualiza-lista-autores',novaListagem);
+	// 	 this.setState({nome:'',email:'',senha:''});
+	// 	 }.bind(this),
+	// 	 error: function(resposta){
+	// 	 if(resposta.status === 400) {
+	// 	 new ErrHandler().publicaErros(resposta.responseJSON);
+	// 	 }
+	// 	 },
+	// 	 beforeSend: function(){
+	// 	 PubSub.publish("limpa-erros",{});
+	// 	 }
+	// 	 });*/
+	// }
 
 	saveAlteration(type, inputName, e){
         this.setState({
@@ -75,78 +75,78 @@ class EventForm extends Component{
 	render() {
 
 		//Statistic Data
-		var accidentTypes 				=	this.props.options.statisticData.accidentTypes.map(function(type){
+		let accidentTypes 				=	this.props.options.statisticData.accidentTypes.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var pavementTypes 				=	this.props.options.statisticData.pavementTypes.map(function(type){
+		let pavementTypes 				=	this.props.options.statisticData.pavementTypes.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var surfaces 					=	this.props.options.statisticData.surfaces.map(function(type){
+		let surfaces 					=	this.props.options.statisticData.surfaces.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var accidentClassifications 	=	this.props.options.statisticData.accidentClassifications.map(function(type){
+		let accidentClassifications 	=	this.props.options.statisticData.accidentClassifications.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var roadStates					=	this.props.options.statisticData.roadStates.map(function(type){
+		let roadStates					=	this.props.options.statisticData.roadStates.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var roadProfiles				=	this.props.options.statisticData.roadProfiles.map(function(type){
+		let roadProfiles				=	this.props.options.statisticData.roadProfiles.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var roadConditions				=	this.props.options.statisticData.roadConditions.map(function(type){
+		let roadConditions				=	this.props.options.statisticData.roadConditions.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var climaticConditions			=	this.props.options.statisticData.climaticConditions.map(function(type){
+		let climaticConditions			=	this.props.options.statisticData.climaticConditions.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var horizontalSignals			=	this.props.options.statisticData.horizontalSignals.map(function(type){
+		let horizontalSignals			=	this.props.options.statisticData.horizontalSignals.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var verticalSignals				=	this.props.options.statisticData.verticalSignals.map(function(type){
+		let verticalSignals				=	this.props.options.statisticData.verticalSignals.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var directions					=	this.props.options.statisticData.directions.map(function(type){
+		let directions					=	this.props.options.statisticData.directions.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var zones						=	this.props.options.statisticData.zones.map(function(type){
+		let zones						=	this.props.options.statisticData.zones.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var causes						=	this.props.options.statisticData.causes.map(function(type){
+		let causes						=	this.props.options.statisticData.causes.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
 		//Vehicles
-		var carStatuses					=	this.props.options.vehicles.carStatuses.map(function(type){
+		let carStatuses					=	this.props.options.vehicles.carStatuses.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var damageLevels				=	this.props.options.vehicles.damageLevels.map(function(type){
+		let damageLevels				=	this.props.options.vehicles.damageLevels.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var licenseLevels				=	this.props.options.vehicles.licenseLevels.map(function(type){
+		let licenseLevels				=	this.props.options.vehicles.licenseLevels.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
 		//involved
-		var involvedSexes				=	this.props.options.involved.involvedSexes.map(function(type){
+		let involvedSexes				=	this.props.options.involved.involvedSexes.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var involvedNeighborhoods		=	this.props.options.involved.involvedNeighborhoods.map(function(type){
+		let involvedNeighborhoods		=	this.props.options.involved.involvedNeighborhoods.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var involvedSituations			=	this.props.options.involved.involvedSituations.map(function(type){
+		let involvedSituations			=	this.props.options.involved.involvedSituations.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var involvedVehicleTypes		=	this.props.options.involved.involvedVehicleTypes.map(function(type){
+		let involvedVehicleTypes		=	this.props.options.involved.involvedVehicleTypes.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var involvedVehiclePositions	=	this.props.options.involved.involvedVehiclePositions.map(function(type){
+		let involvedVehiclePositions	=	this.props.options.involved.involvedVehiclePositions.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var involvedSecurityConditions	=	this.props.options.involved.involvedSecurityConditions.map(function(type){
+		let involvedSecurityConditions	=	this.props.options.involved.involvedSecurityConditions.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var involvedInjuryLevels		=	this.props.options.involved.involvedInjuryLevels.map(function(type){
+		let involvedInjuryLevels		=	this.props.options.involved.involvedInjuryLevels.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
-		var involvedProbableConducts	=	this.props.options.involved.involvedProbableConducts.map(function(type){
+		let involvedProbableConducts	=	this.props.options.involved.involvedProbableConducts.map(function(type){
 			return <option key={type.id} value={type.id}>{type.value}</option>;
 		});
 
@@ -154,7 +154,8 @@ class EventForm extends Component{
 			<div className="clearfix">
 				<Grid>
 					<Row className="clearfix">
-						<Form onSubmit={this.handleEventSubmit} method="post">
+                        {/*onSubmit={this.handleEventSubmit}*/}
+						<Form method="post">
 							{/*<pre>*/}
 								 {/*{JSON.stringify(this.state,undefined,4)}*/}
 							{/*</pre>*/}
@@ -525,7 +526,7 @@ export class EventTable extends Component{
 	}
 
 	componentDidMount(){
-		this.setState({loading: true})
+		this.setState({loading: true});
 		$.ajax({
 			url:'https://ocorrencias-teste-api.herokuapp.com/api/events/open',
 			dataType: 'json',
@@ -561,9 +562,6 @@ export class EventTable extends Component{
 
 	render(){
 		const columns = [{
-			header: 'Ocorrencias Abertas',
-			headerClassName: 'open-events',
-			columns: [{
 				style:{textAlign:"center"},
 				header: 'Data',
 				accessor: 'general.date'
@@ -595,7 +593,6 @@ export class EventTable extends Component{
 				render: props => (
 					<Button icon="edit" primary id={props.value} onClick={this.handleToggle}/>
 				)
-			}]
 		}];
 
 		return(

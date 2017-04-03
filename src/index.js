@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import './css/font-awesome-4.7.0/css/font-awesome.min.css';
-import './css/hamburguer-menu.css';
+// import './css/hamburguer-menu.css';
 import './index.css';
 import './App.css';
 import 'react-table/react-table.css'

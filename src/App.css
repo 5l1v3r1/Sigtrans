@@ -42,6 +42,24 @@ h1 small, h4 small {
 }
 
 
+.metismenu {
+  background: #2A3F54;
+  position: fixed;
+  width: 100%; /*255px; 230px*/
+  color: #e1e1e2;
+  bottom: 0;
+  left: 0;
+  top: 0;
+}
+
+.metismenu-link.has-active-child{
+  border-right: 5px solid #1ABB9C;
+}
+
+.metismenu-link{
+  font-size:12px;
+}
+
 .modal-container {
   position: relative;
 }
@@ -53,4 +71,15 @@ h1 small, h4 small {
 }
 .spanLine{
   border-top: 1px solid #eee;
+}
+
+
+.apb{
+  background: #ededed !important;
+  color: #5a738e !important;
+}
+
+.content-interior{
+  background: #ffffff;
+  padding: 1.8rem;
 }
