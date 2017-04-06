@@ -102,12 +102,18 @@ h1 small, h4 small {
     border-top: 1px solid #eee;
 }
 
-.apb {
+.app-bar {
     background: #ededed !important;
-    color: #5a738e !important;
+    color: #000000 !important;
 }
+/*.app-bar-title{*/
+    /*font-size: 1.4em !important;*/
+    /*text-align: center !important;*/
+/*}*/
 
 .content-interior {
     background: #ffffff;
     padding: 1.8rem;
+    border-radius: 5px
+
 }

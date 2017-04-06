@@ -6,8 +6,8 @@ import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
 import {Modal} from 'react-bootstrap';
 import $ from 'jquery';
-// import PubSub from 'pubsub-js';
-// import ErrHandler from  './ErrHandler';
+import PubSub from 'pubsub-js';
+import ErrHandler from  './ErrHandler';
 
 class EventForm extends Component {
     constructor(props) {
@@ -29,56 +29,48 @@ class EventForm extends Component {
                 damageLevel: '', licenseLevel: '', firstLicense: '', expireDate: '',
             },
             involved: {
-                involvedName: '',
-                involvedAge: '',
-                involvedSex: '',
-                involvedStreet: '',
-                involvedNumber: '',
-                involvedCorner: '',
-                involvedNeighborhood: '',
-                involvedMom: '',
-                involvedReference: '',
-                involvedSituation: '',
-                involvedVehicleType: '',
-                involvedVehiclePosition: '',
-                involvedSecurityCondition: '',
-                involvedInjuryLevel: '',
-                involvedProbableConduct: '',
+                involvedName: '', involvedAge: '', involvedSex: '', involvedStreet: '',
+                involvedNumber: '', involvedCorner: '', involvedNeighborhood: '', involvedMom: '',
+                involvedReference: '', involvedSituation: '', involvedVehicleType: '', involvedVehiclePosition: '',
+                involvedSecurityCondition: '', involvedInjuryLevel: '', involvedProbableConduct: '',
                 involvedEvolution: ''
             }
         });
-        // this.handleEventSubmit = this.handleEventSubmit.bind(this);
+        this.handleEventSubmit = this.handleEventSubmit.bind(this);
     }
 
-    // handleEventSubmit(e){
-    // 	e.preventDefault();
-    // 	//TODO Comunicação com a API
-    // 	/* $.ajax({
-    // 	 url:'',
-    // 	 contentType:'application/json',
-    // 	 dataType:'json',
-    // 	 type:'post',
-    // 	 data: JSON.stringify({nome:this.state.nome,email:this.state.email,senha:this.state.senha}),
-    // 	 success: function(novaListagem){
-    // 	 PubSub.publish('atualiza-lista-autores',novaListagem);
-    // 	 this.setState({nome:'',email:'',senha:''});
-    // 	 }.bind(this),
-    // 	 error: function(resposta){
-    // 	 if(resposta.status === 400) {
-    // 	 new ErrHandler().publicaErros(resposta.responseJSON);
-    // 	 }
-    // 	 },
-    // 	 beforeSend: function(){
-    // 	 PubSub.publish("limpa-erros",{});
-    // 	 }
-    // 	 });*/
-    // }
+    handleEventSubmit(e){
+        e.preventDefault();
+    	let selectedID=this.props.selectedEvent?this.props.selectedEvent.id:null;
+    	//TODO Comunicação com a API
+    	$.ajax({
+             url:selectedID!=null?"https://ocorrencias-teste-api.herokuapp.com/api/events/open/:"+selectedID:"https://ocorrencias-teste-api.herokuapp.com/api/events/open",
+             contentType:'application/json',
+             crossDomain:'true',
+             crossOrigin:'true',
+             dataType:'json',
+             type: selectedID? 'put' : 'post',
+             data: JSON.stringify(this.state),
+             success: function(newData){
+                PubSub.publish('update-events',newData);
+                this.setState(this.state);
+             }.bind(this),
+             error: function(resposta){
+                 if(resposta.status === 400) {
+                     new ErrHandler().publicaErros(resposta.responseJSON);
+                 }
+             },
+             beforeSend: function(){
+                 PubSub.publish("limpa-erros",{});
+             }
+    	 });
+    }
 
-    saveAlteration(type, inputName, e) {
+    saveAlteration(group, option, e) {
         this.setState({
-            [type]: {
-                ...this.state[type],
-                [inputName]: e.target.value,
+            [group]: {
+                ...this.state[group],
+                [option]: e.target.value,
             },
         });
 
@@ -166,10 +158,9 @@ class EventForm extends Component {
             <div className="clearfix">
                 <Grid>
                     <Row className="clearfix">
-                        {/*onSubmit={this.handleEventSubmit}*/}
-                        <Form method="post">
+                        <Form onSubmit={this.handleEventSubmit} method={this.props.selectedEvent ? "put" : "post"}>
                             {/*<pre>*/}
-                            {/*{JSON.stringify(this.state,undefined,4)}*/}
+                            {/*{JSON.stringify(this.state, undefined, 4)}*/}
                             {/*</pre>*/}
                             <Col xs={12} md={12} sm={12}>
 
@@ -699,9 +690,9 @@ export class EventTable extends Component {
                 this.setState({options: res});
             }.bind(this)
         });
-        /*PubSub.subscribe('update-events-list',function(topico,novaLista){
-         this.setState({lista:novaLista});
-         }.bind(this));*/
+        PubSub.subscribe('update-events',function(topicName,newData){
+            this.setState({data:newData, showModal:false, selectedEvent:''});
+        }.bind(this));
     }
 
     handleToggle(e) {
@@ -854,8 +845,8 @@ export default class EventBox extends Component {
             dataType: 'json',
             type: 'GET',
             crossDomain: true,
-            success: function (data) {
-                this.setState({options: data});
+            success: function (opts) {
+                this.setState({options: opts});
             }.bind(this)
         });
 
