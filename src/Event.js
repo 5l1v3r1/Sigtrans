@@ -42,7 +42,6 @@ class EventForm extends Component {
     handleEventSubmit(e){
         e.preventDefault();
     	let selectedID=this.props.selectedEvent?this.props.selectedEvent.id:null;
-    	//TODO Comunicação com a API
     	$.ajax({
              url:selectedID!=null?"https://ocorrencias-teste-api.herokuapp.com/api/events/open/:"+selectedID:"https://ocorrencias-teste-api.herokuapp.com/api/events/open",
              contentType:'application/json',
