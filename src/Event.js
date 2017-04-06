@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import CustomSubmit from './components/CustomSubmit'
 import CustomInput from './components/CustomInput'
+import CustomSelect from './components/CustomSelect'
 import {Form, Grid, Row, Col, PageHeader} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
@@ -39,30 +40,52 @@ class EventForm extends Component {
         this.handleEventSubmit = this.handleEventSubmit.bind(this);
     }
 
-    handleEventSubmit(e){
+    handleEventSubmit(e) {
         e.preventDefault();
-    	let selectedID=this.props.selectedEvent?this.props.selectedEvent.id:null;
-    	$.ajax({
-             url:selectedID!=null?"https://ocorrencias-teste-api.herokuapp.com/api/events/open/:"+selectedID:"https://ocorrencias-teste-api.herokuapp.com/api/events/open",
-             contentType:'application/json',
-             crossDomain:'true',
-             crossOrigin:'true',
-             dataType:'json',
-             type: selectedID? 'put' : 'post',
-             data: JSON.stringify(this.state),
-             success: function(newData){
-                PubSub.publish('update-events',newData);
-                this.setState(this.state);
-             }.bind(this),
-             error: function(resposta){
-                 if(resposta.status === 400) {
-                     new ErrHandler().publicaErros(resposta.responseJSON);
-                 }
-             },
-             beforeSend: function(){
-                 PubSub.publish("limpa-erros",{});
-             }
-    	 });
+        let selectedID = this.props.selectedEvent ? this.props.selectedEvent.id : 0;
+        $.ajax({
+            url: selectedID ? "https://ocorrencias-teste-api.herokuapp.com/api/events/open/:" + selectedID : "https://ocorrencias-teste-api.herokuapp.com/api/events/open",
+            contentType: 'application/json',
+            crossDomain: 'true',
+            crossOrigin: 'true',
+            dataType: 'json',
+            type: selectedID ? 'put' : 'post',
+            data: JSON.stringify(this.state),
+            success: function (newData) {
+                PubSub.publish('update-events', newData);
+                this.setState(selectedID?this.props.selectedEvent:({
+                    id: '',
+                    general: {
+                        date: '', street: '', number: '', cross: '', lat: '', lng: '', middleName: '',
+                    },
+                    statisticData: {
+                        accidentType: '', pavementType: '', surface: '', accidentClassification: '',
+                        roadState: '', roadProfile: '', roadCondition: '', climaticCondition: '',
+                        verticalSignaling: '', horizontalSignaling: '', direction: '',
+                        zone: '', cause: '', additionalInfo: '',
+                    },
+                    vehicles: {
+                        carPlate: '', carStatus: '', carBrand: '', carModel: '',
+                        damageLevel: '', licenseLevel: '', firstLicense: '', expireDate: '',
+                    },
+                    involved: {
+                        involvedName: '', involvedAge: '', involvedSex: '', involvedStreet: '',
+                        involvedNumber: '', involvedCorner: '', involvedNeighborhood: '', involvedMom: '',
+                        involvedReference: '', involvedSituation: '', involvedVehicleType: '', involvedVehiclePosition: '',
+                        involvedSecurityCondition: '', involvedInjuryLevel: '', involvedProbableConduct: '',
+                        involvedEvolution: ''
+                    }
+                }));
+            }.bind(this),
+            error: function (resposta) {
+                if (resposta.status === 400) {
+                    new ErrHandler().publicaErros(resposta.responseJSON);
+                }
+            },
+            beforeSend: function () {
+                PubSub.publish("limpa-erros", {});
+            }
+        });
     }
 
     saveAlteration(group, option, e) {
@@ -76,90 +99,13 @@ class EventForm extends Component {
     }
 
     render() {
-
-        //Statistic Data
-        let accidentTypes = this.props.options.statisticData.accidentTypes.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let pavementTypes = this.props.options.statisticData.pavementTypes.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let surfaces = this.props.options.statisticData.surfaces.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let accidentClassifications = this.props.options.statisticData.accidentClassifications.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let roadStates = this.props.options.statisticData.roadStates.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let roadProfiles = this.props.options.statisticData.roadProfiles.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let roadConditions = this.props.options.statisticData.roadConditions.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let climaticConditions = this.props.options.statisticData.climaticConditions.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let horizontalSignals = this.props.options.statisticData.horizontalSignals.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let verticalSignals = this.props.options.statisticData.verticalSignals.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let directions = this.props.options.statisticData.directions.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let zones = this.props.options.statisticData.zones.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let causes = this.props.options.statisticData.causes.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        //Vehicles
-        let carStatuses = this.props.options.vehicles.carStatuses.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let damageLevels = this.props.options.vehicles.damageLevels.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let licenseLevels = this.props.options.vehicles.licenseLevels.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        //involved
-        let involvedSexes = this.props.options.involved.involvedSexes.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let involvedNeighborhoods = this.props.options.involved.involvedNeighborhoods.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let involvedSituations = this.props.options.involved.involvedSituations.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let involvedVehicleTypes = this.props.options.involved.involvedVehicleTypes.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let involvedVehiclePositions = this.props.options.involved.involvedVehiclePositions.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let involvedSecurityConditions = this.props.options.involved.involvedSecurityConditions.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let involvedInjuryLevels = this.props.options.involved.involvedInjuryLevels.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        let involvedProbableConducts = this.props.options.involved.involvedProbableConducts.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-
         return (
             <div className="clearfix">
                 <Grid>
                     <Row className="clearfix">
                         <Form onSubmit={this.handleEventSubmit} method={this.props.selectedEvent ? "put" : "post"}>
                             {/*<pre>*/}
-                            {/*{JSON.stringify(this.state, undefined, 4)}*/}
+                                {/*{JSON.stringify(this.state, undefined, 4)}*/}
                             {/*</pre>*/}
                             <Col xs={12} md={12} sm={12}>
 
@@ -224,141 +170,103 @@ class EventForm extends Component {
                                     <h4>Dados estatísticos</h4>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="accidentType">Tipo de
-                                                Acidente</label>
-                                            <select value={this.state.statisticData.accidentType} name="accidentType"
-                                                    id="accidentType" className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'accidentType')}>
-                                                <option value="">Selecione</option>
-                                                {accidentTypes}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.accidentType}
+                                                          id="accidentType" name="accidentType"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'accidentType')}
+                                                          options={this.props.options.statisticData.accidentTypes}
+                                                          label="Tipo de Acidente"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="pavementType">Tipo de
-                                                Pavimento</label>
-                                            <select value={this.state.statisticData.pavementType} name="pavementType"
-                                                    id="pavementType" className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'pavementType')}>
-                                                <option value="">Selecione</option>
-                                                {pavementTypes}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.pavementType}
+                                                          id="pavementType" name="pavementType"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'pavementType')}
+                                                          options={this.props.options.statisticData.pavementTypes}
+                                                          label="Tipo de Pavimento"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="surface">Superficie</label>
-                                            <select value={this.state.statisticData.surface} name="surface" id="surface"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'surface')}>
-                                                <option value="">Selecione</option>
-                                                {surfaces}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.surface} id="surface"
+                                                          name="surface"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'surface')}
+                                                          options={this.props.options.statisticData.surfaces}
+                                                          label="Superficie"/>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="accidentClassification">Classificação
-                                                do acidente</label>
-                                            <select value={this.state.statisticData.accidentClassification}
-                                                    name="accidentClassification" id="accidentClassification"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'accidentClassification')}>
-                                                <option value="">Selecione</option>
-                                                {accidentClassifications}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.accidentClassification}
+                                                          id="accidentClassification" name="accidentClassification"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'accidentClassification')}
+                                                          options={this.props.options.statisticData.accidentClassifications}
+                                                          label="Classificação do acidente"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="roadState">Estado da pista</label>
-                                            <select value={this.state.statisticData.roadState} name="roadState"
-                                                    id="roadState" className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'roadState')}>
-                                                <option value="">Selecione</option>
-                                                {roadStates}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.roadState} id="roadState"
+                                                          name="roadState"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'roadState')}
+                                                          options={this.props.options.statisticData.roadStates}
+                                                          label="Estado da pista"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="roadProfile">Perfil da
-                                                pista</label>
-                                            <select value={this.state.statisticData.roadProfile} name="roadProfile"
-                                                    id="roadProfile" className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'roadProfile')}>
-                                                <option value="">Selecione</option>
-                                                {roadProfiles}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.roadProfile} id="roadProfile"
+                                                          name="roadProfile"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'roadProfile')}
+                                                          options={this.props.options.statisticData.roadProfiles}
+                                                          label="Perfil da pista"/>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="roadCondition">Condição da
-                                                pista</label>
-                                            <select value={this.state.statisticData.roadCondition} name="roadCondition"
-                                                    id="roadCondition" className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'roadCondition')}>
-                                                <option value="">Selecione</option>
-                                                {roadConditions}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.roadCondition} id="roadCondition"
+                                                          name="roadCondition"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'roadCondition')}
+                                                          options={this.props.options.statisticData.roadConditions}
+                                                          label="Condição da pista"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="climaticCondition">Condição
-                                                climática</label>
-                                            <select value={this.state.statisticData.climaticCondition}
-                                                    name="climaticCondition" id="climaticCondition"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'climaticCondition')}>
-                                                <option value="">Selecione</option>
-                                                {climaticConditions}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.climaticCondition} id="climaticCondition"
+                                                          name="climaticCondition"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'climaticCondition')}
+                                                          options={this.props.options.statisticData.climaticConditions}
+                                                          label="Condição climática"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="verticalSignaling">Sinalização
-                                                vertical</label>
-                                            <select value={this.state.statisticData.verticalSignaling}
-                                                    name="verticalSignaling" id="verticalSignaling"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'verticalSignaling')}>
-                                                <option value="">Selecione</option>
-                                                {verticalSignals}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.verticalSignaling} id="verticalSignaling"
+                                                          name="verticalSignaling"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'verticalSignaling')}
+                                                          options={this.props.options.statisticData.verticalSignals}
+                                                          label="Sinalização vertical"/>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="horizontalSignaling">Sinalização
-                                                horizontal</label>
-                                            <select value={this.state.statisticData.horizontalSignaling}
-                                                    name="horizontalSignaling" id="horizontalSignaling"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'horizontalSignaling')}>
-                                                <option value="">Selecione</option>
-                                                {horizontalSignals}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.horizontalSignaling} id="horizontalSignaling"
+                                                          name="horizontalSignaling"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'horizontalSignaling')}
+                                                          options={this.props.options.statisticData.horizontalSignals}
+                                                          label="Sinalização horizontal"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="direction">Direção</label>
-                                            <select value={this.state.statisticData.direction} name="direction"
-                                                    id="direction" className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'direction')}>
-                                                <option value="">Selecione</option>
-                                                {directions}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.direction} id="direction"
+                                                          name="direction"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'direction')}
+                                                          options={this.props.options.statisticData.directions}
+                                                          label="Direção"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="zone">Zona</label>
-                                            <select value={this.state.statisticData.zone} name="zone" id="zone"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'zone')}>
-                                                <option value="">Selecione</option>
-                                                {zones}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.zone} id="zone"
+                                                          name="zone"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'zone')}
+                                                          options={this.props.options.statisticData.zones}
+                                                          label="Zona"/>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="cause">Causa provável</label>
-                                            <select value={this.state.statisticData.cause} name="cause" id="cause"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'statisticData', 'cause')}>
-                                                <option value="">Selecione</option>
-                                                {causes}
-                                            </select>
+                                            <CustomSelect value={this.state.statisticData.cause} id="cause"
+                                                          name="cause"
+                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'cause')}
+                                                          options={this.props.options.statisticData.causes}
+                                                          label="Causa provável"/>
                                         </Col>
                                         <Col className="control-label" xs={8}>
                                             <CustomInput value={this.state.statisticData.additionalInfo} type="text"
@@ -380,13 +288,11 @@ class EventForm extends Component {
                                                          label="Placa"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="carStatus">Estado</label>
-                                            <select value={this.state.vehicles.carStatus} name="carStatus"
-                                                    id="carStatus" className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'vehicles', 'carStatus')}>
-                                                <option value="">Selecione</option>
-                                                {carStatuses}
-                                            </select>
+                                            <CustomSelect value={this.state.vehicles.carStatus} id="carStatus"
+                                                          name="carStatus"
+                                                          onChange={this.saveAlteration.bind(this, 'vehicles', 'carStatus')}
+                                                          options={this.props.options.vehicles.carStatuses}
+                                                          label="Estado"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <CustomInput value={this.state.vehicles.carBrand} type="text" id="carBrand"
@@ -403,27 +309,21 @@ class EventForm extends Component {
                                                          label="Modelo"/>
                                         </Col>
                                         <Col xs={8}>
-                                            <label className="control-label" htmlFor="damageLevel">Grau de
-                                                avaria</label>
-                                            <select value={this.state.vehicles.damageLevel} name="damageLevel"
-                                                    id="damageLevel" className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'vehicles', 'damageLevel')}>
-                                                <option value="">Selecione</option>
-                                                {damageLevels}
-                                            </select>
+                                            <CustomSelect value={this.state.vehicles.damageLevel} id="damageLevel"
+                                                          name="damageLevel"
+                                                          onChange={this.saveAlteration.bind(this, 'vehicles', 'damageLevel')}
+                                                          options={this.props.options.vehicles.damageLevels}
+                                                          label="Grau de avaria"/>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <h5>Quanto ao condutor</h5>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="licenseLevel">Categoria da
-                                                habilitação</label>
-                                            <select value={this.state.vehicles.licenseLevel} name="licenseLevel"
-                                                    id="licenseLevel" className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'vehicles', 'licenseLevel')}>
-                                                <option value="">Selecione</option>
-                                                {licenseLevels}
-                                            </select>
+                                            <CustomSelect value={this.state.vehicles.licenseLevel} id="licenseLevel"
+                                                          name="licenseLevel"
+                                                          onChange={this.saveAlteration.bind(this, 'vehicles', 'licenseLevel')}
+                                                          options={this.props.options.vehicles.licenseLevels}
+                                                          label="Categoria da habilitação"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <CustomInput value={this.state.vehicles.firstLicense} type="date"
@@ -457,13 +357,11 @@ class EventForm extends Component {
                                                          label="Idade"/>
                                         </ Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="involvedSex">Sexo</label>
-                                            <select value={this.state.involved.involvedSex} name="involvedSex"
-                                                    id="involvedSex" className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'involved', 'involvedSex')}>
-                                                <option value="">Selecione</option>
-                                                {involvedSexes}
-                                            </select>
+                                            <CustomSelect value={this.state.involved.involvedSex} id="involvedSex"
+                                                          name="involvedSex"
+                                                          onChange={this.saveAlteration.bind(this, 'involved', 'involvedSex')}
+                                                          options={this.props.options.involved.involvedSexes}
+                                                          label="Sexo"/>
                                         </ Col>
                                     </Row>
                                     <Row>
@@ -488,15 +386,11 @@ class EventForm extends Component {
                                     </Row>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label"
-                                                   htmlFor="involvedNeighborhood">Bairro</label>
-                                            <select value={this.state.involved.involvedNeighborhood}
-                                                    name="involvedNeighborhood" id="involvedNeighborhood"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'involved', 'involvedNeighborhood')}>
-                                                <option value="">Selecione</option>
-                                                {involvedNeighborhoods}
-                                            </select>
+                                            <CustomSelect value={this.state.involved.involvedNeighborhood} id="involvedNeighborhood"
+                                                          name="involvedNeighborhood"
+                                                          onChange={this.saveAlteration.bind(this, 'involved', 'involvedNeighborhood')}
+                                                          options={this.props.options.involved.involvedNeighborhoods}
+                                                          label="Bairro"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <CustomInput value={this.state.involved.involvedReference} type="text"
@@ -513,72 +407,48 @@ class EventForm extends Component {
                                     </Row>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label"
-                                                   htmlFor="involvedSituation">Situação</label>
-                                            <select value={this.state.involved.involvedSituation}
-                                                    name="involvedSituation" id="involvedSituation"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'involved', 'involvedSituation')}>
-                                                <option value="">Selecione</option>
-                                                {involvedSituations}
-                                            </select>
+                                            <CustomSelect value={this.state.involved.involvedSituation} id="involvedSituation"
+                                                          name="involvedSituation"
+                                                          onChange={this.saveAlteration.bind(this, 'involved', 'involvedSituation')}
+                                                          options={this.props.options.involved.involvedSituations}
+                                                          label="Situação"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="involvedVehicleType">Tipo de
-                                                veiculo</label>
-                                            <select value={this.state.involved.involvedVehicleType}
-                                                    name="involvedVehicleType" id="involvedVehicleType"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'involved', 'involvedVehicleType')}>
-                                                <option value="">Selecione</option>
-                                                {involvedVehicleTypes}
-                                            </select>
+                                            <CustomSelect value={this.state.involved.involvedVehicleType} id="involvedVehicleType"
+                                                          name="involvedVehicleType"
+                                                          onChange={this.saveAlteration.bind(this, 'involved', 'involvedVehicleType')}
+                                                          options={this.props.options.involved.involvedVehicleTypes}
+                                                          label="Tipo de veiculo"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="involvedVehiclePosition">Posição
-                                                no Veículo</label>
-                                            <select value={this.state.involved.involvedVehiclePosition}
-                                                    name="involvedVehiclePosition" id="involvedVehiclePosition"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'involved', 'involvedVehiclePosition')}>
-                                                <option value="">Selecione</option>
-                                                {involvedVehiclePositions}
-                                            </select>
+                                            <CustomSelect value={this.state.involved.involvedVehiclePosition} id="involvedVehiclePosition"
+                                                          name="involvedVehiclePosition"
+                                                          onChange={this.saveAlteration.bind(this, 'involved', 'involvedVehiclePosition')}
+                                                          options={this.props.options.involved.involvedVehiclePositions}
+                                                          label="Posição no Veículo"/>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="involvedSecurityCondition">Condição
-                                                de segurança</label>
-                                            <select value={this.state.involved.involvedSecurityCondition}
-                                                    name="involvedSecurityCondition" id="involvedSecurityCondition"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'involved', 'involvedSecurityCondition')}>
-                                                <option value="">Selecione</option>
-                                                {involvedSecurityConditions}
-                                            </select>
+                                            <CustomSelect value={this.state.involved.involvedSecurityCondition} id="involvedSecurityCondition"
+                                                          name="involvedSecurityCondition"
+                                                          onChange={this.saveAlteration.bind(this, 'involved', 'involvedSecurityCondition')}
+                                                          options={this.props.options.involved.involvedSecurityConditions}
+                                                          label="Condição de segurança"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="involvedInjuryLevel">Gravidade da
-                                                lesão</label>
-                                            <select value={this.state.involved.involvedInjuryLevel}
-                                                    name="involvedInjuryLevel" id="involvedInjuryLevel"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'involved', 'involvedInjuryLevel')}>
-                                                <option value="">Selecione</option>
-                                                {involvedInjuryLevels}
-                                            </select>
+                                            <CustomSelect value={this.state.involved.involvedInjuryLevel} id="involvedInjuryLevel"
+                                                          name="involvedInjuryLevel"
+                                                          onChange={this.saveAlteration.bind(this, 'involved', 'involvedInjuryLevel')}
+                                                          options={this.props.options.involved.involvedInjuryLevels}
+                                                          label="Gravidade da lesão"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <label className="control-label" htmlFor="involvedProbableConduct">Conduta
-                                                provável</label>
-                                            <select value={this.state.involved.involvedProbableConduct}
-                                                    name="involvedProbableConduct" id="involvedProbableConduct"
-                                                    className="form-control control-label"
-                                                    onChange={this.saveAlteration.bind(this, 'involved', 'involvedProbableConduct')}>
-                                                <option value="">Selecione</option>
-                                                {involvedProbableConducts}
-                                            </select>
+                                            <CustomSelect value={this.state.involved.involvedProbableConduct} id="involvedProbableConduct"
+                                                          name="involvedProbableConduct"
+                                                          onChange={this.saveAlteration.bind(this, 'involved', 'involvedProbableConduct')}
+                                                          options={this.props.options.involved.involvedProbableConducts}
+                                                          label="Conduta provável"/>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -689,8 +559,8 @@ export class EventTable extends Component {
                 this.setState({options: res});
             }.bind(this)
         });
-        PubSub.subscribe('update-events',function(topicName,newData){
-            this.setState({data:newData, showModal:false, selectedEvent:''});
+        PubSub.subscribe('update-events', function (topicName, newData) {
+            this.setState({data: newData, showModal: false, selectedEvent: ''});
         }.bind(this));
     }
 

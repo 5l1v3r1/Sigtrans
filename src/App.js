@@ -54,29 +54,29 @@ class App extends Component {
 
 	render() {
 		return (
-			<div>
-				{/* <div className="navigation">
-				 <MetisMenu content={menu} LinkComponent={RouterLink} />
-				 </div>
-
-				 <input type="checkbox" id="nav-trigger" className="nav-trigger" />
-				 <label htmlFor="nav-trigger"><FontIcon className="md-24" value='menu'/></label>
-
-				 <div className="site-wrap">
-				 {this.props.children}
-				 </div>*/}
 				<Layout>
-					<NavDrawer pinned={this.state.drawerPinned} permanentAt='xxxl'>
+                    {/* <div className="navigation">
+					 <MetisMenu content={menu} LinkComponent={RouterLink} />
+					 </div>
+
+					 <input type="checkbox" id="nav-trigger" className="nav-trigger" />
+					 <label htmlFor="nav-trigger"><FontIcon className="md-24" value='menu'/></label>
+
+					 <div className="site-wrap">
+					 {this.props.children}
+					 </div>*/}
+					<NavDrawer pinned={this.state.drawerPinned}>
 						<MetisMenu content={menu} LinkComponent={RouterLink}/>
 					</NavDrawer>
 					<Panel>
-						{/*
-							theme={{title:"app-bar-title"}}
-						*/}
+                        {/*
+						 theme={{title:"app-bar-title"}}
+						 */}
+
 						<AppBar title=" "
 								leftIcon={<FontIcon className="md-24 md-dark" value='menu'/>}
 								rightIcon={<FontIcon className="md-24 md-dark" value='account_circle'/>}
-								onLeftIconClick={ this.toggleDrawerPinned }
+								onLeftIconClick={this.toggleDrawerPinned}
 								flat
 								className="app-bar">
 							<Navigation type="horizontal">
@@ -91,7 +91,6 @@ class App extends Component {
 						</div>
 					</Panel>
 				</Layout>
-			</div>
 		);
 	}
 }
