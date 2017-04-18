@@ -17,82 +17,87 @@ import FontIcon from "react-toolbox/lib/font_icon";
 // import IconButton from 'react-toolbox/lib/button/IconButton';
 
 const menu = [
-	{
-		icon: 'dashboard',
-		label: 'Sigtrans',
-		to: '/',
-	},
-	{
-		icon: 'bell',
-		label: 'Ocorrencias',
-		content: [
-			{
-				icon: 'bolt',
-				label: 'Abertas',
-				to: '/ocorrencias/abertas'
-			},
-			{
-				icon: 'bolt',
-				label: 'Criar',
-				to: '/ocorrencias/fechadas',
-			}
-		]
-	}
+    {
+        icon: 'dashboard',
+        label: 'Sigtrans',
+        to: '/'
+    },
+    {
+        icon: 'bell',
+        label: 'Ocorrencias',
+        content: [
+            {
+                icon: 'bolt',
+                label: 'Abertas',
+                to: '/ocorrencias/abertas'
+            },
+            {
+                icon: 'bolt',
+                label: 'Criar',
+                to: '/ocorrencias/fechadas',
+            }
+        ]
+    },
+    {
+        icon: 'bell',
+        label: 'Obitos',
+        to: '/obitos'
+    }
 ];
 
 class App extends Component {
-	constructor() {
-		super();
-		this.state = {
-			drawerPinned: true,
-		};
-	}
+    constructor() {
+        super();
+        this.state = {
+            drawerPinned: true,
+        };
+    }
 
-	toggleDrawerPinned = () => {
-		this.setState({drawerPinned: !this.state.drawerPinned});
-	};
+    toggleDrawerPinned = () => {
+        this.setState({drawerPinned: !this.state.drawerPinned});
+    };
 
-	render() {
-		return (
-				<Layout>
-                    {/* <div className="navigation">
-					 <MetisMenu content={menu} LinkComponent={RouterLink} />
-					 </div>
+    render() {
+        return (
+            <Layout>
+                {/* <div className="navigation">
+                 <MetisMenu content={menu} LinkComponent={RouterLink} />
+                 </div>
 
-					 <input type="checkbox" id="nav-trigger" className="nav-trigger" />
-					 <label htmlFor="nav-trigger"><FontIcon className="md-24" value='menu'/></label>
+                 <input type="checkbox" id="nav-trigger" className="nav-trigger" />
+                 <label htmlFor="nav-trigger"><FontIcon className="md-24" value='menu'/></label>
 
-					 <div className="site-wrap">
-					 {this.props.children}
-					 </div>*/}
-					<NavDrawer pinned={this.state.drawerPinned}>
-						<MetisMenu content={menu} LinkComponent={RouterLink}/>
-					</NavDrawer>
-					<Panel>
-                        {/*
-						 theme={{title:"app-bar-title"}}
-						 */}
+                 <div className="site-wrap">
+                 {this.props.children}
+                 </div>*/}
+                <NavDrawer pinned={this.state.drawerPinned}>
+                    <MetisMenu content={menu} LinkComponent={RouterLink}/>
+                </NavDrawer>
+                <Panel>
+                    {/*
+                     theme={{title:"app-bar-title"}}
+                     */}
 
-						<AppBar title=" "
-								leftIcon={<FontIcon className="md-24 md-dark" value='menu'/>}
-								rightIcon={<FontIcon className="md-24 md-dark" value='account_circle'/>}
-								onLeftIconClick={this.toggleDrawerPinned}
-								flat
-								className="app-bar">
-							<Navigation type="horizontal">
-								<Link href="#" label="Inbox" icon="inbox" />
-								<Link href="#" active label="Profile" icon="person" />
-							</Navigation>
-						</AppBar>
-						<div style={{flex: 1, overflowY: 'auto', padding: '1.8rem'}}>
-							<div className="content-interior">
-								{this.props.children}
-							</div>
-						</div>
-					</Panel>
-				</Layout>
-		);
-	}
+                    <AppBar title=" "
+                            leftIcon={<FontIcon className="md-24 md-dark" value='menu'/>}
+                            rightIcon={<FontIcon className="md-24 md-dark" value='account_circle'/>}
+                            onLeftIconClick={this.toggleDrawerPinned}
+                            flat
+                            className="app-bar">
+                        <Navigation type="horizontal">
+                            <Link href="#" label="Inbox" icon="inbox"/>
+                            <Link href="#" active label="Profile" icon="person"/>
+                        </Navigation>
+                    </AppBar>
+                    <div style={{flex: 1, overflowY: 'auto', padding: '1.8rem'}}>
+                        <div className="content-interior">
+                            {this.props.children}
+                        </div>
+                    </div>
+                </Panel>
+            </Layout>
+        );
+    }
 }
 
 export default App;

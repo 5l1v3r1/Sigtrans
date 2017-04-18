@@ -14,8 +14,9 @@ import './toolbox/theme.css'
 
 //Components
 import App from './App';
-import EventBox from './Event';
-import {EventTable} from './Event';
+import EBox from './Event';
+import {EGrid} from './Event';
+import Deaths from './Death';
 import Home from './Home';
 
 //Router
@@ -31,10 +32,10 @@ ReactDOM.render((
                 <Route path="/" component={App}>
                     <IndexRoute component={Home}/>
                     <Route path="/ocorrencias">
-                        <Route path="/ocorrencias/abertas" component={EventTable}/>
-                        <Route path="/ocorrencias/fechadas" component={EventBox}/>
+                        <Route path="/ocorrencias/abertas" component={EGrid}/>
+                        <Route path="/ocorrencias/fechadas" component={EBox}/>
                     </Route>
-                    <Route path="/livro"/>
+                    <Route path="/obitos" component={Deaths}/>
                 </Route>
             </Router>
         </ThemeProvider>
