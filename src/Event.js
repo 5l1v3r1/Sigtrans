@@ -2,19 +2,22 @@ import React, {Component} from 'react';
 import CustomSubmit from './components/CustomSubmit'
 import CustomInput from './components/CustomInput'
 import CustomSelect from './components/CustomSelect'
-import {Form, Grid, Row, Col, PageHeader, Tabs, Tab} from 'react-bootstrap';
+import {Form, Grid, Row, Col, PageHeader, Tabs, Tab, Collapse, Well} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
 import {Modal} from 'react-bootstrap';
 import $ from 'jquery';
 import PubSub from 'pubsub-js';
 import ErrHandler from  './ErrHandler';
+import update from 'immutability-helper';
 
 class EForm extends Component {
     constructor(props) {
-
         super(props);
         this.state = props.selectedEvent ? props.selectedEvent : ({
+            collapse:[{
+                open:false
+            }],
             id: '',
             general: {
                 date: '', street: '', number: '', cross: '', lat: '', lng: '', middleName: '',
@@ -25,10 +28,13 @@ class EForm extends Component {
                 verticalSignaling: '', horizontalSignaling: '', direction: '',
                 zone: '', cause: '', additionalInfo: '',
             },
-            vehicles: {
-                carPlate: '', carStatus: '', carBrand: '', carModel: '',
-                damageLevel: '', licenseLevel: '', firstLicense: '', expireDate: '',
-            },
+            vehicles: [
+                {
+                    id:'1',
+                    carPlate: '', carStatus: '', carBrand: '', carModel: '',
+                    damageLevel: '', licenseLevel: '', firstLicense: '', expireDate: '',
+                }
+            ],
             involved: {
                 involvedName: '', involvedAge: '', involvedSex: '', involvedStreet: '',
                 involvedNumber: '', involvedCorner: '', involvedNeighborhood: '', involvedMom: '',
@@ -106,10 +112,115 @@ class EForm extends Component {
                 [option]: e.target.value,
             },
         });
-
     }
 
+    saveNestedAlteration(group, option, id, e){
+        this.setState({
+            [group]: update(this.state[group], {
+                [id]: {[option]: {$set: e.target.value}}
+            })
+        });
+    }
+
+    handleCollapse(id){
+        this.setState({
+            collapse: update(this.state.collapse,{
+                [id]:{open: {$set:!this.state.collapse[id].open}}
+            })
+        });
+    }
+
+    createCollapse(id){
+        this.setState({
+            collapse: update(this.state.collapse,{
+                [id]:{open: {$set:false}}
+            })
+        });
+        console.log(JSON.stringify(this.state.collapse));
+    }
+
+
     render() {
+        let vehicles = this.state.vehicles.map(function(vehicle) {
+            return (
+                <Row key={vehicle.id}>
+                    <Col md={10}>
+                        <h4>Veiculo {vehicle.id}</h4>
+                        <Collapse in={this.state.collapse[vehicle.id-1].open}>
+                            <div>
+                                <Well>
+                                    <Row>
+                                        <Col xs={2} md={2} sm={2}>
+                                            <CustomInput value={vehicle.carPlate} type="text"
+                                                         id="carPlate"
+                                                         required="required"
+                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carPlate', vehicle.id-1)}
+                                                         label="Placa"/>
+                                        </Col>
+                                        <Col xs={3} md={3} sm={3}>
+                                            <CustomInput value={vehicle.carBrand} type="text"
+                                                         id="carBrand"
+                                                         required="required"
+                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carBrand', vehicle.id-1)}
+                                                         label="Marca"/>
+                                        </Col>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <CustomInput value={vehicle.carModel} type="text"
+                                                         id="carModel"
+                                                         required="required"
+                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carModel', vehicle.id-1)}
+                                                         label="Modelo"/>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <CustomSelect value={vehicle.carStatus} id="carStatus"
+                                                          name="carStatus"
+                                                          onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carStatus', vehicle.id-1)}
+                                                          options={this.props.options.vehicles.carStatuses}
+                                                          label="Estado"/>
+                                        </Col>
+                                        <Col xs={5} md={5} sm={5}>
+                                            <CustomSelect value={vehicle.damageLevel} id="damageLevel"
+                                                          name="damageLevel"
+                                                          onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'damageLevel', vehicle.id-1)}
+                                                          options={this.props.options.vehicles.damageLevels}
+                                                          label="Grau de avaria"/>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <h5>Quanto ao condutor</h5>
+                                        <Col xs={3} md={3} sm={3}>
+                                            <CustomSelect value={vehicle.licenseLevel} id="licenseLevel"
+                                                          name="licenseLevel"
+                                                          onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'licenseLevel', vehicle.id-1)}
+                                                          options={this.props.options.vehicles.licenseLevels}
+                                                          label="Categoria da habilitação"/>
+                                        </Col>
+                                        <Col xs={3} md={3} sm={3}>
+                                            <CustomInput value={vehicle.firstLicense} type="date"
+                                                         id="firstLicense" required="required"
+                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'firstLicense', vehicle.id-1)}
+                                                         label="Primeira habilitação"/>
+                                        </Col>
+                                        <Col xs={3} md={3} sm={3}>
+                                            <CustomInput value={vehicle.expireDate} type="date"
+                                                         id="expireDate" required="required"
+                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'expireDate', vehicle.id-1)}
+                                                         label="Vencimento da habilitação"/>
+                                        </Col>
+                                    </Row>
+                                </Well>
+                            </div>
+                        </Collapse>
+                    </Col>
+                    <Col md={1}>
+                        <Button label="clickme" onClick={this.handleCollapse.bind(this, vehicle.id-1)} />
+                    </Col>
+                </Row>
+            );
+        }, this);
+
         return (
             <div className="clearfix" style={{flex: 1, overflowX: 'auto'}}>
                 <Grid>
@@ -217,7 +328,8 @@ class EForm extends Component {
                                                               label="Estado da pista"/>
                                             </Col>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.roadProfile} id="roadProfile"
+                                                <CustomSelect value={this.state.statisticData.roadProfile}
+                                                              id="roadProfile"
                                                               name="roadProfile"
                                                               onChange={this.saveAlteration.bind(this, 'statisticData', 'roadProfile')}
                                                               options={this.props.options.statisticData.roadProfiles}
@@ -294,64 +406,7 @@ class EForm extends Component {
                                 <Tab eventKey={3} title="Veículos">
                                     <Row className="form-group">
                                         <br/>
-                                        <Row>
-                                            <Col xs={4} md={4} sm={4}>
-                                                <CustomInput value={this.state.vehicles.carPlate} type="text" id="carPlate"
-                                                             required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'vehicles', 'carPlate')}
-                                                             label="Placa"/>
-                                            </Col>
-                                            <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.vehicles.carStatus} id="carStatus"
-                                                              name="carStatus"
-                                                              onChange={this.saveAlteration.bind(this, 'vehicles', 'carStatus')}
-                                                              options={this.props.options.vehicles.carStatuses}
-                                                              label="Estado"/>
-                                            </Col>
-                                            <Col xs={4} md={4} sm={4}>
-                                                <CustomInput value={this.state.vehicles.carBrand} type="text" id="carBrand"
-                                                             required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'vehicles', 'carBrand')}
-                                                             label="Marca"/>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col xs={4} md={4} sm={4}>
-                                                <CustomInput value={this.state.vehicles.carModel} type="text" id="carModel"
-                                                             required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'vehicles', 'carModel')}
-                                                             label="Modelo"/>
-                                            </Col>
-                                            <Col xs={8}>
-                                                <CustomSelect value={this.state.vehicles.damageLevel} id="damageLevel"
-                                                              name="damageLevel"
-                                                              onChange={this.saveAlteration.bind(this, 'vehicles', 'damageLevel')}
-                                                              options={this.props.options.vehicles.damageLevels}
-                                                              label="Grau de avaria"/>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <h5>Quanto ao condutor</h5>
-                                            <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.vehicles.licenseLevel} id="licenseLevel"
-                                                              name="licenseLevel"
-                                                              onChange={this.saveAlteration.bind(this, 'vehicles', 'licenseLevel')}
-                                                              options={this.props.options.vehicles.licenseLevels}
-                                                              label="Categoria da habilitação"/>
-                                            </Col>
-                                            <Col xs={4} md={4} sm={4}>
-                                                <CustomInput value={this.state.vehicles.firstLicense} type="date"
-                                                             id="firstLicense" required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'vehicles', 'firstLicense')}
-                                                             label="Primeira habilitação"/>
-                                            </Col>
-                                            <Col xs={4} md={4} sm={4}>
-                                                <CustomInput value={this.state.vehicles.expireDate} type="date"
-                                                             id="expireDate" required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'vehicles', 'expireDate')}
-                                                             label="Vencimento da habilitação"/>
-                                            </Col>
-                                        </Row>
+                                        {vehicles}
                                     </Row>
                                 </Tab>
                                 <Tab eventKey={4} title="Envolvidos">
@@ -483,11 +538,10 @@ class EForm extends Component {
                                     </Row>
                                 </Tab>
                             </Tabs>
-                            <Row>
-                                <Col xs={1} md={1} sm={1} mdOffset={11} smOffset={9} xsOffset={8}>
-                                    <CustomSubmit className="col-md-2" label="Gravar"/>
-                                </Col>
-                            </Row>
+                            <Col xs={1} md={1} sm={1} mdOffset={11} smOffset={11} xsOffset={11}>
+                                <CustomSubmit className="col-md-2" label="Gravar"/>
+                            </Col>
+
                         </Col>
                     </Form>
                 </Grid>
@@ -505,14 +559,6 @@ export class EGrid extends Component {
             loading: true,
             showModal: false,
             options: {
-                general: {
-                    date: "",
-                    street: "",
-                    number: "",
-                    cross: "",
-                    lat: "",
-                    lng: ""
-                },
                 statisticData: {
                     accidentTypes: [], pavementTypes: [], surfaces: [],
                     accidentClassifications: [], roadStates: [],
@@ -521,33 +567,20 @@ export class EGrid extends Component {
                     zones: [], causes: [], additionalInfo: []
                 },
                 vehicles: {
-                    carPlate: "",
                     carStatuses: [],
-                    carBrand: "",
-                    carModel: "",
                     damageLevels: [],
-                    licenseLevels: [],
-                    firstLicense: "",
-                    expireDate: ""
+                    licenseLevels: []
                 },
                 involved: {
-                    involvedName: "",
-                    involvedAge: "",
+
                     involvedSexes: [],
-                    involvedStreet: "",
-                    involvedNumber: "",
-                    involvedCorner: "",
                     involvedNeighborhoods: [],
-                    middleName: "",
-                    involvedMom: "",
-                    involvedReference: "",
                     involvedSituations: [],
                     involvedVehicleTypes: [],
                     involvedVehiclePositions: [],
                     involvedSecurityConditions: [],
                     involvedInjuryLevels: [],
-                    involvedProbableConducts: [],
-                    involvedEvolution: ""
+                    involvedProbableConducts: []
                 }
             },
             selectedEvent: [],
@@ -663,7 +696,7 @@ export class EGrid extends Component {
                             </Modal.Body>
 
                             {/*<Modal.Footer>*/}
-                                {/*/!*<Button onClick={this.handleToggle}>Close</Button>*!/*/}
+                            {/*/!*<Button onClick={this.handleToggle}>Close</Button>*!/*/}
                             {/*</Modal.Footer>*/}
 
                         </Modal>
@@ -681,14 +714,6 @@ export default class EBox extends Component {
         super(props);
         this.state = {
             options: {
-                general: {
-                    date: "",
-                    street: "",
-                    number: "",
-                    cross: "",
-                    lat: "",
-                    lng: ""
-                },
                 statisticData: {
                     accidentTypes: [], pavementTypes: [], surfaces: [],
                     accidentClassifications: [], roadStates: [],
@@ -697,33 +722,19 @@ export default class EBox extends Component {
                     zones: [], causes: [], additionalInfo: []
                 },
                 vehicles: {
-                    carPlate: "",
                     carStatuses: [],
-                    carBrand: "",
-                    carModel: "",
                     damageLevels: [],
                     licenseLevels: [],
-                    firstLicense: "",
-                    expireDate: ""
                 },
                 involved: {
-                    involvedName: "",
-                    involvedAge: "",
                     involvedSexes: [],
-                    involvedStreet: "",
-                    involvedNumber: "",
-                    involvedCorner: "",
                     involvedNeighborhoods: [],
-                    middleName: "",
-                    involvedMom: "",
-                    involvedReference: "",
                     involvedSituations: [],
                     involvedVehicleTypes: [],
                     involvedVehiclePositions: [],
                     involvedSecurityConditions: [],
                     involvedInjuryLevels: [],
                     involvedProbableConducts: [],
-                    involvedEvolution: ""
                 }
             }
         };
