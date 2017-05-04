@@ -15,8 +15,8 @@ class EForm extends Component {
     constructor(props) {
         super(props);
         this.state = props.selectedEvent ? props.selectedEvent : ({
-            collapse:[{
-                open:false
+            collapse: [{
+                open: false
             }],
             id: '',
             general: {
@@ -30,7 +30,7 @@ class EForm extends Component {
             },
             vehicles: [
                 {
-                    id:'1',
+                    id: '1',
                     carPlate: '', carStatus: '', carBrand: '', carModel: '',
                     damageLevel: '', licenseLevel: '', firstLicense: '', expireDate: '',
                 }
@@ -114,7 +114,7 @@ class EForm extends Component {
         });
     }
 
-    saveNestedAlteration(group, option, id, e){
+    saveNestedAlteration(group, option, id, e) {
         this.setState({
             [group]: update(this.state[group], {
                 [id]: {[option]: {$set: e.target.value}}
@@ -122,18 +122,18 @@ class EForm extends Component {
         });
     }
 
-    handleCollapse(id){
+    handleCollapse(id) {
         this.setState({
-            collapse: update(this.state.collapse,{
-                [id]:{open: {$set:!this.state.collapse[id].open}}
+            collapse: update(this.state.collapse, {
+                [id]: {open: {$set: !this.state.collapse[id].open}}
             })
         });
     }
 
-    createCollapse(id){
+    createCollapse(id) {
         this.setState({
-            collapse: update(this.state.collapse,{
-                [id]:{open: {$set:false}}
+            collapse: update(this.state.collapse, {
+                [id]: {open: {$set: false}}
             })
         });
         console.log(JSON.stringify(this.state.collapse));
@@ -141,12 +141,12 @@ class EForm extends Component {
 
 
     render() {
-        let vehicles = this.state.vehicles.map(function(vehicle) {
+        let vehicles = this.state.vehicles.map(function (vehicle) {
             return (
                 <Row key={vehicle.id}>
                     <Col md={10}>
                         <h4>Veiculo {vehicle.id}</h4>
-                        <Collapse in={this.state.collapse[vehicle.id-1].open}>
+                        {/*<Collapse in={this.state.collapse[vehicle.id - 1].open}>*/}
                             <div>
                                 <Well>
                                     <Row>
@@ -154,21 +154,21 @@ class EForm extends Component {
                                             <CustomInput value={vehicle.carPlate} type="text"
                                                          id="carPlate"
                                                          required="required"
-                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carPlate', vehicle.id-1)}
+                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carPlate', vehicle.id - 1)}
                                                          label="Placa"/>
                                         </Col>
                                         <Col xs={3} md={3} sm={3}>
                                             <CustomInput value={vehicle.carBrand} type="text"
                                                          id="carBrand"
                                                          required="required"
-                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carBrand', vehicle.id-1)}
+                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carBrand', vehicle.id - 1)}
                                                          label="Marca"/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <CustomInput value={vehicle.carModel} type="text"
                                                          id="carModel"
                                                          required="required"
-                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carModel', vehicle.id-1)}
+                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carModel', vehicle.id - 1)}
                                                          label="Modelo"/>
                                         </Col>
                                     </Row>
@@ -176,14 +176,14 @@ class EForm extends Component {
                                         <Col xs={4} md={4} sm={4}>
                                             <CustomSelect value={vehicle.carStatus} id="carStatus"
                                                           name="carStatus"
-                                                          onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carStatus', vehicle.id-1)}
+                                                          onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carStatus', vehicle.id - 1)}
                                                           options={this.props.options.vehicles.carStatuses}
                                                           label="Estado"/>
                                         </Col>
                                         <Col xs={5} md={5} sm={5}>
                                             <CustomSelect value={vehicle.damageLevel} id="damageLevel"
                                                           name="damageLevel"
-                                                          onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'damageLevel', vehicle.id-1)}
+                                                          onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'damageLevel', vehicle.id - 1)}
                                                           options={this.props.options.vehicles.damageLevels}
                                                           label="Grau de avaria"/>
                                         </Col>
@@ -193,34 +193,33 @@ class EForm extends Component {
                                         <Col xs={3} md={3} sm={3}>
                                             <CustomSelect value={vehicle.licenseLevel} id="licenseLevel"
                                                           name="licenseLevel"
-                                                          onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'licenseLevel', vehicle.id-1)}
+                                                          onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'licenseLevel', vehicle.id - 1)}
                                                           options={this.props.options.vehicles.licenseLevels}
                                                           label="Categoria da habilitação"/>
                                         </Col>
                                         <Col xs={3} md={3} sm={3}>
                                             <CustomInput value={vehicle.firstLicense} type="date"
                                                          id="firstLicense" required="required"
-                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'firstLicense', vehicle.id-1)}
+                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'firstLicense', vehicle.id - 1)}
                                                          label="Primeira habilitação"/>
                                         </Col>
                                         <Col xs={3} md={3} sm={3}>
                                             <CustomInput value={vehicle.expireDate} type="date"
                                                          id="expireDate" required="required"
-                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'expireDate', vehicle.id-1)}
+                                                         onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'expireDate', vehicle.id - 1)}
                                                          label="Vencimento da habilitação"/>
                                         </Col>
                                     </Row>
                                 </Well>
                             </div>
-                        </Collapse>
+                        {/*</Collapse>*/}
                     </Col>
-                    <Col md={1}>
-                        <Button label="clickme" onClick={this.handleCollapse.bind(this, vehicle.id-1)} />
-                    </Col>
+                    {/*<Col md={1}>*/}
+                        {/*<Button label="clickme" onClick={this.handleCollapse.bind(this, vehicle.id - 1)}/>*/}
+                    {/*</Col>*/}
                 </Row>
             );
         }, this);
-
         return (
             <div className="clearfix" style={{flex: 1, overflowX: 'auto'}}>
                 <Grid>
@@ -572,7 +571,6 @@ export class EGrid extends Component {
                     licenseLevels: []
                 },
                 involved: {
-
                     involvedSexes: [],
                     involvedNeighborhoods: [],
                     involvedSituations: [],
