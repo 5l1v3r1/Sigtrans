@@ -1,12 +1,11 @@
 /**
  * Created by natal on 17/04/17.
  */
-
 import React, {Component} from 'react';
 import CustomSubmit from './components/CustomSubmit'
 import CustomInput from './components/CustomInput'
 import CustomSelect from './components/CustomSelect'
-import {Form, Grid, Row, Col, PageHeader} from 'react-bootstrap';
+import {Form, Grid, Row, Col, PageHeader, FormGroup, Checkbox} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
 import {Modal} from 'react-bootstrap';
@@ -14,33 +13,68 @@ import $ from 'jquery';
 import PubSub from 'pubsub-js';
 import ErrHandler from  './ErrHandler';
 import update from 'immutability-helper';
+import Slider from 'react-toolbox/lib/slider/Slider';
 
 class DForm extends Component {
     constructor(props) {
         super(props);
         this.state = props.selectedEvent ? props.selectedEvent : ({
-            death:{
+            death: {
                 id: '',
                 general: {
-                    year: '', date:'', street: '', time: '', number: '', cross: '', lat: '', lng: '', middleName: '',
+                    year: '',
+                    date: '',
+                    street: '',
+                    time: '',
+                    number: '',
+                    cross: '',
+                    lat: '',
+                    lng: '',
                     zone: ''
                 },
-                statisticData: {
-                    accidentType: '', pavementType: '', surface: '', accidentClassification: '',
-                    roadState: '', roadProfile: '', roadCondition: '', climaticCondition: '',
-                    verticalSignaling: '', horizontalSignaling: '', direction: '',
-                    cause: '', additionalInfo: '',
+                victim: {
+                    victimName: '',
+                    victimSex: '',
+                    victimAge: ''
                 },
-                vehicles: {
-                    carPlate: '', carStatus: '', carBrand: '', carModel: '',
-                    damageLevel: '', licenseLevel: '', firstLicense: '', expireDate: '',
+                riskFactors: {
+                    speed: 0,
+                    drugs: 0,
+                    infra: 0,
+                    vehicle: 0,
+                    fatigue: 0,
+                    visibility: 0,
+                    psych: 0,
+                    distraction: 0,
+                    climateConditions: 0,
+                    responsible: ''
                 },
-                involved: {
-                    involvedName: '', involvedAge: '', involvedSex: '', involvedStreet: '',
-                    involvedNumber: '', involvedCorner: '', involvedNeighborhood: '', involvedMom: '',
-                    involvedReference: '', involvedSituation: '', involvedVehicleType: '', involvedVehiclePosition: '',
-                    involvedSecurityCondition: '', involvedInjuryLevel: '', involvedProbableConduct: '',
-                    involvedEvolution: ''
+                riskConducts: {
+                    license: 0,
+                    prohibited: 0,
+                    improper: 0,
+                    trackChange: 0,
+                    vehiclesDistance: 0,
+                    signalingDisrespect: 0,
+                    convergePreference: 0,
+                    defensiveDriving: 0,
+                    dangerousDriving: 0,
+                    recklessPedestrian: 0,
+                    responsible: ''
+                },
+                user: {
+                    helmet: 0,
+                    belt: 0,
+                    occupantProtection: 0,
+                    sideObjects: 0,
+                    traumaAttention: 0,
+                    alcoholism: 0,
+                    licensing: 0
+                },
+                other: {
+                    possibleCause: '',
+                    mainCauses: '',
+                    partners: ''
                 }
             }
         });
@@ -111,54 +145,24 @@ class DForm extends Component {
         alteration[group] = update(alteration[group], {
             [option]: {$set: e.target.value}
         });
+
         this.setState({
-            death:alteration
+            death: alteration
         });
+
     }
 
+    handleChange(group, option, value) {
+        let alteration = this.state.death;
+        alteration[group] = update(alteration[group], {
+            [option]: {$set: value}
+        });
+        this.setState({
+            death: alteration
+        });
+    };
+
     render() {
-        /*
-*         * Ano de Referência (ex: 2016)
-*         * Data da Ocorrência
-*         * Hora da Ocorrência
-*         * Endereço Completo (Ex: Av. Brasil, 207, Centro, Cascavel, PR)
-*         * Trecho
-*         * Nome da Vítima
-*         * Status da vítima
-*         * Idade da vítima (somente número)
-*         * Sexo
-         * Fatores de Risco [Velocidade]
-         * Fatores de Risco [Álcool/Drogas]
-         * Fatores de Risco [Infraestrutura]
-         * Fatores de Risco [Veículo]
-         * Fatores de Risco [Fadiga]
-         * Fatores de Risco [Visibilidade]
-         * Fatores de Risco [Problemas psicológicos]
-         * Fatores de Risco [Celular ou distração]
-         * Fatores de Risco [Condições climáticas]
-         * Possível responsável pelos fatores de risco
-         * Condutas de Risco [Habilitação]
-         * Condutas de Risco [Transitar local proibido]
-         * Condutas de Risco [Transitar local impróprio]
-         * Condutas de Risco [Mudança faixa/pista]
-         * Condutas de Risco [Distância veículos]
-         * Condutas de Risco [Desrespeito sinalização]
-         * Condutas de Risco [Converter/cruzar sem dar preferência]
-         * Condutas de Risco [Evitabilidade/Direção defensiva]
-         * Condutas de Risco [Direção perigosa]
-         * Condutas de Risco [Atitude imprudente pedestre]
-         * Possível responsável pelas condutas de risco
-         * Quanto ao Usuário [Capacete]
-         * Quanto ao Usuário [Cinto]
-         * Quanto ao Usuário [Proteção do ocupante]
-         * Quanto ao Usuário [Objetos laterais]
-         * Quanto ao Usuário [Atenção ao trauma]
-         * Outros itens avaliados [Alcoolemia]
-         * Outros itens avaliados [Licenciamento]
-         * Órgãos Responsáveis pelo Fornecimento dos Dados
-         * Descritivo de possível causa
-         * Principal(ais) causa(s) avaliada(s)
-         */
         return (
             <div className="clearfix">
                 <Grid>
@@ -169,13 +173,18 @@ class DForm extends Component {
                                 {/*{JSON.stringify(this.state, undefined, 4)}*/}
                             {/*</pre>*/}
                             <Col xs={12} md={12} sm={12}>
-
-                                {/*Geral
-                                    * Ano de Referência (ex: 2016) -------------------------------------------------
-                                    * Data da Ocorrência -----------------------------------------------------------
-                                    * Hora da Ocorrência -----------------------------------------------------------
-                                    * Endereço Completo (Ex: Av. Brasil, 207, Centro, Cascavel, PR)-----------------
-                                    */}
+                                {/**
+                                 * Geral
+                                 * Ano de Referência (ex: 2016)
+                                 * Data da Ocorrência
+                                 * Hora da Ocorrência
+                                 * Endereço Completo (Ex: Av. Brasil, 207, Centro, Cascavel, PR)
+                                 * Trecho
+                                 * Nome da Vítima
+                                 * Status da vítima
+                                 * Idade da vítima (somente número)
+                                 * Sexo
+                                 */}
                                 <Row className="form-group clearfix">
                                     <h4>Geral</h4>
                                     <Row>
@@ -183,29 +192,22 @@ class DForm extends Component {
                                             <CustomInput value={this.state.death.general.year} type="number" id="year"
                                                          required="required"
                                                          onChange={this.saveAlteration.bind(this, 'general', 'year')}
-                                                         label="Ano"/>
+                                                         label="Ano de Referência"/>
                                         </Col>
-                                        <Col xs={2} md={2} sm={2}>
-                                            <CustomInput value={this.state.death.general.time} type="time" id="time"
+                                        <Col xs={3} md={3} sm={3}>
+                                            <CustomInput value={this.state.death.general.date} type="date" id="date"
                                                          required="required"
-                                                         onChange={this.saveAlteration.bind(this, 'general', 'time')}
-                                                         label="Hora"/>
+                                                         onChange={this.saveAlteration.bind(this, 'general', 'date')}
+                                                         label="Data da Ocorrência"/>
                                         </Col>
-                                        <Col xs={2} md={2} sm={2}>
-                                            <CustomInput value={this.state.death.general.number} type="text" id="number"
-                                                         required="required"
-                                                         onChange={this.saveAlteration.bind(this, 'general', 'number')}
-                                                         label="Numero/KM"/>
-                                        </Col>
-                                        <Col xs={2} md={2} sm={2}>
-                                            <CustomSelect value={this.state.death.statisticData.zone} id="zone"
+                                        <Col xs={3} md={3} sm={3}>
+                                            <CustomSelect value={this.state.death.general.zone} id="zone"
                                                           name="zone"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'zone')}
+                                                          onChange={this.saveAlteration.bind(this, 'general', 'zone')}
                                                           options={this.props.options.statisticData.zones}
-                                                          label="Zona"/>
+                                                          label="Trecho"/>
                                         </Col>
                                     </Row>
-
                                     <Row>
                                         <Col xs={6} md={6} sm={6}>
                                             <CustomInput value={this.state.death.general.street} type="text" id="street"
@@ -214,339 +216,388 @@ class DForm extends Component {
                                                          label="Rua"/>
                                         </Col>
                                         <Col xs={2} md={2} sm={2}>
-                                            <CustomInput value={this.state.death.general.lat} type="number" id="lat"
+                                            <CustomInput value={this.state.death.general.number} type="text" id="number"
                                                          required="required"
-                                                         onChange={this.saveAlteration.bind(this, 'general', 'lat')}
-                                                         label="Latitude"/>
+                                                         onChange={this.saveAlteration.bind(this, 'general', 'number')}
+                                                         label="Numero/KM"/>
                                         </Col>
                                     </Row>
-
                                     <Row>
                                         <Col xs={6} md={6} sm={6}>
                                             <CustomInput value={this.state.death.general.cross} type="text" id="cross"
-                                                         required="required"
                                                          onChange={this.saveAlteration.bind(this, 'general', 'cross')}
                                                          label="Cruzamento"/>
                                         </Col>
                                         <Col xs={2} md={2} sm={2}>
-                                            <CustomInput value={this.state.death.general.lng} type="number" id="lng"
+                                            <CustomInput value={this.state.death.general.time} type="time" id="time"
                                                          required="required"
-                                                         onChange={this.saveAlteration.bind(this, 'general', 'lng')}
-                                                         label="Longitude"/>
+                                                         onChange={this.saveAlteration.bind(this, 'general', 'time')}
+                                                         label="Hora da Ocorrência"/>
                                         </Col>
+                                        {/*<Col mdOffset={1} xs={2} md={2} sm={2}>*/}
+                                        {/*<CustomInput value={this.state.death.general.lat} type="number" id="lat"*/}
+                                        {/*required="required"*/}
+                                        {/*onChange={this.saveAlteration.bind(this, 'general', 'lat')}*/}
+                                        {/*label="Latitude"/>*/}
+                                        {/*</Col>*/}
+                                        {/*<Col xs={2} md={2} sm={2}>*/}
+                                        {/*<CustomInput value={this.state.death.general.lng} type="number" id="lng"*/}
+                                        {/*required="required"*/}
+                                        {/*onChange={this.saveAlteration.bind(this, 'general', 'lng')}*/}
+                                        {/*label="Longitude"/>*/}
+                                        {/*</Col>*/}
                                     </Row>
-
                                 </Row>
-
-                                {/*Vitima
-                                     * Nome da Vítima----------------------
-                                     * Status da vítima--------------------
-                                     * Idade da vítima (somente número)----
-                                     * Sexo--------------------------------
-                                */}
+                                {/**
+                                 * Vitima
+                                 * Fatores de Risco [Velocidade]
+                                 * Fatores de Risco [Álcool/Drogas]
+                                 * Fatores de Risco [Infraestrutura]
+                                 * Fatores de Risco [Veículo]
+                                 * Fatores de Risco [Fadiga]
+                                 * Fatores de Risco [Visibilidade]
+                                 * Fatores de Risco [Problemas psicológicos]
+                                 * Fatores de Risco [Celular ou distração]
+                                 * Fatores de Risco [Condições climáticas]
+                                 * Possível responsável pelos fatores de risco
+                                 */}
                                 <Row className="form-group clearfix">
                                     <h4>Vítima</h4>
                                     <Row>
                                         <Col xs={8} md={8} sm={8}>
-                                            <CustomInput value={this.state.death.involved.involvedName} type="text"
-                                                         id="involvedName" required="required"
-                                                         onChange={this.saveAlteration.bind(this, 'involved', 'involvedName')}
+                                            <CustomInput value={this.state.death.victim.victimName} type="text"
+                                                         id="victimName" required="required"
+                                                         onChange={this.saveAlteration.bind(this, 'victim', 'victimName')}
                                                          label="Nome"/>
                                         </ Col>
                                     </Row>
                                     <Row>
                                         <Col xs={2} md={2} sm={2}>
-                                            <CustomSelect value={this.state.death.involved.involvedSex} id="involvedSex"
-                                                          name="involvedSex"
-                                                          onChange={this.saveAlteration.bind(this, 'involved', 'involvedSex')}
+                                            <CustomSelect value={this.state.death.victim.victimSex} id="victimSex"
+                                                          name="victimSex"
+                                                          onChange={this.saveAlteration.bind(this, 'victim', 'victimSex')}
                                                           options={this.props.options.involved.involvedSexes}
                                                           label="Sexo"/>
                                         </ Col>
                                         <Col xs={2} md={2} sm={2}>
-                                            <CustomInput value={this.state.death.involved.involvedAge} type="number"
-                                                     id="involvedAge" required="required"
-                                                     onChange={this.saveAlteration.bind(this, 'involved', 'involvedAge')}
-                                                     label="Idade"/>
+                                            <CustomInput value={this.state.death.victim.victimAge} type="number"
+                                                         id="victimAge" required="victimAge"
+                                                         onChange={this.saveAlteration.bind(this, 'victim', 'victimAge')}
+                                                         label="Idade"/>
                                         </ Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.involved.involvedVehiclePosition}
-                                                          id="involvedVehiclePosition"
-                                                          name="involvedVehiclePosition"
-                                                          onChange={this.saveAlteration.bind(this, 'involved', 'involvedVehiclePosition')}
+                                            <CustomSelect value={this.state.death.victim.victimVehiclePosition}
+                                                          id="victimVehiclePosition"
+                                                          name="victimVehiclePosition"
+                                                          onChange={this.saveAlteration.bind(this, 'victim', 'victimVehiclePosition')}
                                                           options={this.props.options.involved.involvedVehiclePositions}
                                                           label="Posição no Veículo"/>
                                         </Col>
                                     </Row>
-                                    {/*<Row>*/}
-                                        {/*<Col xs={4} md={4} sm={4}>*/}
-                                            {/*<CustomInput value={this.state.death.involved.involvedStreet} type="text"*/}
-                                                         {/*id="involvedStreet" required="required"*/}
-                                                         {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedStreet')}*/}
-                                                         {/*label="Rua"/>*/}
-                                        {/*</Col>*/}
-                                        {/*<Col xs={4} md={4} sm={4}>*/}
-                                            {/*<CustomInput value={this.state.death.involved.involvedNumber} type="text"*/}
-                                                         {/*id="involvedNumber" required="required"*/}
-                                                         {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedNumber')}*/}
-                                                         {/*label="Numero"/>*/}
-                                        {/*</Col>*/}
-                                        {/*<Col xs={4} md={4} sm={4}>*/}
-                                            {/*<CustomInput value={this.state.death.involved.involvedCorner} type="text"*/}
-                                                         {/*id="involvedCorner" required="required"*/}
-                                                         {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedCorner')}*/}
-                                                         {/*label="Esquina"/>*/}
-                                        {/*</Col>*/}
-                                    {/*</Row>*/}
-                                    {/*<Row>*/}
-                                        {/*<Col xs={4} md={4} sm={4}>*/}
-                                            {/*<CustomSelect value={this.state.death.involved.involvedNeighborhood}*/}
-                                                          {/*id="involvedNeighborhood"*/}
-                                                          {/*name="involvedNeighborhood"*/}
-                                                          {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedNeighborhood')}*/}
-                                                          {/*options={this.props.options.involved.involvedNeighborhoods}*/}
-                                                          {/*label="Bairro"/>*/}
-                                        {/*</Col>*/}
-                                        {/*<Col xs={4} md={4} sm={4}>*/}
-                                            {/*<CustomInput value={this.state.death.involved.involvedReference} type="text"*/}
-                                                         {/*id="involvedReference" required="required"*/}
-                                                         {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedReference')}*/}
-                                                         {/*label="Referência"/>*/}
-                                        {/*</Col>*/}
-                                        {/*<Col xs={4} md={4} sm={4}>*/}
-                                            {/*<CustomInput value={this.state.death.involved.involvedMom} type="text"*/}
-                                                         {/*id="involvedMom" required="required"*/}
-                                                         {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedMom')}*/}
-                                                         {/*label="Nome da mãe"/>*/}
-                                        {/*</Col>*/}
-                                    {/*</Row>*/}
-                                    {/*<Row>*/}
-                                        {/*<Col xs={4} md={4} sm={4}>*/}
-                                            {/*<CustomSelect value={this.state.death.involved.involvedSituation}*/}
-                                                          {/*id="involvedSituation"*/}
-                                                          {/*name="involvedSituation"*/}
-                                                          {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedSituation')}*/}
-                                                          {/*options={this.props.options.involved.involvedSituations}*/}
-                                                          {/*label="Situação"/>*/}
-                                        {/*</Col>*/}
-                                        {/*<Col xs={4} md={4} sm={4}>*/}
-                                            {/*<CustomSelect value={this.state.death.involved.involvedVehicleType}*/}
-                                                          {/*id="involvedVehicleType"*/}
-                                                          {/*name="involvedVehicleType"*/}
-                                                          {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedVehicleType')}*/}
-                                                          {/*options={this.props.options.involved.involvedVehicleTypes}*/}
-                                                          {/*label="Tipo de veiculo"/>*/}
-                                        {/*</Col>*/}
-                                    {/*</Row>*/}
-                                    {/*<Row>*/}
-                                        {/*<Col xs={4} md={4} sm={4}>*/}
-                                            {/*<CustomSelect value={this.state.death.involved.involvedSecurityCondition}*/}
-                                                          {/*id="involvedSecurityCondition"*/}
-                                                          {/*name="involvedSecurityCondition"*/}
-                                                          {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedSecurityCondition')}*/}
-                                                          {/*options={this.props.options.involved.involvedSecurityConditions}*/}
-                                                          {/*label="Condição de segurança"/>*/}
-                                        {/*</Col>*/}
-                                        {/*<Col xs={4} md={4} sm={4}>*/}
-                                            {/*<CustomSelect value={this.state.death.involved.involvedInjuryLevel}*/}
-                                                          {/*id="involvedInjuryLevel"*/}
-                                                          {/*name="involvedInjuryLevel"*/}
-                                                          {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedInjuryLevel')}*/}
-                                                          {/*options={this.props.options.involved.involvedInjuryLevels}*/}
-                                                          {/*label="Gravidade da lesão"/>*/}
-                                        {/*</Col>*/}
-                                        {/*<Col xs={4} md={4} sm={4}>*/}
-                                            {/*<CustomSelect value={this.state.death.involved.involvedProbableConduct}*/}
-                                                          {/*id="involvedProbableConduct"*/}
-                                                          {/*name="involvedProbableConduct"*/}
-                                                          {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedProbableConduct')}*/}
-                                                          {/*options={this.props.options.involved.involvedProbableConducts}*/}
-                                                          {/*label="Conduta provável"/>*/}
-                                        {/*</Col>*/}
-                                    {/*</Row>*/}
-                                    {/*<Row>*/}
-                                        {/*<Col xs={12}>*/}
-                                            {/*<CustomInput value={this.state.death.involved.involvedEvolution} type="text"*/}
-                                                         {/*id="involvedEvolution" required="required"*/}
-                                                         {/*onChange={this.saveAlteration.bind(this, 'involved', 'involvedEvolution')}*/}
-                                                         {/*label="Evolução"/>*/}
-                                        {/*</Col>*/}
-                                    {/*</Row>*/}
                                 </Row>
-
-                                {/*Fatores de Risco*/}
+                                {/**
+                                 * Fatores de Risco
+                                 * Fatores de Risco [Velocidade]
+                                 * Fatores de Risco [Álcool/Drogas]
+                                 * Fatores de Risco [Infraestrutura]
+                                 * Fatores de Risco [Veículo]
+                                 * Fatores de Risco [Fadiga]
+                                 * Fatores de Risco [Visibilidade]
+                                 * Fatores de Risco [Problemas psicológicos]
+                                 * Fatores de Risco [Celular ou distração]
+                                 * Fatores de Risco [Condições climáticas]
+                                 * Possível responsável pelos fatores de risco
+                                 */}
                                 <Row className="form-group clearfix">
                                     <h4>Fatores de Risco</h4>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.accidentType}
-                                                          id="accidentType" name="accidentType"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'accidentType')}
-                                                          options={this.props.options.statisticData.accidentTypes}
-                                                          label="Tipo de Acidente"/>
+                                            <label htmlFor="speed">Velocidade</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="speed" name="speed"
+                                                    value={this.state.death.riskFactors.speed}
+                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'speed')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.pavementType}
-                                                          id="pavementType" name="pavementType"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'pavementType')}
-                                                          options={this.props.options.statisticData.pavementTypes}
-                                                          label="Tipo de Pavimento"/>
+                                            <label htmlFor="drugs">Álcool/Drogas</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="drugs" name="drugs"
+                                                    value={this.state.death.riskFactors.drugs}
+                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'drugs')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.surface} id="surface"
-                                                          name="surface"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'surface')}
-                                                          options={this.props.options.statisticData.surfaces}
-                                                          label="Superficie"/>
+                                            <label htmlFor="infra">Infraestrutura</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="infra" name="infra"
+                                                    value={this.state.death.riskFactors.infra}
+                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'infra')}/>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.accidentClassification}
-                                                          id="accidentClassification" name="accidentClassification"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'accidentClassification')}
-                                                          options={this.props.options.statisticData.accidentClassifications}
-                                                          label="Classificação do acidente"/>
+                                            <label htmlFor="vehicle">Veículo</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="vehicle" name="vehicle"
+                                                    value={this.state.death.riskFactors.vehicle}
+                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'vehicle')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.roadState} id="roadState"
-                                                          name="roadState"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'roadState')}
-                                                          options={this.props.options.statisticData.roadStates}
-                                                          label="Estado da pista"/>
+                                            <label htmlFor="fatigue">Fadiga</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="fatigue" name="fatigue"
+                                                    value={this.state.death.riskFactors.fatigue}
+                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'fatigue')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.roadProfile} id="roadProfile"
-                                                          name="roadProfile"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'roadProfile')}
-                                                          options={this.props.options.statisticData.roadProfiles}
-                                                          label="Perfil da pista"/>
+                                            <label htmlFor="visibility">Visibilidade</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="visibility" name="visibility"
+                                                    value={this.state.death.riskFactors.visibility}
+                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'visibility')}/>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.roadCondition}
-                                                          id="roadCondition"
-                                                          name="roadCondition"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'roadCondition')}
-                                                          options={this.props.options.statisticData.roadConditions}
-                                                          label="Condição da pista"/>
+                                            <label htmlFor="psych">Problemas psicológicos</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="psych" name="psych"
+                                                    value={this.state.death.riskFactors.psych}
+                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'psych')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.climaticCondition}
-                                                          id="climaticCondition"
-                                                          name="climaticCondition"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'climaticCondition')}
-                                                          options={this.props.options.statisticData.climaticConditions}
-                                                          label="Condição climática"/>
+                                            <label htmlFor="distraction">Celular ou distração</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="distraction" name="distraction"
+                                                    value={this.state.death.riskFactors.distraction}
+                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'distraction')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.verticalSignaling}
-                                                          id="verticalSignaling"
-                                                          name="verticalSignaling"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'verticalSignaling')}
-                                                          options={this.props.options.statisticData.verticalSignals}
-                                                          label="Sinalização vertical"/>
+                                            <label htmlFor="climateConditions">Condições climáticas</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="climateConditions" name="climateConditions"
+                                                    value={this.state.death.riskFactors.climateConditions}
+                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'climateConditions')}/>
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.horizontalSignaling}
-                                                          id="horizontalSignaling"
-                                                          name="horizontalSignaling"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'horizontalSignaling')}
-                                                          options={this.props.options.statisticData.horizontalSignals}
-                                                          label="Sinalização horizontal"/>
-                                        </Col>
-                                        <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.direction} id="direction"
-                                                          name="direction"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'direction')}
-                                                          options={this.props.options.statisticData.directions}
-                                                          label="Direção"/>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.statisticData.cause} id="cause"
-                                                          name="cause"
-                                                          onChange={this.saveAlteration.bind(this, 'statisticData', 'cause')}
-                                                          options={this.props.options.statisticData.causes}
-                                                          label="Causa provável"/>
-                                        </Col>
-                                        <Col className="control-label" xs={8}>
-                                            <CustomInput value={this.state.death.statisticData.additionalInfo} type="text"
-                                                         id="additionalInfo" required="required"
-                                                         onChange={this.saveAlteration.bind(this, 'statisticData', 'additionalInfo')}
-                                                         label="Informações adicionais"/>
+                                        <Col mdOffset={6} xs={6} md={6} sm={6}>
+                                            <CustomSelect value={this.state.death.riskFactors.responsible}
+                                                          id="responsibleFactors" name="responsibleFactors"
+                                                          onChange={this.saveAlteration.bind(this, 'riskFactors', 'responsible')}
+                                                          options={this.props.options.involved.involvedVehiclePositions}
+                                                          label="Possível responsável pelos fatores de risco"/>
                                         </Col>
                                     </Row>
                                 </Row>
-
-                                {/*Veículos*/}
+                                {/**
+                                 * Condutas de Risco
+                                 * Condutas de Risco [Habilitação]
+                                 * Condutas de Risco [Transitar local proibido]
+                                 * Condutas de Risco [Transitar local impróprio]
+                                 * Condutas de Risco [Mudança faixa/pista]
+                                 * Condutas de Risco [Distância veículos]
+                                 * Condutas de Risco [Desrespeito sinalização]
+                                 * Condutas de Risco [Converter/cruzar sem dar preferência]
+                                 * Condutas de Risco [Evitabilidade/Direção defensiva]
+                                 * Condutas de Risco [Direção perigosa]
+                                 * Condutas de Risco [Atitude imprudente pedestre]
+                                 * Possível responsável pelas condutas de risco
+                                 */}
                                 <Row className="form-group clearfix">
-                                    <h4>Veículos</h4>
+                                    <h4>Condutas de Risco</h4>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomInput value={this.state.death.vehicles.carPlate} type="text" id="carPlate"
-                                                         required="required"
-                                                         onChange={this.saveAlteration.bind(this, 'vehicles', 'carPlate')}
-                                                         label="Placa"/>
+                                            <label htmlFor="license">Habilitação</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="license" name="license"
+                                                    value={this.state.death.riskConducts.license}
+                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'license')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.vehicles.carStatus} id="carStatus"
-                                                          name="carStatus"
-                                                          onChange={this.saveAlteration.bind(this, 'vehicles', 'carStatus')}
-                                                          options={this.props.options.vehicles.carStatuses}
-                                                          label="Estado"/>
+                                            <label htmlFor="prohibited">Transitar local proibido</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="prohibited" name="prohibited"
+                                                    value={this.state.death.riskConducts.prohibited}
+                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'prohibited')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomInput value={this.state.death.vehicles.carBrand} type="text" id="carBrand"
-                                                         required="required"
-                                                         onChange={this.saveAlteration.bind(this, 'vehicles', 'carBrand')}
-                                                         label="Marca"/>
+                                            <label htmlFor="improper">Transitar local impróprio</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="improper" name="improper"
+                                                    value={this.state.death.riskConducts.improper}
+                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'improper')}/>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomInput value={this.state.death.vehicles.carModel} type="text" id="carModel"
-                                                         required="required"
-                                                         onChange={this.saveAlteration.bind(this, 'vehicles', 'carModel')}
-                                                         label="Modelo"/>
+                                            <label htmlFor="trackChange">Mudança faixa/pista</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="trackChange" name="trackChange"
+                                                    value={this.state.death.riskConducts.trackChange}
+                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'trackChange')}/>
                                         </Col>
-                                        <Col xs={8}>
-                                            <CustomSelect value={this.state.death.vehicles.damageLevel} id="damageLevel"
-                                                          name="damageLevel"
-                                                          onChange={this.saveAlteration.bind(this, 'vehicles', 'damageLevel')}
-                                                          options={this.props.options.vehicles.damageLevels}
-                                                          label="Grau de avaria"/>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <label htmlFor="vehiclesDistance">Distância veículos</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="vehiclesDistance" name="vehiclesDistance"
+                                                    value={this.state.death.riskConducts.vehiclesDistance}
+                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'vehiclesDistance')}/>
+                                        </Col>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <label htmlFor="signalingDisrespect">Desrespeito sinalização</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="signalingDisrespect" name="signalingDisrespect"
+                                                    value={this.state.death.riskConducts.signalingDisrespect}
+                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'signalingDisrespect')}/>
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <h5>Quanto ao condutor</h5>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomSelect value={this.state.death.vehicles.licenseLevel} id="licenseLevel"
-                                                          name="licenseLevel"
-                                                          onChange={this.saveAlteration.bind(this, 'vehicles', 'licenseLevel')}
-                                                          options={this.props.options.vehicles.licenseLevels}
-                                                          label="Categoria da habilitação"/>
+                                            <label htmlFor="convergePreference">Converter/cruzar sem dar
+                                                preferência</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="convergePreference" name="convergePreference"
+                                                    value={this.state.death.riskConducts.convergePreference}
+                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'convergePreference')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomInput value={this.state.death.vehicles.firstLicense} type="date"
-                                                         id="firstLicense" required="required"
-                                                         onChange={this.saveAlteration.bind(this, 'vehicles', 'firstLicense')}
-                                                         label="Primeira habilitação"/>
+                                            <label htmlFor="defensiveDriving">Evitabilidade/Direção defensiva</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="defensiveDriving" name="defensiveDriving"
+                                                    value={this.state.death.riskConducts.defensiveDriving}
+                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'defensiveDriving')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
-                                            <CustomInput value={this.state.death.vehicles.expireDate} type="date"
-                                                         id="expireDate" required="required"
-                                                         onChange={this.saveAlteration.bind(this, 'vehicles', 'expireDate')}
-                                                         label="Vencimento da habilitação"/>
+                                            <label htmlFor="dangerousDriving">Direção perigosa</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="dangerousDriving" name="dangerousDriving"
+                                                    value={this.state.death.riskConducts.dangerousDriving}
+                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'dangerousDriving')}/>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <label htmlFor="recklessPedestrian">Atitude imprudente pedestre</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="recklessPedestrian" name="recklessPedestrian"
+                                                    value={this.state.death.riskConducts.recklessPedestrian}
+                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'recklessPedestrian')}/>
+                                        </Col>
+                                        <Col xs={6} md={6} sm={6} mdOffset={2}>
+                                            <CustomSelect value={this.state.death.riskConducts.responsible}
+                                                          id="responsibleConducts" name="responsibleConducts"
+                                                          onChange={this.saveAlteration.bind(this, 'riskConducts', 'responsible')}
+                                                          options={this.props.options.involved.involvedVehiclePositions}
+                                                          label="Possível responsável pelas condutas de risco"/>
                                         </Col>
                                     </Row>
                                 </Row>
-
-
-
+                                {/**
+                                 * Quanto ao Usuário
+                                 * Quanto ao Usuário [Capacete]
+                                 * Quanto ao Usuário [Cinto]
+                                 * Quanto ao Usuário [Proteção do ocupante]
+                                 * Quanto ao Usuário [Objetos laterais]
+                                 * Quanto ao Usuário [Atenção ao trauma]
+                                 * Outros itens avaliados [Alcoolemia]
+                                 * Outros itens avaliados [Licenciamento]
+                                 */}
+                                <Row className="form-group clearfix">
+                                    <h4>Quanto ao Usuário</h4>
+                                    <Row>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <label htmlFor="helmet">Capacete</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="helmet" name="helmet"
+                                                    value={this.state.death.user.helmet}
+                                                    onChange={this.handleChange.bind(this, 'user', 'helmet')}/>
+                                        </Col>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <label htmlFor="belt">Cinto de Segurança</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="belt" name="belt"
+                                                    value={this.state.death.user.belt}
+                                                    onChange={this.handleChange.bind(this, 'user', 'belt')}/>
+                                        </Col>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <label htmlFor="occupantProtection">Proteção do ocupante</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="occupantProtection" name="occupantProtection"
+                                                    value={this.state.death.user.occupantProtection}
+                                                    onChange={this.handleChange.bind(this, 'user', 'occupantProtection')}/>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <label htmlFor="sideObjects">Objetos laterais</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="sideObjects" name="sideObjects"
+                                                    value={this.state.death.user.sideObjects}
+                                                    onChange={this.handleChange.bind(this, 'user', 'sideObjects')}/>
+                                        </Col>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <label htmlFor="traumaAttention">Atenção ao trauma</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="traumaAttention" name="traumaAttention"
+                                                    value={this.state.death.user.traumaAttention}
+                                                    onChange={this.handleChange.bind(this, 'user', 'traumaAttention')}/>
+                                        </Col>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <label htmlFor="alcoholism">Alcoolemia</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="alcoholism" name="alcoholism"
+                                                    value={this.state.death.user.alcoholism}
+                                                    onChange={this.handleChange.bind(this, 'user', 'alcoholism')}/>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={4} md={4} sm={4}>
+                                            <label htmlFor="licensing">Licenciamento</label>
+                                            <Slider pinned snaps editable min={0} max={10} step={2}
+                                                    id="licensing" name="licensing"
+                                                    value={this.state.death.user.licensing}
+                                                    onChange={this.handleChange.bind(this, 'user', 'licensing')}/>
+                                        </Col>
+                                    </Row>
+                                </Row>
+                                {/**
+                                 * Outros
+                                 * Órgãos Responsáveis pelo Fornecimento dos Dados
+                                 * Descritivo de possível causa
+                                 * Principal(ais) causa(s) avaliada(s)
+                                 mainCauses
+                                 partners
+                                 */}
+                                <Row className="form-group clearfix">
+                                    <h4>Outros</h4>
+                                    <Row>
+                                        <Col xs={12} md={12} sm={12}>
+                                            <p>mainCauses</p>
+                                        </Col>
+                                        <Col xs={12} md={12} sm={12}>
+                                            <FormGroup>
+                                                <Checkbox inline>
+                                                    1
+                                                </Checkbox>
+                                                <Checkbox inline>
+                                                    2
+                                                </Checkbox>
+                                                <Checkbox inline>
+                                                    3
+                                                </Checkbox>
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={12} md={12} sm={12}>
+                                            <CustomInput value={this.state.death.other.possibleCause}
+                                                         required="required"
+                                                         type="possibleCause" id="possibleCause"
+                                                         onChange={this.saveAlteration.bind(this, 'other', 'possibleCause')}
+                                                         label="Descritivo de possível causa"/>
+                                        </Col>
+                                    </Row>
+                                </Row>
                                 <Row className="clearfix">
                                     <Col xs={1} md={1} sm={1} mdOffset={11} smOffset={9} xsOffset={8}>
                                         <CustomSubmit className="col-md-2" label="Gravar"/>
@@ -747,7 +798,7 @@ export default class Deaths extends Component {
         this.state = {
             options: {
                 general: {
-                    year:"",
+                    year: "",
                     date: "",
                     street: "",
                     number: "",

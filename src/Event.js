@@ -144,7 +144,7 @@ class EForm extends Component {
         let vehicles = this.state.vehicles.map(function (vehicle) {
             return (
                 <Row key={vehicle.id}>
-                    <Col md={10}>
+                    <Col xs={10} md={10} sm={10}>
                         <h4>Veiculo {vehicle.id}</h4>
                         {/*<Collapse in={this.state.collapse[vehicle.id - 1].open}>*/}
                             <div>
@@ -227,7 +227,7 @@ class EForm extends Component {
                         {/*<pre>*/}
                         {/*{JSON.stringify(this.state, undefined, 4)}*/}
                         {/*</pre>*/}
-                        <Col xs={12} md={12} sm={12}>
+                        <Col xs={10} md={10} sm={10}>
                             <Tabs defaultActiveKey={1} id="event-form-tabs">
                                 <Tab eventKey={1} title="Geral">
                                     <Row className="form-group">
