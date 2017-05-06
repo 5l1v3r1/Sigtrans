@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import CustomSubmit from './components/CustomSubmit'
 import CustomInput from './components/CustomInput'
 import CustomSelect from './components/CustomSelect'
-import {Form, Grid, Row, Col, PageHeader, Tabs, Tab, Collapse, Well} from 'react-bootstrap';
+import {Form, Grid, Row, Col, PageHeader, Tabs, Tab, Well} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
 import {Modal} from 'react-bootstrap';
@@ -138,7 +138,6 @@ class EForm extends Component {
         });
         console.log(JSON.stringify(this.state.collapse));
     }
-
 
     render() {
         let vehicles = this.state.vehicles.map(function (vehicle) {

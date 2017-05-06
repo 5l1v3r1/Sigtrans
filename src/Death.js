@@ -14,12 +14,11 @@ import PubSub from 'pubsub-js';
 import ErrHandler from  './ErrHandler';
 import update from 'immutability-helper';
 import Slider from 'react-toolbox/lib/slider/Slider';
-import Checkbox from 'react-toolbox/lib/checkbox/Checkbox';
 
 class DForm extends Component {
     constructor(props) {
         super(props);
-        this.state = props.selectedEvent ? props.selectedEvent : ({
+        this.state = props.selectedDeath ? props.selectedDeath : ({
             death: {
                 id: '',
                 general: {
@@ -73,7 +72,7 @@ class DForm extends Component {
                     licensing: 0
                 },
                 other: {
-                    possibleCause: '',
+                    possibleCauseDescription: '',
                     mainCauses: [],
                 }
             },
@@ -96,7 +95,7 @@ class DForm extends Component {
 
     handleEventSubmit(e) {
         e.preventDefault();
-        let selectedID = this.props.selectedEvent ? this.props.selectedEvent.id : 0;
+        let selectedID = this.props.selectedDeath ? this.props.selectedDeath.id : 0;
         $.ajax({
             url: selectedID ? "https://ocorrencias-teste-api.herokuapp.com/api/events/open/:" + selectedID : "https://ocorrencias-teste-api.herokuapp.com/api/events/open",
             contentType: 'application/json',
@@ -107,7 +106,7 @@ class DForm extends Component {
             data: JSON.stringify(this.state),
             success: function (newData) {
                 PubSub.publish('update-events', newData);
-                this.setState(selectedID ? this.props.selectedEvent : ({
+                this.setState(selectedID ? this.props.selectedDeath : ({
                     id: '',
                     general: {
                         date: '', street: '', number: '', cross: '', lat: '', lng: '', middleName: '',
@@ -175,11 +174,34 @@ class DForm extends Component {
         });
     };
 
+    handleCheckBox(group, option, e) {
+        let value = e.target.name;
+        let alteration = this.state.death;
+        let idx = alteration[group][option].indexOf(value);
+        alteration[group] = idx > -1 ?
+            (
+                update(alteration[group], {
+                    [option]: {$splice: [[idx, 1]]}
+                })
+            ):(
+                update(alteration[group], {
+                    [option]: {$push: [value]}
+                })
+            );
+        this.setState({
+            death: alteration
+        });
+    }
+    
     render() {
         let causes = this.state.causes.map(function (cause) {
             return (
                 <Col key={cause.id} xs={3} md={3} sm={3}>
-                    {cause.name}
+                    <input name={cause.id}
+                           type="checkbox"
+                           checked={this.state.death.other.mainCauses[cause.id]}
+                           onChange={this.handleCheckBox.bind(this, 'other', 'mainCauses')} />
+                    {' ' + cause.name}
                 </Col>
             );
         }, this);
@@ -187,12 +209,12 @@ class DForm extends Component {
             <div className="clearfix">
                 <Grid>
                     <Row className="clearfix">
-                        <Form onSubmit={this.handleEventSubmit} method={this.props.selectedEvent ? "put" : "post"}>
+                        <Form onSubmit={this.handleEventSubmit} method={this.props.selectedDeath ? "put" : "post"}>
                             {/*{console.log(JSON.stringify(this.state, undefined, 4))}*/}
-                            {/*<pre>*/}
-                                {/*{JSON.stringify(this.state, undefined, 4)}*/}
-                            {/*</pre>*/}
                             <Col xs={12} md={12} sm={12}>
+                                {/*<pre>*/}
+                                    {/*{JSON.stringify(this.state, undefined, 4)}*/}
+                                {/*</pre>*/}
                                 {/**
                                  * Geral
                                  * Ano de Referência (ex: 2016)
@@ -206,7 +228,7 @@ class DForm extends Component {
                                  * Sexo
                                  */}
                                 <Row className="form-group clearfix">
-                                    <h4>Geral</h4>
+                                    <h3>Geral</h3>
                                     <Row>
                                         <Col xs={2} md={2} sm={2}>
                                             <CustomInput value={this.state.death.general.year} type="number" id="year"
@@ -282,7 +304,7 @@ class DForm extends Component {
                                  * Possível responsável pelos fatores de risco
                                  */}
                                 <Row className="form-group clearfix">
-                                    <h4>Vítima</h4>
+                                    <h3>Vítima</h3>
                                     <Row>
                                         <Col xs={8} md={8} sm={8}>
                                             <CustomInput value={this.state.death.victim.victimName} type="text"
@@ -329,7 +351,7 @@ class DForm extends Component {
                                  * Possível responsável pelos fatores de risco
                                  */}
                                 <Row className="form-group clearfix">
-                                    <h4>Fatores de Risco</h4>
+                                    <h3>Fatores de Risco</h3>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="speed">Velocidade</label>
@@ -424,7 +446,7 @@ class DForm extends Component {
                                  * Possível responsável pelas condutas de risco
                                  */}
                                 <Row className="form-group clearfix">
-                                    <h4>Condutas de Risco</h4>
+                                    <h3>Condutas de Risco</h3>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="license">Habilitação</label>
@@ -523,7 +545,7 @@ class DForm extends Component {
                                  * Outros itens avaliados [Licenciamento]
                                  */}
                                 <Row className="form-group clearfix">
-                                    <h4>Quanto ao Usuário</h4>
+                                    <h3>Quanto ao Usuário</h3>
                                     <Row>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="helmet">Capacete</label>
@@ -589,17 +611,20 @@ class DForm extends Component {
                                  partners
                                  */}
                                 <Row className="form-group clearfix">
-                                    <h4>Outros</h4>
                                     <Row>
-                                        <h2>Principal(ais) causa(s) avaliada(s)</h2>
+                                        <h3>Outros</h3>
+                                    </Row>
+                                    <Row>
+                                        <h4>Principais causas avaliadas</h4>
                                         {causes}
                                     </Row>
                                     <Row>
                                         <Col xs={12} md={12} sm={12}>
-                                            <CustomInput value={this.state.death.other.possibleCause}
+                                            <br/>
+                                            <CustomInput value={this.state.death.other.possibleCauseDescription}
                                                          required="required"
-                                                         type="text" id="possibleCause"
-                                                         onChange={this.saveAlteration.bind(this, 'other', 'possibleCause')}
+                                                         type="text" id="possibleCauseDescription"
+                                                         onChange={this.saveAlteration.bind(this, 'other', 'possibleCauseDescription')}
                                                          label="Descritivo de possível causa"/>
                                         </Col>
                                     </Row>
@@ -617,10 +642,10 @@ class DForm extends Component {
             </div>
         );
     }
-
 }
 
-class DGrid extends Component {
+export class DGrid extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -673,7 +698,7 @@ class DGrid extends Component {
                     involvedEvolution: ""
                 }
             },
-            selectedEvent: [],
+            selectedDeath: [],
             data: [], //server side
         };
         this.handleToggle = this.handleToggle.bind(this);
@@ -703,13 +728,13 @@ class DGrid extends Component {
             }.bind(this)
         });
         PubSub.subscribe('update-events', function (topicName, newData) {
-            this.setState({data: newData, showModal: false, selectedEvent: ''});
+            this.setState({data: newData, showModal: false, selectedDeath: ''});
         }.bind(this));
     }
 
     handleToggle(e) {
-        if (!this.state.selectedEvent || !this.state.showModal) {
-            this.setState({selectedEvent: this.state.data[e.target.id - 1]});
+        if (!this.state.selectedDeath || !this.state.showModal) {
+            this.setState({selectedDeath: this.state.data[e.target.id - 1]});
         }
         this.setState({showModal: !this.state.showModal});
     }
@@ -751,9 +776,7 @@ class DGrid extends Component {
 
         return (
             <div>
-                <PageHeader>Ocorrências
-                    <small>(Abertas)</small>
-                </PageHeader>
+                <PageHeader>Obitos</PageHeader>
                 <div className="content" id="content">
                     <ReactTable
                         previousText='Anterior'
@@ -777,12 +800,12 @@ class DGrid extends Component {
                                aria-labelledby="contained-modal-title">
                             <Modal.Header closeButton>
                                 <Modal.Title id="contained-modal-title">Ocorrência
-                                    <small> Nº: {this.state.selectedEvent.id}</small>
+                                    <small> Nº: {this.state.selectedDeath.id}</small>
                                 </Modal.Title>
                             </Modal.Header>
 
                             <Modal.Body>
-                                <DForm options={this.state.options} selectedEvent={this.state.selectedEvent}/>
+                                <DForm options={this.state.options} selectedDeath={this.state.selectedDeath}/>
                             </Modal.Body>
 
                             <Modal.Footer>
@@ -871,9 +894,10 @@ export default class Deaths extends Component {
     render() {
         return (
             <div>
-                <PageHeader>Editar Obito</PageHeader>
+                {/*<PageHeader>Obitos</PageHeader>*/}
                 <div className="content" id="content">
-                    <DForm options={this.state.options} selectedEvent={null}/>
+                    {/*<DGrid/>*/}
+                    <DForm options={this.state.options} selectedDeath={null}/>
                 </div>
             </div>
         );
