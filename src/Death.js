@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import CustomSubmit from './components/CustomSubmit'
 import CustomInput from './components/CustomInput'
 import CustomSelect from './components/CustomSelect'
-import {Form, Grid, Row, Col, PageHeader, FormGroup, Checkbox} from 'react-bootstrap';
+import {Form, Grid, Row, Col, PageHeader} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
 import {Modal} from 'react-bootstrap';
@@ -14,6 +14,7 @@ import PubSub from 'pubsub-js';
 import ErrHandler from  './ErrHandler';
 import update from 'immutability-helper';
 import Slider from 'react-toolbox/lib/slider/Slider';
+import Checkbox from 'react-toolbox/lib/checkbox/Checkbox';
 
 class DForm extends Component {
     constructor(props) {
@@ -73,10 +74,22 @@ class DForm extends Component {
                 },
                 other: {
                     possibleCause: '',
-                    mainCauses: '',
-                    partners: ''
+                    mainCauses: [],
                 }
-            }
+            },
+            causes: [
+                {name: "Excesso de velocidade", id: "speed"},
+                {name: "Problemas do veículo", id: "vehicleProblems"},
+                {name: "Imprudência do Condutor", id: "driverImprudence"},
+                {name: "Uso de álcool/drogas", id: "drugs"},
+                {name: "Problemas psicológicos", id: "psych"},
+                {name: "Imprudência do pedestre", id: "recklessPedestrian"},
+                {name: "Condições climáticas e visibilidade", id: "visibility"},
+                {name: "Problemas na infraestrutura ou via", id: "infra"},
+                {name: "Imperícia do Condutor", id: "driverInexperience"},
+                {name: "Fadiga ou distração", id: "fatigueDistraction"},
+                {name: "Outro", id: "other"}
+            ]
         });
         this.handleEventSubmit = this.handleEventSubmit.bind(this);
     }
@@ -152,7 +165,7 @@ class DForm extends Component {
 
     }
 
-    handleChange(group, option, value) {
+    handleSlide(group, option, value) {
         let alteration = this.state.death;
         alteration[group] = update(alteration[group], {
             [option]: {$set: value}
@@ -163,6 +176,13 @@ class DForm extends Component {
     };
 
     render() {
+        let causes = this.state.causes.map(function (cause) {
+            return (
+                <Col key={cause.id} xs={3} md={3} sm={3}>
+                    {cause.name}
+                </Col>
+            );
+        }, this);
         return (
             <div className="clearfix">
                 <Grid>
@@ -316,21 +336,21 @@ class DForm extends Component {
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="speed" name="speed"
                                                     value={this.state.death.riskFactors.speed}
-                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'speed')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskFactors', 'speed')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="drugs">Álcool/Drogas</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="drugs" name="drugs"
                                                     value={this.state.death.riskFactors.drugs}
-                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'drugs')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskFactors', 'drugs')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="infra">Infraestrutura</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="infra" name="infra"
                                                     value={this.state.death.riskFactors.infra}
-                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'infra')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskFactors', 'infra')}/>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -339,21 +359,21 @@ class DForm extends Component {
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="vehicle" name="vehicle"
                                                     value={this.state.death.riskFactors.vehicle}
-                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'vehicle')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskFactors', 'vehicle')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="fatigue">Fadiga</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="fatigue" name="fatigue"
                                                     value={this.state.death.riskFactors.fatigue}
-                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'fatigue')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskFactors', 'fatigue')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="visibility">Visibilidade</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="visibility" name="visibility"
                                                     value={this.state.death.riskFactors.visibility}
-                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'visibility')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskFactors', 'visibility')}/>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -362,21 +382,21 @@ class DForm extends Component {
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="psych" name="psych"
                                                     value={this.state.death.riskFactors.psych}
-                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'psych')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskFactors', 'psych')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="distraction">Celular ou distração</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="distraction" name="distraction"
                                                     value={this.state.death.riskFactors.distraction}
-                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'distraction')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskFactors', 'distraction')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="climateConditions">Condições climáticas</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="climateConditions" name="climateConditions"
                                                     value={this.state.death.riskFactors.climateConditions}
-                                                    onChange={this.handleChange.bind(this, 'riskFactors', 'climateConditions')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskFactors', 'climateConditions')}/>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -411,21 +431,21 @@ class DForm extends Component {
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="license" name="license"
                                                     value={this.state.death.riskConducts.license}
-                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'license')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskConducts', 'license')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="prohibited">Transitar local proibido</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="prohibited" name="prohibited"
                                                     value={this.state.death.riskConducts.prohibited}
-                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'prohibited')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskConducts', 'prohibited')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="improper">Transitar local impróprio</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="improper" name="improper"
                                                     value={this.state.death.riskConducts.improper}
-                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'improper')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskConducts', 'improper')}/>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -434,21 +454,21 @@ class DForm extends Component {
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="trackChange" name="trackChange"
                                                     value={this.state.death.riskConducts.trackChange}
-                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'trackChange')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskConducts', 'trackChange')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="vehiclesDistance">Distância veículos</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="vehiclesDistance" name="vehiclesDistance"
                                                     value={this.state.death.riskConducts.vehiclesDistance}
-                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'vehiclesDistance')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskConducts', 'vehiclesDistance')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="signalingDisrespect">Desrespeito sinalização</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="signalingDisrespect" name="signalingDisrespect"
                                                     value={this.state.death.riskConducts.signalingDisrespect}
-                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'signalingDisrespect')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskConducts', 'signalingDisrespect')}/>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -458,21 +478,21 @@ class DForm extends Component {
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="convergePreference" name="convergePreference"
                                                     value={this.state.death.riskConducts.convergePreference}
-                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'convergePreference')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskConducts', 'convergePreference')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="defensiveDriving">Evitabilidade/Direção defensiva</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="defensiveDriving" name="defensiveDriving"
                                                     value={this.state.death.riskConducts.defensiveDriving}
-                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'defensiveDriving')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskConducts', 'defensiveDriving')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="dangerousDriving">Direção perigosa</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="dangerousDriving" name="dangerousDriving"
                                                     value={this.state.death.riskConducts.dangerousDriving}
-                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'dangerousDriving')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskConducts', 'dangerousDriving')}/>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -481,7 +501,7 @@ class DForm extends Component {
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="recklessPedestrian" name="recklessPedestrian"
                                                     value={this.state.death.riskConducts.recklessPedestrian}
-                                                    onChange={this.handleChange.bind(this, 'riskConducts', 'recklessPedestrian')}/>
+                                                    onChange={this.handleSlide.bind(this, 'riskConducts', 'recklessPedestrian')}/>
                                         </Col>
                                         <Col xs={6} md={6} sm={6} mdOffset={2}>
                                             <CustomSelect value={this.state.death.riskConducts.responsible}
@@ -510,21 +530,21 @@ class DForm extends Component {
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="helmet" name="helmet"
                                                     value={this.state.death.user.helmet}
-                                                    onChange={this.handleChange.bind(this, 'user', 'helmet')}/>
+                                                    onChange={this.handleSlide.bind(this, 'user', 'helmet')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="belt">Cinto de Segurança</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="belt" name="belt"
                                                     value={this.state.death.user.belt}
-                                                    onChange={this.handleChange.bind(this, 'user', 'belt')}/>
+                                                    onChange={this.handleSlide.bind(this, 'user', 'belt')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="occupantProtection">Proteção do ocupante</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="occupantProtection" name="occupantProtection"
                                                     value={this.state.death.user.occupantProtection}
-                                                    onChange={this.handleChange.bind(this, 'user', 'occupantProtection')}/>
+                                                    onChange={this.handleSlide.bind(this, 'user', 'occupantProtection')}/>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -533,21 +553,21 @@ class DForm extends Component {
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="sideObjects" name="sideObjects"
                                                     value={this.state.death.user.sideObjects}
-                                                    onChange={this.handleChange.bind(this, 'user', 'sideObjects')}/>
+                                                    onChange={this.handleSlide.bind(this, 'user', 'sideObjects')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="traumaAttention">Atenção ao trauma</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="traumaAttention" name="traumaAttention"
                                                     value={this.state.death.user.traumaAttention}
-                                                    onChange={this.handleChange.bind(this, 'user', 'traumaAttention')}/>
+                                                    onChange={this.handleSlide.bind(this, 'user', 'traumaAttention')}/>
                                         </Col>
                                         <Col xs={4} md={4} sm={4}>
                                             <label htmlFor="alcoholism">Alcoolemia</label>
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="alcoholism" name="alcoholism"
                                                     value={this.state.death.user.alcoholism}
-                                                    onChange={this.handleChange.bind(this, 'user', 'alcoholism')}/>
+                                                    onChange={this.handleSlide.bind(this, 'user', 'alcoholism')}/>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -556,7 +576,7 @@ class DForm extends Component {
                                             <Slider pinned snaps editable min={0} max={10} step={2}
                                                     id="licensing" name="licensing"
                                                     value={this.state.death.user.licensing}
-                                                    onChange={this.handleChange.bind(this, 'user', 'licensing')}/>
+                                                    onChange={this.handleSlide.bind(this, 'user', 'licensing')}/>
                                         </Col>
                                     </Row>
                                 </Row>
@@ -571,28 +591,14 @@ class DForm extends Component {
                                 <Row className="form-group clearfix">
                                     <h4>Outros</h4>
                                     <Row>
-                                        <Col xs={12} md={12} sm={12}>
-                                            <p>mainCauses</p>
-                                        </Col>
-                                        <Col xs={12} md={12} sm={12}>
-                                            <FormGroup>
-                                                <Checkbox inline>
-                                                    1
-                                                </Checkbox>
-                                                <Checkbox inline>
-                                                    2
-                                                </Checkbox>
-                                                <Checkbox inline>
-                                                    3
-                                                </Checkbox>
-                                            </FormGroup>
-                                        </Col>
+                                        <h2>Principal(ais) causa(s) avaliada(s)</h2>
+                                        {causes}
                                     </Row>
                                     <Row>
                                         <Col xs={12} md={12} sm={12}>
                                             <CustomInput value={this.state.death.other.possibleCause}
                                                          required="required"
-                                                         type="possibleCause" id="possibleCause"
+                                                         type="text" id="possibleCause"
                                                          onChange={this.saveAlteration.bind(this, 'other', 'possibleCause')}
                                                          label="Descritivo de possível causa"/>
                                         </Col>
