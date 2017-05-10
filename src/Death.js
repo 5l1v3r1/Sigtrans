@@ -22,32 +22,14 @@ class DForm extends Component {
             death: {
                 id: '',
                 general: {
-                    year: '',
-                    date: '',
-                    street: '',
-                    time: '',
-                    number: '',
-                    cross: '',
-                    lat: '',
-                    lng: '',
-                    zone: ''
+                    year: '', date: '', street: '', time: '', number: '', cross: '', lat: '', lng: '', zone: ''
                 },
                 victim: {
-                    victimName: '',
-                    victimSex: '',
-                    victimAge: ''
+                    victimName: '', victimSex: '', victimAge: ''
                 },
                 riskFactors: {
-                    speed: 0,
-                    drugs: 0,
-                    infra: 0,
-                    vehicle: 0,
-                    fatigue: 0,
-                    visibility: 0,
-                    psych: 0,
-                    distraction: 0,
-                    climateConditions: 0,
-                    responsible: ''
+                    speed: 0, drugs: 0, infra: 0, vehicle: 0, fatigue: 0, visibility: 0, psych: 0, distraction: 0,
+                    climateConditions: 0, responsible: ''
                 },
                 riskConducts: {
                     license: 0,
@@ -63,17 +45,11 @@ class DForm extends Component {
                     responsible: ''
                 },
                 user: {
-                    helmet: 0,
-                    belt: 0,
-                    occupantProtection: 0,
-                    sideObjects: 0,
-                    traumaAttention: 0,
-                    alcoholism: 0,
+                    helmet: 0, belt: 0, occupantProtection: 0, sideObjects: 0, traumaAttention: 0, alcoholism: 0,
                     licensing: 0
                 },
                 other: {
-                    possibleCauseDescription: '',
-                    mainCauses: [],
+                    possibleCauseDescription: '', mainCauses: [],
                 }
             },
             causes: [
@@ -642,6 +618,7 @@ class DForm extends Component {
             </div>
         );
     }
+
 }
 
 export class DGrid extends Component {

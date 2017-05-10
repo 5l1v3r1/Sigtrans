@@ -13,8 +13,8 @@ import Panel from "react-toolbox/lib/layout/Panel";
 import FontIcon from "react-toolbox/lib/font_icon";
 
 // import Checkbox from 'react-toolbox/lib/checkbox/Checkbox';
-// import Sidebar from 'react-toolbox/lib/layout/Sidebar';
-// import IconButton from 'react-toolbox/lib/button/IconButton';
+import Sidebar from 'react-toolbox/lib/layout/Sidebar';
+import IconButton from 'react-toolbox/lib/button/IconButton';
 
 const menu = [
     {
@@ -49,12 +49,18 @@ class App extends Component {
     constructor() {
         super();
         this.state = {
+            drawerActive: false,
             drawerPinned: true,
+            sidebarPinned: false,
         };
     }
 
     toggleDrawerPinned = () => {
         this.setState({drawerPinned: !this.state.drawerPinned});
+    };
+
+    toggleSidebar = () => {
+        this.setState({sidebarPinned: !this.state.sidebarPinned});
     };
 
     render() {
@@ -74,10 +80,6 @@ class App extends Component {
                     <MetisMenu content={menu} LinkComponent={RouterLink}/>
                 </NavDrawer>
                 <Panel>
-                    {/*
-                     theme={{title:"app-bar-title"}}
-                     */}
-
                     <AppBar title=" "
                             leftIcon={<FontIcon className="md-24 md-dark" value='menu'/>}
                             rightIcon={<FontIcon className="md-24 md-dark" value='account_circle'/>}
@@ -95,6 +97,12 @@ class App extends Component {
                         </div>
                     </div>
                 </Panel>
+                <Sidebar pinned={ this.state.sidebarPinned } width={ 5 }>
+                    <div><IconButton icon='close' onClick={ this.toggleSidebar }/></div>
+                    <div style={{flex: 1}}>
+                        <p>Supplemental content goes here.</p>
+                    </div>
+                </Sidebar>
             </Layout>
         );
     }
