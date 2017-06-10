@@ -6,7 +6,7 @@ export default class Home extends Component {
             <div>
                 <PageHeader>Bem Vindo</PageHeader>
                 <div className="content" id="content">
-                    Sigtrans - Modulo de Ocorrencias
+                    Sigtrans
                 </div>
             </div>
 

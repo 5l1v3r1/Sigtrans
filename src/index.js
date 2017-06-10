@@ -6,18 +6,20 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import './css/font-awesome-4.7.0/css/font-awesome.min.css';
-// import './css/hamburguer-menu.css';
-import './index.css';
-import './App.css';
+import './css/index.css';
+import './css/App.css';
 import 'react-table/react-table.css'
 import './toolbox/theme.css'
 
+// import './css/hamburguer-menu.css';
+
 //Components
 import App from './App';
-import EBox from './Event';
-import {EGrid} from './Event';
-import Deaths from './Death';
-import Home from './Home';
+// import TestPage from './TestPage';
+import {EGrid} from './components/Event';
+import Deaths from './components/Death';
+import Home from './components/Home';
+import EBox from './components/Event';
 
 //Router
 import {Router, Route, browserHistory, IndexRoute} from 'react-router';
@@ -26,18 +28,48 @@ import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 import theme from './toolbox/theme';
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
 
-ReactDOM.render((
+//Redux
+// import {matchPattern} from 'react-router/lib/PatternUtils';
+import {createStore, applyMiddleware, combineReducers} from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import {Provider} from 'react-redux';
+
+//reducers
+import {navegation} from './reducers/menus';
+import {content} from './reducers/content';
+
+// function verifyAuth(nextState,replace) {
+//     const resultado = matchPattern('/timeline(/:login)',nextState.location.pathname);
+//     const enderecoPrivadoTimeline = resultado.paramValues[0] === undefined;
+//
+//     if(enderecoPrivadoTimeline && localStorage.getItem('auth-token') === null){
+//         replace('/?msg=você precisa estar logado para acessar o endereço');
+//     }
+// }
+
+/**
+ * Create Reducers
+ */
+
+const reducers = combineReducers({content, navegation});
+const store = createStore(reducers, applyMiddleware(thunkMiddleware));
+
+ReactDOM.render(
+    (
         <ThemeProvider theme={theme}>
-            <Router history={browserHistory}>
-                <Route path="/" component={App}>
-                    <IndexRoute component={Home}/>
-                    <Route path="/ocorrencias">
-                        <Route path="/ocorrencias/abertas" component={EGrid}/>
-                        <Route path="/ocorrencias/fechadas" component={EBox}/>
+            <Provider store={store}>
+                <Router history={browserHistory}>
+                    <Route path="/" component={App}>
+                        <IndexRoute component={Home}/>
+                        <Route path="/ocorrencias">
+                            <Route path="/ocorrencias/abertas" component={EGrid}/>
+                            <Route path="/ocorrencias/fechadas" component={EBox}/>
+                        </Route>
+                        <Route path="/obitos" component={Deaths}/>
                     </Route>
-                    <Route path="/obitos" component={Deaths}/>
-                </Route>
-            </Router>
+                </Router>
+            </Provider>
         </ThemeProvider>
-    ), document.getElementById('root')
+    ),
+    document.getElementById('root')
 );

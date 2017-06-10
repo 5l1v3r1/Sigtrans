@@ -2,9 +2,9 @@
  * Created by natal on 17/04/17.
  */
 import React, {Component} from 'react';
-import CustomSubmit from './components/CustomSubmit'
-import CustomInput from './components/CustomInput'
-import CustomSelect from './components/CustomSelect'
+import CustomSubmit from './CustomSubmit'
+import CustomInput from './CustomInput'
+import CustomSelect from './CustomSelect'
 import {Form, Grid, Row, Col, PageHeader} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
@@ -873,8 +873,8 @@ export default class Deaths extends Component {
             <div>
                 {/*<PageHeader>Obitos</PageHeader>*/}
                 <div className="content" id="content">
-                    {/*<DGrid/>*/}
-                    <DForm options={this.state.options} selectedDeath={null}/>
+                    <DGrid/>
+                    {/*<DForm options={this.state.options} selectedDeath={null}/>*/}
                 </div>
             </div>
         );

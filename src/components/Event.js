@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import CustomSubmit from './components/CustomSubmit'
-import CustomInput from './components/CustomInput'
-import CustomSelect from './components/CustomSelect'
+import CustomSubmit from './CustomSubmit'
+import CustomInput from './CustomInput'
+import CustomSelect from './CustomSelect'
 import {Form, Grid, Row, Col, PageHeader, Tabs, Tab, Panel} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
@@ -173,7 +173,8 @@ class EForm extends Component {
 
     render() {
 
-        /**TODO Make a component**/
+
+        /**TODO Make as component**/
         let Vehicles = this.state.vehicles.map(function (vehicle) {
             return (
                 <Panel header={"Veiculo " + vehicle.id + ": " + vehicle.carModel + " " + vehicle.carPlate}
@@ -253,7 +254,7 @@ class EForm extends Component {
             );
         }, this);
 
-        /**TODO Make a component**/
+        /**TODO Make as component**/
         let Involved = this.state.involved.map(function (involved) {
             return (
                 <Panel header={"Envolvido: " + involved.Name} eventKey={involved.id} key={involved.id} collapsible>
@@ -708,11 +709,11 @@ export class EGrid extends Component {
         }, {
             style: {textAlign: "center"},
             header: 'Bairro',
-            accessor: 'involved.involvedNeighborhood'
+            accessor: 'involved.Neighborhood'
         }, {
             style: {textAlign: "center"},
             header: 'Referencia',
-            accessor: 'involved.involvedReference'
+            accessor: 'involved.Reference'
         }, {
             style: {textAlign: "center"},
             header: 'Editar',
