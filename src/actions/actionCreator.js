@@ -8,3 +8,7 @@ export function toggleD() {
 export function toggleS() {
     return {type: 'TOGGLESIDEBAR'}
 }
+
+export function listDeathEvents(deathEvents) {
+    return {type: 'LISTDEATHEVENTS', deathEvents};
+}

@@ -17,7 +17,7 @@ import './toolbox/theme.css'
 import App from './App';
 // import TestPage from './TestPage';
 import {EGrid} from './components/Event';
-import Deaths from './components/Death';
+import Death from './components/Death';
 import Home from './components/Home';
 import EBox from './components/Event';
 
@@ -36,7 +36,7 @@ import {Provider} from 'react-redux';
 
 //reducers
 import {navegation} from './reducers/menus';
-import {content} from './reducers/content';
+import {death} from './reducers/death';
 
 // function verifyAuth(nextState,replace) {
 //     const resultado = matchPattern('/timeline(/:login)',nextState.location.pathname);
@@ -51,7 +51,7 @@ import {content} from './reducers/content';
  * Create Reducers
  */
 
-const reducers = combineReducers({content, navegation});
+const reducers = combineReducers({death, navegation});
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
@@ -65,7 +65,7 @@ ReactDOM.render(
                             <Route path="/ocorrencias/abertas" component={EGrid}/>
                             <Route path="/ocorrencias/fechadas" component={EBox}/>
                         </Route>
-                        <Route path="/obitos" component={Deaths}/>
+                        <Route path="/obitos" component={Death}/>
                     </Route>
                 </Router>
             </Provider>
