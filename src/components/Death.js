@@ -1,74 +1,72 @@
 /**
  * Created by natal on 17/04/17.
  */
-import React, {Component} from "react";
-import DeathApi from '../logics/DeathApi'
-// import MetisMenu from "react-metismenu";
-import NavDrawer from "react-toolbox/lib/layout/NavDrawer";
-// import RouterLink from "react-metismenu-router-link";
 
+// import MetisMenu from "react-metismenu";
+// import NavDrawer from "react-toolbox/lib/layout/NavDrawer";
+// import RouterLink from "react-metismenu-router-link";
 // import CustomSubmit from './CustomSubmit'
 // import CustomInput from './CustomInput'
 // import CustomSelect from './CustomSelect'
-import {PageHeader} from 'react-bootstrap';
-import ReactTable from 'react-table';
-// import Button from 'react-toolbox/lib/button/Button';
-import {Modal} from 'react-bootstrap';
 // import $ from 'jquery';
 // import PubSub from 'pubsub-js';
 // import ErrHandler from  './ErrHandler';
 // import update from 'immutability-helper';
 // import Slider from 'react-toolbox/lib/slider/Slider';
+// import Navigation from "react-toolbox/lib/navigation/Navigation";
+// import Link from "react-toolbox/lib/link/Link";
+// import AppBar from "react-toolbox/lib/app_bar/AppBar";
+// import Layout from "react-toolbox/lib/layout/Layout";
+// import Panel from "react-toolbox/lib/layout/Panel";
+// import FontIcon from "react-toolbox/lib/font_icon";
+// import Sidebar from 'react-toolbox/lib/layout/Sidebar';
+// import IconButton from 'react-toolbox/lib/button/IconButton';
 
-import Navigation from "react-toolbox/lib/navigation/Navigation";
-import Link from "react-toolbox/lib/link/Link";
-
-import AppBar from "react-toolbox/lib/app_bar/AppBar";
-import Layout from "react-toolbox/lib/layout/Layout";
-import Panel from "react-toolbox/lib/layout/Panel";
-
-import FontIcon from "react-toolbox/lib/font_icon";
-
-import Sidebar from 'react-toolbox/lib/layout/Sidebar';
-import IconButton from 'react-toolbox/lib/button/IconButton';
+import React, {Component} from "react";
+import Button from 'react-toolbox/lib/button/Button';
+import DeathApi from '../logics/DeathApi'
+import {PageHeader} from 'react-bootstrap';
+import ReactTable from 'react-table';
 import {connect} from 'react-redux';
+import {Modal} from 'react-bootstrap';
 
 class DGrid extends Component {
     render() {
-        const columns = [{
-            style: {textAlign: "center"},
-            header: 'Data',
-            accessor: 'general.date'
-        }, {
-            style: {textAlign: "center"},
-            header: 'Rua',
-            accessor: 'general.street'
-        }, {
-            style: {textAlign: "center"},
-            header: 'Numero/KM',
-            accessor: 'general.number'
-        }, {
-            style: {textAlign: "center"},
-            header: 'Cruzamento com',
-            accessor: 'general.cross'
-        }, {
-            style: {textAlign: "center"},
-            header: 'Bairro',
-            accessor: 'involved.involvedNeighborhood'
-        }, {
-            style: {textAlign: "center"},
-            header: 'Referencia',
-            accessor: 'involved.involvedReference'
-        }];
-        // }, {
-        //     style: {textAlign: "center"},
-        //     header: 'Editar',
-        //     accessor: 'id',
-        //     sortable: false,
-        //     render: props => (
-        //         <Button icon="edit" primary id={props.value} onClick={this.handleToggle}/>
-        //     )
-        // }];
+        const columns = [
+            {
+                style: {textAlign: "center"},
+                header: 'Data',
+                accessor: 'general.date'
+            }, {
+                style: {textAlign: "center"},
+                header: 'Rua',
+                accessor: 'general.street'
+            }, {
+                style: {textAlign: "center"},
+                header: 'Numero/KM',
+                accessor: 'general.number'
+            }, {
+                style: {textAlign: "center"},
+                header: 'Cruzamento com',
+                accessor: 'general.cross'
+            }, {
+                style: {textAlign: "center"},
+                header: 'Bairro',
+                accessor: 'involved.involvedNeighborhood'
+            }, {
+                style: {textAlign: "center"},
+                header: 'Referencia',
+                accessor: 'involved.involvedReference'
+            }, {
+                style: {textAlign: "center"},
+                header: 'Editar',
+                accessor: 'id',
+                sortable: false,
+                render: props => (
+                    <Button icon="edit" primary id={props.id} onClick={() => alert(props.id)}/>
+                )
+            }
+        ];
 
         return (
             <div>
@@ -78,45 +76,64 @@ class DGrid extends Component {
                         previousText='Anterior'
                         nextText='Proximo'
                         loadingText='Carregando...'
-                        noDataText='Opa! Algo deu errado!'
                         pageText='Pagina'
+                        noDataText='Opa! Algo deu errado!'
                         ofText='de'
                         rowsText='linhas'
                         data={this.props.data}
                         className="-striped"
-
+                        loading={(this.props.loading === undefined)}
                         columns={columns}
                         defaultPageSize={5}
                     />
+                    <div className="modal-container">
+                        <Modal show={this.props.showModal}
+                               container={this}
+                               dialogClassName="custom-modal"
+                               aria-labelledby="contained-modal-title">
+                            {/*onHide={this.handleToggle}*/}
+                            <Modal.Header closeButton>
+                                <Modal.Title id="contained-modal-title">Ocorrência
+                                    {/*<small> Nº: {this.state.selectedEvent.id}</small>*/}
+                                </Modal.Title>
+                            </Modal.Header>
 
-                    {/*loading={this.props.loading}*/}
+                            <Modal.Body>
+                                {/*<EForm options={this.state.options} selectedEvent={this.state.selectedEvent}/>*/}
+                            </Modal.Body>
+
+                            {/*<Modal.Footer>*/}
+                            {/*/!*<Button onClick={this.handleToggle}>Close</Button>*!/*/}
+                            {/*</Modal.Footer>*/}
+
+                        </Modal>
+                    </div>
                 </div>
             </div>
         );
     }
-
 }
 
 class Death extends Component {
+
+    componentDidMount() {
+        this.props.list(this.props.deaths.loading)
+    }
+
     render() {
         return (
             <div>
-                <DGrid data={this.props.deaths.data}/>
+                <DGrid data={this.props.deaths.deathEvents}
+                       loading={this.props.deaths.loading}
+                />
             </div>
-
         );
     }
 }
 
-Death.contextTypes = {
-    store: React.PropTypes.object.isRequired
-};
-
-const mapStateToProps = (state) => {
-    return {
-        deaths: state.death
-    }
-};
+// Death.contextTypes = {
+//     store: React.PropTypes.object.isRequired
+// };
 
 //     constructor(props) {
 //     super(props);
@@ -175,13 +192,16 @@ const mapStateToProps = (state) => {
 //     };
 //     this.handleToggle = this.handleToggle.bind(this);
 
+const mapStateToProps = (state) => {
+    return {
+        deaths: state.death,
+    }
+};
+
 const mapDispatchToProps = dispatch => {
     return {
-        toggleDeath: (loading) => {
+        list: (loading) => {
             dispatch(DeathApi.listDeaths(loading));
-        },
-        toggleSidebar: () => {
-            dispatch(DeathApi.toggleSidebar());
         }
     }
 };

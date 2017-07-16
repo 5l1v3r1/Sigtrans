@@ -3,16 +3,12 @@ import NavegationApi from './logics/NavegationApi'
 import MetisMenu from "react-metismenu";
 import NavDrawer from "react-toolbox/lib/layout/NavDrawer";
 import RouterLink from "react-metismenu-router-link";
-
 import Navigation from "react-toolbox/lib/navigation/Navigation";
 import Link from "react-toolbox/lib/link/Link";
-
 import AppBar from "react-toolbox/lib/app_bar/AppBar";
 import Layout from "react-toolbox/lib/layout/Layout";
 import Panel from "react-toolbox/lib/layout/Panel";
-
 import FontIcon from "react-toolbox/lib/font_icon";
-
 import Sidebar from 'react-toolbox/lib/layout/Sidebar';
 import IconButton from 'react-toolbox/lib/button/IconButton';
 import {connect} from 'react-redux';
@@ -54,6 +50,7 @@ class App extends Component {
                         <NavDrawer pinned={this.props.menus.drawer}>
                             <MetisMenu content={menu} LinkComponent={RouterLink}/>
                         </NavDrawer>
+
                         <Panel>
                             <AppBar title=" "
                                     leftIcon={<FontIcon className="md-24 md-dark" value='menu'/>}
@@ -105,7 +102,7 @@ const mapDispatchToProps = dispatch => {
             dispatch(NavegationApi.toggleSidebar());
         }
     }
-}
+};
 
 const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
 
