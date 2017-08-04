@@ -19,7 +19,7 @@ class App extends Component {
             {
                 icon: 'dashboard',
                 label: 'Sigtrans',
-                to: '/'
+                to: '/home'
             },
             {
                 icon: 'bell',
@@ -50,7 +50,6 @@ class App extends Component {
                         <NavDrawer pinned={this.props.menus.drawer}>
                             <MetisMenu content={menu} LinkComponent={RouterLink}/>
                         </NavDrawer>
-
                         <Panel>
                             <AppBar title=" "
                                     leftIcon={<FontIcon className="md-24 md-dark" value='menu'/>}

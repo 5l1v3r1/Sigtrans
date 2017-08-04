@@ -3,16 +3,6 @@
  */
 import {listDeathEvents} from '../actions/actionCreator'
 
-//     $.ajax({
-//         url: 'https://ocorrencias-teste-api.herokuapp.com/api/options',
-//         dataType: 'json',
-//         type: 'GET',
-//         crossDomain: true,
-//         success: function (res) {
-//             this.setState({options: res});
-//         }.bind(this)
-//     });
-
 export default class DeathApi {
 
     static listDeaths(loading) {

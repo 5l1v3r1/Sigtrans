@@ -7,6 +7,7 @@
     "immutability-helper": "^2.2.2",
     "immutable": "^3.8.1",
     "jquery": "^3.2.1",
+    "js-cookie": "^2.1.4",
     "material-design-icons": "^3.0.1",
     "pubsub-js": "^1.5.7",
     "react": "^15.5.4",
@@ -27,7 +28,7 @@
     "react-toolbox-themr": "^1.0.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3006 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
