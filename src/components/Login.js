@@ -15,7 +15,7 @@ export default class Login extends Component {
         const requestInfo = {
             method: 'POST',
             headers: {
-                'Csrf-Token': Cookies.get('auth-token'),
+                'Csrf-Token': Cookies.get("auth-token"),
                 'Content-Type': 'application/json; charset=utf-8',
                 Accept: 'application/json',
             },
@@ -41,12 +41,9 @@ export default class Login extends Component {
     }
 
     render() {
-        let bgImg = {
-            backgroundImage: "url('traffic.jpg')"
-        };
         return (
             <div>
-                <div style={bgImg}>
+                <div className="login-back">
                     <div className="login-box">
                         <h1 className="header-logo">SIGTRANS</h1>
                         <span>{this.state.msg}</span>
@@ -55,7 +52,7 @@ export default class Login extends Component {
                             <input type="password" ref={(input) => this.senha = input}/>
                             <input type="submit" value="Login"/>
                         </form>
-                    </div>
+                </div>
                 </div>
             </div>
         );

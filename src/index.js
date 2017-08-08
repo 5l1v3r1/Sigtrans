@@ -39,12 +39,21 @@ import './css/App.css';
 import './toolbox/theme.css'
 import 'react-table/react-table.css'
 
+//TESTPAGE
+// import Test from './TestPage';
+
 function verifyAuth(nextState, replace) {
     const resultado = matchPattern('/', nextState.location.pathname);
     const privatePath = resultado.paramValues[0] === undefined;
 
-    if (privatePath && !Cookies.get("auth-token")) {
+    if (privatePath && !Cookies.get('auth-token')) {
         replace('/?msg=Você precisa estar logado');
+    }
+}
+
+function verifyLogin(nextState, replace) {
+    if (Cookies.get('auth-token')) {
+        replace('/home');
     }
 }
 
@@ -57,7 +66,7 @@ ReactDOM.render(
         <ThemeProvider theme={theme}>
             <Provider store={store}>
                 <Router history={browserHistory}>
-                    <Route path="/" component={Login} onEnter={verifyAuth}/>
+                    <Route path="/" component={Login} onEnter={verifyLogin}/>
                     <Route path="/home" component={App} onEnter={verifyAuth}>
                         <IndexRoute component={Home}/>
                         <Route path="/ocorrencias">
