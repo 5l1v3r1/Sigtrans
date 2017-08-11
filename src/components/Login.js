@@ -1,43 +1,14 @@
 import React, {Component} from 'react';
-import {browserHistory} from 'react-router';
-import Cookies from 'js-cookie';
+import {connect} from 'react-redux';
+import AuthApi from "../logics/AuthApi";
+
 // import 'whatwg-fetch';
 
-export default class Login extends Component {
+class Login extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {msg: this.props.location.query.msg};
-    }
-
-    requestAuth(event) {
-        event.preventDefault();
-        const requestInfo = {
-            method: 'POST',
-            headers: {
-                'Csrf-Token': Cookies.get("auth-token"),
-                'Content-Type': 'application/json; charset=utf-8',
-                Accept: 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({login: this.login.value, senha: this.senha.value}),
-        };
-        fetch('http://localhost:8080/api/public/login', requestInfo)
-            .then(response => {
-                if (response.ok) {
-                    return response.text();
-                } else {
-                    throw new Error('Não foi possível fazer o login');
-                }
-            })
-            .then(token => {
-                // localStorage.setItem('auth-token', token);
-                Cookies.set("auth-token", token);
-                browserHistory.push('/home');
-            })
-            .catch(error => {
-                this.setState({msg: error.message});
-            });
+    requestAuth(e) {
+        e.preventDefault();
+        this.props.requestAuth(this.user.value, this.psw.value);
     }
 
     render() {
@@ -46,15 +17,35 @@ export default class Login extends Component {
                 <div className="login-back">
                     <div className="login-box">
                         <h1 className="header-logo">SIGTRANS</h1>
-                        <span>{this.state.msg}</span>
+                        <span>{this.props.location.query.msg ? this.props.location.query.msg : this.props.auth.msg}</span>
                         <form onSubmit={this.requestAuth.bind(this)}>
-                            <input type="text" ref={(input) => this.login = input}/>
-                            <input type="password" ref={(input) => this.senha = input}/>
+                            <input type="text" placeholder="Usuário" name="user" required
+                                   ref={(input) => this.user = input}/>
+                            <input type="password" placeholder="Senha" name="psw" required
+                                   ref={(input) => this.psw = input}/>
                             <input type="submit" value="Login"/>
                         </form>
-                </div>
+                    </div>
                 </div>
             </div>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        auth: state.auth,
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        requestAuth: (user, psw) => {
+            dispatch(AuthApi.rAuth(user, psw));
+        }
+    }
+};
+
+const LoginContainer = connect(mapStateToProps, mapDispatchToProps)(Login);
+
+export default LoginContainer;

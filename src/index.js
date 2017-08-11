@@ -29,6 +29,7 @@ import {matchPattern} from 'react-router/lib/PatternUtils';
 //reducers
 import {navegation} from './reducers/menus';
 import {death} from './reducers/death';
+import {auth} from './reducers/auth';
 
 //CSS
 import 'bootstrap/dist/css/bootstrap.css';
@@ -43,6 +44,7 @@ import 'react-table/react-table.css'
 // import Test from './TestPage';
 
 function verifyAuth(nextState, replace) {
+    // console.log(nextState.location.pathname);
     const resultado = matchPattern('/', nextState.location.pathname);
     const privatePath = resultado.paramValues[0] === undefined;
 
@@ -58,7 +60,7 @@ function verifyLogin(nextState, replace) {
 }
 
 // Create Reducers
-const reducers = combineReducers({death, navegation});
+const reducers = combineReducers({death, navegation, auth});
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(

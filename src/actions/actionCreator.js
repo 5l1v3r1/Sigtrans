@@ -13,3 +13,7 @@ export function toggleS() {
 export function listDeathEvents(loading, deathEvents) {
     return {type: 'LISTDEATHEVENTS', loading, deathEvents};
 }
+
+export function authERR(msg) {
+    return {type: 'AUTHERR', msg}
+}

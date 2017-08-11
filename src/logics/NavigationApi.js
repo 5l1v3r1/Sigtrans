@@ -3,7 +3,7 @@
  */
 import {toggleD, toggleS} from '../actions/actionCreator'
 
-export default class NavegationAPI {
+export default class NavigationApi {
     static toggleDrawer() {
         return dispatch => {
             return dispatch(toggleD());

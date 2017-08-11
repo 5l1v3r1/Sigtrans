@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import NavegationApi from './logics/NavegationApi'
+import NavegationApi from './logics/NavigationApi'
 import MetisMenu from "react-metismenu";
 import NavDrawer from "react-toolbox/lib/layout/NavDrawer";
 import RouterLink from "react-metismenu-router-link";
