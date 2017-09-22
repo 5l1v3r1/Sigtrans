@@ -1,6 +1,7 @@
 import {authERR} from '../actions/actionCreator'
 import {browserHistory} from 'react-router';
 import Cookies from 'js-cookie';
+
 export default class AuthAPI {
 
 
@@ -20,16 +21,24 @@ export default class AuthAPI {
             const requestInfo = {
                 method: 'POST',
                 headers: new Headers({
-                    'Csrf-Token': Cookies.get("auth-token"),
-                    'Content-Type': 'application/json; charset=utf-8',
-                    Accept: 'application/json',
+                    // 'Csrf-Token': Cookies.get("auth-token"),
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    // Accept: 'application/json',
                 }),
                 credentials: 'include',
-                body: JSON.stringify({login: user, senha: psw}),
+                body: JSON.stringify({
+                    username: user,
+                    password: psw,
+                    grant_type: 'password',
+                    client_id: 'client',
+                    client_secret: 'secret',
+                    scope: 'api1'
+                }),
             };
-            fetch('http://localhost:8080/api/public/login', requestInfo)
+            fetch('http://10.81.81.12:5000/.well-known/openid-configuration', requestInfo)
                 .then(response => {
                     if (response.ok) {
+                        //Bearer 'key'
                         return response.text();
                     } else {
                         throw new Error('Não foi possível fazer o login');
