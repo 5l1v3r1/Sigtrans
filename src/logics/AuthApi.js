@@ -1,6 +1,4 @@
 import {authERR} from '../actions/actionCreator'
-import {browserHistory} from 'react-router';
-import Cookies from 'js-cookie';
 
 export default class AuthAPI {
 
@@ -18,25 +16,31 @@ export default class AuthAPI {
 
     static rAuth(user, psw) {
         return dispatch => {
+            // 'Csrf-Token': Cookies.get("auth-token"),
+            // Accept: 'application/json',
+            // credentials: 'include',
+            //alice
+            //password
+
             const requestInfo = {
                 method: 'POST',
                 headers: new Headers({
-                    // 'Csrf-Token': Cookies.get("auth-token"),
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    // Accept: 'application/json',
+                    "content-type": "application/x-www-form-urlencoded"
                 }),
-                credentials: 'include',
                 body: JSON.stringify({
                     username: user,
                     password: psw,
-                    grant_type: 'password',
-                    client_id: 'client',
-                    client_secret: 'secret',
-                    scope: 'api1'
+                    grant_type: "password",
+                    client_id: "client",
+                    client_secret: "secret",
+                    scope: "api1"
                 }),
             };
-            fetch('http://10.81.81.12:5000/.well-known/openid-configuration', requestInfo)
+            console.log(JSON.stringify(requestInfo));
+            // .well-known/openid-configuration
+            fetch('https://10.81.81.12:5000/connect/token', requestInfo)
                 .then(response => {
+                    console.log(response);
                     if (response.ok) {
                         //Bearer 'key'
                         return response.text();
@@ -44,10 +48,10 @@ export default class AuthAPI {
                         throw new Error('Não foi possível fazer o login');
                     }
                 })
-                .then(token => {
+                /*.then(token => {
                     Cookies.set("auth-token", token);
                     browserHistory.push('/home');
-                })
+                })*/
                 .catch(err => {
                     dispatch(authERR(err.message));
                 });

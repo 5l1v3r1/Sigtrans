@@ -13,7 +13,7 @@ class Login extends Component {
         return (
             <div>
                 <div className="login-back">
-                    <pre id="results">{JSON.stringify(this.props, null, ' ')}</pre>
+                    {/*<pre id="results">{JSON.stringify(this.props, null, ' ')}</pre>*/}
                     <div className="login-box">
                         <h1 className="header-logo">SIGTRANS</h1>
                         <span>{this.props.location.query.msg ? this.props.location.query.msg : this.props.auth.msg}</span>

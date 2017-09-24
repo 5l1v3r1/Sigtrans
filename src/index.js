@@ -1,36 +1,28 @@
 //React
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 //Cookies
 import Cookies from 'js-cookie';
-
 //Components
 import App from './App';
-import {EGrid} from './components/Event';
+import EBox, {EGrid} from './components/Event';
 import Death from './components/Death';
 import Home from './components/Home';
-import EBox from './components/Event';
 import Login from './components/Login';
-
 //Router
-import {Router, Route, browserHistory, IndexRoute} from 'react-router';
-
+import {browserHistory, IndexRoute, Route, Router} from 'react-router';
 //React Toolbox Themer (PostCSS Issues)
 import theme from './toolbox/theme';
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
-
 //Redux
-import {createStore, applyMiddleware, combineReducers} from 'redux';
+import {applyMiddleware, combineReducers, createStore} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import {Provider} from 'react-redux';
 import {matchPattern} from 'react-router/lib/PatternUtils';
-
 //reducers
 import {navegation} from './reducers/menus';
 import {death} from './reducers/death';
 import {auth} from './reducers/auth';
-
 //CSS
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
@@ -68,8 +60,8 @@ ReactDOM.render(
         <ThemeProvider theme={theme}>
             <Provider store={store}>
                 <Router history={browserHistory}>
-                    <Route path="/" component={Login} onEnter={verifyLogin}/>
-                    <Route path="/home" component={App} onEnter={verifyAuth}>
+                    <Route path="/" component={Login}/>
+                    <Route path="/home" component={App}>
                         <IndexRoute component={Home}/>
                         <Route path="/ocorrencias">
                             <Route path="/ocorrencias/abertas" component={EGrid}/>
