@@ -54,7 +54,6 @@ function verifyLogin(nextState, replace) {
 // Create Reducers
 const reducers = combineReducers({death, navegation, auth});
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
-
 ReactDOM.render(
     (
         <ThemeProvider theme={theme}>
