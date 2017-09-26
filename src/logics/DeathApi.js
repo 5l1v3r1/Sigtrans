@@ -1,7 +1,7 @@
 /**
  * Created by natal on 05/06/17.
  */
-import {listDeathEvents} from '../actions/actionCreator'
+import {listDeathEvents, toggleDeathModal} from '../actions/actionCreator'
 
 export default class DeathApi {
 
@@ -15,4 +15,11 @@ export default class DeathApi {
                 });
         }
     }
+
+    static handleDeathModal(showModal, id) {
+        return dispatch => {
+            return dispatch(toggleDeathModal(showModal, id));
+        }
+    }
+
 }
