@@ -2,17 +2,18 @@ import React, {Component} from 'react';
 import CustomSubmit from './CustomSubmit'
 import CustomInput from './CustomInput'
 import CustomSelect from './CustomSelect'
-import {Form, Grid, Row, Col, PageHeader, Tabs, Tab, Panel} from 'react-bootstrap';
+import {Col, Form, Grid, Modal, PageHeader, Panel, Row, Tab, Tabs} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
-import {Modal} from 'react-bootstrap';
 import $ from 'jquery';
 import PubSub from 'pubsub-js';
-import ErrHandler from  './ErrHandler';
+import ErrHandler from './ErrHandler';
 import update from 'immutability-helper';
+
 // import IconButton from 'react-toolbox/lib/button/IconButton';
 
 class EForm extends Component {
+
     constructor(props) {
         super(props);
         this.state = props.selectedEvent ? props.selectedEvent : ({
@@ -153,7 +154,6 @@ class EForm extends Component {
         });
     }
 
-
     // handleCollapse(id) {
     //     this.setState({
     //         collapse: update(this.state.collapse, {
@@ -172,7 +172,6 @@ class EForm extends Component {
     // }
 
     render() {
-
 
         /**TODO Make as component**/
         let Vehicles = this.state.vehicles.map(function (vehicle) {

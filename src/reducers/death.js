@@ -9,15 +9,13 @@ export function death(state = new List(), action) {
     if (action.type === 'LISTDEATHEVENTS') {
         const deathEvents = action.deathEvents;
         const loading = !action.loading;
-
         return Object.assign({}, state, {deathEvents, loading});
     }
 
     if (action.type === 'TOGGLEDEATHMODAL') {
         const showModal = !action.showModal;
         const selectedEventID = action.id;
-        const selectedEvent = state.selectedEvent === undefined ? state.deathEvents[selectedEventID - 1] : undefined;
-
+        const selectedEvent = state.selectedEvent ? state.deathEvents[selectedEventID - 1] : undefined;
         return Object.assign({}, state, {showModal, selectedEventID, selectedEvent});
     }
 

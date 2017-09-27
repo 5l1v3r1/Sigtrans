@@ -59,8 +59,8 @@ class App extends Component {
                                     flat
                                     className="app-bar">
                                 <Navigation type="horizontal">
-                                    <Link href="#" label="Inbox" icon="inbox"/>
-                                    <Link href="#" active label="Profile" icon="person"/>
+                                    <Link href="#" label="Mensagens" icon="inbox"/>
+                                    <Link href="#" active label="Perfil" icon="person"/>
                                 </Navigation>
                             </AppBar>
                             <div style={{flex: 1, overflowY: 'auto', padding: '1.8rem'}}>
