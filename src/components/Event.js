@@ -800,18 +800,6 @@ export default class EBox extends Component {
                     involvedInjuryLevels: [],
                     involvedProbableConducts: [],
                 }
-                // RoadProfile: [],
-                // Zone: [],
-                // Position: [],
-                // AccidentType: [],
-                // LicenseLevel: [],
-                // Visibility: [],
-                // PavementType: [],
-                // RoadCondition: [],
-                // RoadSurface: [],
-                // ClimaticCondition: [],
-                // AccidentClassification: [],
-                // InjuryLevel: []
             }
         };
     }

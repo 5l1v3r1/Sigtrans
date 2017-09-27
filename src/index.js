@@ -8,7 +8,7 @@ import App from './App';
 import EBox, {EGrid} from './components/Event';
 import Death from './components/Death';
 import Home from './components/Home';
-// import Login from './components/Login';
+import Login from './components/Login';
 //Router
 import {browserHistory, IndexRoute, Route, Router} from 'react-router';
 //React Toolbox Themer (PostCSS Issues)
@@ -59,14 +59,16 @@ ReactDOM.render(
         <ThemeProvider theme={theme}>
             <Provider store={store}>
                 <Router history={browserHistory}>
-                    {/*<Route path="/" component={Login}/>*/}
-                    <Route path="/" component={App}>
+                    <Route path="/" component={Login}/>
+                    <Route path="/home" component={App}>
                         <IndexRoute component={Home}/>
                         <Route path="/ocorrencias">
                             <Route path="/ocorrencias/abertas" component={EGrid}/>
-                            <Route path="/ocorrencias/fechadas" component={EBox}/>
+                            <Route path="/ocorrencias/fechadas" component={EGrid}/>
+                            <Route path="/ocorrencias/criar" component={EBox}/>
                         </Route>
                         <Route path="/obitos" component={Death}/>
+                        <Route path="/relatorios" component={Home}/>
                     </Route>
                 </Router>
             </Provider>

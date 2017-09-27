@@ -32,8 +32,13 @@ class App extends Component {
                     },
                     {
                         icon: 'bolt',
+                        label: 'Fechadas',
+                        to: '/ocorrencias/fechadas'
+                    },
+                    {
+                        icon: 'bolt',
                         label: 'Criar',
-                        to: '/ocorrencias/fechadas',
+                        to: '/ocorrencias/criar',
                     }
                 ]
             },
@@ -41,6 +46,11 @@ class App extends Component {
                 icon: 'bell',
                 label: 'Obitos',
                 to: '/obitos'
+            },
+            {
+                icon: 'bell',
+                label: 'Relatórios',
+                to: '/relatorios'
             }
         ];
         return (
