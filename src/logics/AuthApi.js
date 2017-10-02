@@ -7,7 +7,9 @@ export default class AuthAPI {
 
     static rAuth(user, psw) {
         return dispatch => {
+
             let data = new FormData();
+
             data.append("client_id", "client");
             data.append("client_secret", "secret");
             data.append("grant_type", "password");

@@ -44,7 +44,7 @@ class App extends Component {
             },
             {
                 icon: 'bell',
-                label: 'Obitos',
+                label: 'Ocorrencias fatais',
                 to: '/obitos'
             },
             {

@@ -6,7 +6,7 @@
 // import NavDrawer from "react-toolbox/lib/layout/NavDrawer";
 // import RouterLink from "react-metismenu-router-link";
 // import CustomSubmit from './CustomSubmit'
-// import CustomInput from './CustomInput'
+// import Input from './Input'
 // import CustomSelect from './CustomSelect'
 // import $ from 'jquery';
 // import PubSub from 'pubsub-js';
@@ -28,6 +28,7 @@ import {Col, Form, Grid, Modal, PageHeader, Row} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import {connect} from 'react-redux';
 import Slider from 'react-toolbox/lib/slider/Slider';
+import Input from "./CustomInput";
 
 class Death extends Component {
 
@@ -53,7 +54,7 @@ class Death extends Component {
 
 }
 
-//make new js file
+//make new js file for both grids
 class DGrid extends Component {
 
     handleToggle(id) {
@@ -88,7 +89,7 @@ class DGrid extends Component {
                 accessor: 'general.Reference'
             }, {
                 style: {textAlign: "center"},
-                header: 'Editar',
+                header: 'Análise',
                 accessor: 'id',
                 sortable: false,
                 render: props => (
@@ -96,9 +97,10 @@ class DGrid extends Component {
                 )
             }
         ];
+
         return (
             <div>
-                <PageHeader>Obitos</PageHeader>
+                <PageHeader>Ocorrencias fatais</PageHeader>
                 <div className="content" id="content">
                     <ReactTable
                         previousText='Anterior'
@@ -122,7 +124,7 @@ class DGrid extends Component {
                                onHide={() => this.handleToggle(this.props.selectedEventID)}>
 
                             <Modal.Header closeButton>
-                                <Modal.Title id="contained-modal-title">Óbito
+                                <Modal.Title id="contained-modal-title">Análise do Óbito
                                     <small> Nº: {this.props.selectedEventID}</small>
                                 </Modal.Title>
                             </Modal.Header>
@@ -148,40 +150,60 @@ class DGrid extends Component {
 //make new js file
 class DeathAnalysis extends Component {
     render() {
+        let padding = {padding: '2px 2px 2px 2px'};
         return (
             <div className='clearfix'>
                 <Grid>
                     <Form>
-                        <Col xs={12} md={12} sm={12}>
+                        {/*<Col xs={12} md={12} sm={12}>*/}
                             {/*general*/}
                             <Row>
                                 <Col xs={6} md={6} sm={6}>
                                     <Row className="form-group">
                                         <Row>
-                                            General Info
+                                            <h4>Informações Gerais</h4>
                                         </Row>
-                                        <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
-                                            <input type="text" placeholder="Info1" name="info1" disabled
-                                                   ref={(input) => this.info1 = input}/>
+                                        <Col md={4} sm={2} xs={2} style={padding}>
+                                            <Input type="date" name="deathDate"
+                                                   id="date"
+                                                   label="Data" disabled
+                                                   ref={(input) => this.date = input}
+                                            />
                                         </Col>
-                                        <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
-                                            <input type="text" placeholder="Info2" name="info2" disabled
-                                                   ref={(input) => this.info2 = input}/>
+                                        <Col md={8} sm={6} xs={6} style={padding}>
+                                            <Input type="text" name="eventAddress"
+                                                   id="eventAddress" placeholder="Local da Ocorrência"
+                                                   label="Local da Ocorrência" disabled
+                                                   ref={(input) => this.eventAddress = input}
+                                            />
                                         </Col>
-                                        <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
-                                            <input type="text" placeholder="Info3" name="info3" disabled
-                                                   ref={(input) => this.info3 = input}/>
+                                        <Col md={2} sm={2} xs={2} style={padding}>
+                                            <Input type="time" name="deathTime"
+                                                   id="deathTime"
+                                                   label="Hora" disabled
+                                                   ref={(input) => this.deathTime = input}
+                                            />
                                         </Col>
-                                        <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
-                                            <input type="text" placeholder="Info4" name="info4" disabled
-                                                   ref={(input) => this.info4 = input}/>
+                                        <Col md={4} sm={2} xs={2} style={padding}>
+                                            <Input type="text" name="accidentType"
+                                                   id="accidentType"
+                                                   label="Tipo do Acidente" disabled
+                                                   ref={(input) => this.accidentType = input}
+                                            />
+                                        </Col>
+                                        <Col md={4} sm={2} xs={2} style={padding}>
+                                            <Input type="text" name="severity"
+                                                   id="severity"
+                                                   label="Severidade" disabled
+                                                   ref={(input) => this.severity = input}
+                                            />
                                         </Col>
                                     </Row>
                                 </Col>
                                 {/*Map*/}
                                 <Col xs={6} md={6} sm={6}
-                                     style={{height: '400px', borderStyle: 'solid', borderWidth: '1px'}}>
-                                    <div style={{
+                                     style={{height: '400px', padding: "3px 3px 3px 3px"}}>
+                                    <Row style={{
                                         position: 'relative',
                                         float: 'left',
                                         top: '50%',
@@ -189,67 +211,67 @@ class DeathAnalysis extends Component {
                                         transform: 'translate(-50%, -50%)'
                                     }}>
                                         MAP HERE
-                                    </div>
+                                    </Row>
                                 </Col>
                             </Row>
                             {/*sliders*/}
                             <Row className="form-group">
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <p>Fator/Causa</p>
                                     <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
                                             onChange={(value) => this.slider = value}/>
@@ -260,24 +282,24 @@ class DeathAnalysis extends Component {
                                 <Row>
                                     Victims Info
                                 </Row>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <input type="text" placeholder="Info1" name="vinfo1" disabled
                                            ref={(input) => this.vinfo1 = input}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <input type="text" placeholder="Info2" name="vinfo2" disabled
                                            ref={(input) => this.vinfo2 = input}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <input type="text" placeholder="Info3" name="vinfo3" disabled
                                            ref={(input) => this.vinfo3 = input}/>
                                 </Col>
-                                <Col md={4} style={{padding: '3px 3px 3px 3px'}}>
+                                <Col md={4} style={padding}>
                                     <input type="text" placeholder="Info4" name="vinfo4" disabled
                                            ref={(input) => this.vinfo3 = input}/>
                                 </Col>
                             </Row>
-                        </Col>
+                        {/*</Col>*/}
                     </Form>
                 </Grid>
             </div>

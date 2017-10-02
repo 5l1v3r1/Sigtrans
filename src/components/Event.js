@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import CustomSubmit from './CustomSubmit'
-import CustomInput from './CustomInput'
-import CustomSelect from './CustomSelect'
+import Submit from './CustomSubmit'
+import Input from './CustomInput'
+import Select from './CustomSelect'
 import {Col, Form, Grid, Modal, PageHeader, Panel, Row, Tab, Tabs} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import Button from 'react-toolbox/lib/button/Button';
@@ -182,41 +182,41 @@ class EForm extends Component {
                         <Col xs={10} md={10} sm={10}>
                             <Row>
                                 <Col mdOffset={1} xs={2} md={2} sm={2}>
-                                    <CustomInput value={vehicle.carPlate} type="text"
-                                                 id="carPlate"
-                                                 required="required"
-                                                 onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carPlate', vehicle.id - 1)}
-                                                 label="Placa"/>
+                                    <Input value={vehicle.carPlate} type="text"
+                                           id="carPlate"
+                                           required="required"
+                                           onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carPlate', vehicle.id - 1)}
+                                           label="Placa"/>
                                 </Col>
                                 <Col xs={3} md={3} sm={3}>
-                                    <CustomInput value={vehicle.carBrand} type="text"
-                                                 id="carBrand"
-                                                 required="required"
-                                                 onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carBrand', vehicle.id - 1)}
-                                                 label="Marca"/>
+                                    <Input value={vehicle.carBrand} type="text"
+                                           id="carBrand"
+                                           required="required"
+                                           onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carBrand', vehicle.id - 1)}
+                                           label="Marca"/>
                                 </Col>
                                 <Col xs={4} md={4} sm={4}>
-                                    <CustomInput value={vehicle.carModel} type="text"
-                                                 id="carModel"
-                                                 required="required"
-                                                 onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carModel', vehicle.id - 1)}
-                                                 label="Modelo"/>
+                                    <Input value={vehicle.carModel} type="text"
+                                           id="carModel"
+                                           required="required"
+                                           onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carModel', vehicle.id - 1)}
+                                           label="Modelo"/>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col mdOffset={1} xs={4} md={4} sm={4}>
-                                    <CustomSelect value={vehicle.carStatus} id="carStatus"
-                                                  name="carStatus"
-                                                  onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carStatus', vehicle.id - 1)}
-                                                  options={this.props.options.vehicles.carStatuses}
-                                                  label="Estado"/>
+                                    <Select value={vehicle.carStatus} id="carStatus"
+                                            name="carStatus"
+                                            onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carStatus', vehicle.id - 1)}
+                                            options={this.props.options.vehicles.carStatuses}
+                                            label="Estado"/>
                                 </Col>
                                 <Col xs={5} md={5} sm={5}>
-                                    <CustomSelect value={vehicle.damageLevel} id="damageLevel"
-                                                  name="damageLevel"
-                                                  onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'damageLevel', vehicle.id - 1)}
-                                                  options={this.props.options.vehicles.damageLevels}
-                                                  label="Grau de avaria"/>
+                                    <Select value={vehicle.damageLevel} id="damageLevel"
+                                            name="damageLevel"
+                                            onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'damageLevel', vehicle.id - 1)}
+                                            options={this.props.options.vehicles.damageLevels}
+                                            label="Grau de avaria"/>
                                 </Col>
                             </Row>
                             <Row>
@@ -224,23 +224,23 @@ class EForm extends Component {
                                     <h5>Quanto ao condutor</h5>
                                 </Col>
                                 <Col mdOffset={1} xs={3} md={3} sm={3}>
-                                    <CustomSelect value={vehicle.licenseLevel} id="licenseLevel"
-                                                  name="licenseLevel"
-                                                  onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'licenseLevel', vehicle.id - 1)}
-                                                  options={this.props.options.vehicles.licenseLevels}
-                                                  label="Categoria da habilitação"/>
+                                    <Select value={vehicle.licenseLevel} id="licenseLevel"
+                                            name="licenseLevel"
+                                            onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'licenseLevel', vehicle.id - 1)}
+                                            options={this.props.options.vehicles.licenseLevels}
+                                            label="Categoria da habilitação"/>
                                 </Col>
                                 <Col xs={3} md={3} sm={3}>
-                                    <CustomInput value={vehicle.firstLicense} type="date"
-                                                 id="firstLicense" required="required"
-                                                 onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'firstLicense', vehicle.id - 1)}
-                                                 label="Primeira habilitação"/>
+                                    <Input value={vehicle.firstLicense} type="date"
+                                           id="firstLicense" required="required"
+                                           onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'firstLicense', vehicle.id - 1)}
+                                           label="Primeira habilitação"/>
                                 </Col>
                                 <Col xs={3} md={3} sm={3}>
-                                    <CustomInput value={vehicle.expireDate} type="date"
-                                                 id="expireDate" required="required"
-                                                 onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'expireDate', vehicle.id - 1)}
-                                                 label="Vencimento da habilitação"/>
+                                    <Input value={vehicle.expireDate} type="date"
+                                           id="expireDate" required="required"
+                                           onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'expireDate', vehicle.id - 1)}
+                                           label="Vencimento da habilitação"/>
                                 </Col>
                             </Row>
                         </Col>
@@ -260,125 +260,125 @@ class EForm extends Component {
                     <Col xs={10} md={10} sm={10}>
                         <Row>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomInput value={involved.Name} type="text"
-                                             id="involvedName" required="required"
-                                             onChange={this.saveNestedAlteration.bind(this, 'involved', 'Name', involved.id - 1)}
-                                             label="Nome"/>
+                                <Input value={involved.Name} type="text"
+                                       id="involvedName" required="required"
+                                       onChange={this.saveNestedAlteration.bind(this, 'involved', 'Name', involved.id - 1)}
+                                       label="Nome"/>
                             </ Col>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomInput value={involved.Age} type="number"
-                                             id="involvedAge" required="required"
-                                             onChange={this.saveNestedAlteration.bind(this, 'involved', 'Age', involved.id - 1)}
-                                             label="Idade"/>
+                                <Input value={involved.Age} type="number"
+                                       id="involvedAge" required="required"
+                                       onChange={this.saveNestedAlteration.bind(this, 'involved', 'Age', involved.id - 1)}
+                                       label="Idade"/>
                             </ Col>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomSelect value={involved.Sex} id="involvedSex"
-                                              name="involvedSex"
-                                              onChange={this.saveNestedAlteration.bind(this, 'involved', 'Sex', involved.id - 1)}
-                                              options={this.props.options.involved.involvedSexes}
-                                              label="Sexo"/>
+                                <Select value={involved.Sex} id="involvedSex"
+                                        name="involvedSex"
+                                        onChange={this.saveNestedAlteration.bind(this, 'involved', 'Sex', involved.id - 1)}
+                                        options={this.props.options.involved.involvedSexes}
+                                        label="Sexo"/>
                             </ Col>
                         </Row>
                         <Row>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomInput value={involved.Street} type="text"
-                                             id="involvedStreet" required="required"
-                                             onChange={this.saveNestedAlteration.bind(this, 'involved', 'Street', involved.id - 1)}
-                                             label="Rua"/>
+                                <Input value={involved.Street} type="text"
+                                       id="involvedStreet" required="required"
+                                       onChange={this.saveNestedAlteration.bind(this, 'involved', 'Street', involved.id - 1)}
+                                       label="Rua"/>
                             </Col>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomInput value={involved.Number} type="text"
-                                             id="involvedNumber" required="required"
-                                             onChange={this.saveNestedAlteration.bind(this, 'involved', 'Number', involved.id - 1)}
-                                             label="Numero"/>
+                                <Input value={involved.Number} type="text"
+                                       id="involvedNumber" required="required"
+                                       onChange={this.saveNestedAlteration.bind(this, 'involved', 'Number', involved.id - 1)}
+                                       label="Numero"/>
                             </Col>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomInput value={involved.Corner} type="text"
-                                             id="involvedCorner" required="required"
-                                             onChange={this.saveNestedAlteration.bind(this, 'involved', 'Corner', involved.id - 1)}
-                                             label="Esquina"/>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col xs={4} md={4} sm={4}>
-                                <CustomSelect value={involved.Neighborhood}
-                                              id="involvedNeighborhood"
-                                              name="involvedNeighborhood"
-                                              onChange={this.saveNestedAlteration.bind(this, 'involved', 'Neighborhood', involved.id - 1)}
-                                              options={this.props.options.involved.involvedNeighborhoods}
-                                              label="Bairro"/>
-                            </Col>
-                            <Col xs={4} md={4} sm={4}>
-                                <CustomInput value={involved.Reference} type="text"
-                                             id="involvedReference" required="required"
-                                             onChange={this.saveNestedAlteration.bind(this, 'involved', 'Reference', involved.id - 1)}
-                                             label="Referência"/>
-                            </Col>
-                            <Col xs={4} md={4} sm={4}>
-                                <CustomInput value={involved.Mom} type="text"
-                                             id="involvedMom" required="required"
-                                             onChange={this.saveNestedAlteration.bind(this, 'involved', 'Mom', involved.id - 1)}
-                                             label="Nome da mãe"/>
+                                <Input value={involved.Corner} type="text"
+                                       id="involvedCorner" required="required"
+                                       onChange={this.saveNestedAlteration.bind(this, 'involved', 'Corner', involved.id - 1)}
+                                       label="Esquina"/>
                             </Col>
                         </Row>
                         <Row>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomSelect value={involved.Situation}
-                                              id="involvedSituation"
-                                              name="involvedSituation"
-                                              onChange={this.saveNestedAlteration.bind(this, 'involved', 'Situation', involved.id - 1)}
-                                              options={this.props.options.involved.involvedSituations}
-                                              label="Situação"/>
+                                <Select value={involved.Neighborhood}
+                                        id="involvedNeighborhood"
+                                        name="involvedNeighborhood"
+                                        onChange={this.saveNestedAlteration.bind(this, 'involved', 'Neighborhood', involved.id - 1)}
+                                        options={this.props.options.involved.involvedNeighborhoods}
+                                        label="Bairro"/>
                             </Col>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomSelect value={involved.VehicleType}
-                                              id="involvedVehicleType"
-                                              name="involvedVehicleType"
-                                              onChange={this.saveNestedAlteration.bind(this, 'involved', 'VehicleType', involved.id - 1)}
-                                              options={this.props.options.involved.involvedVehicleTypes}
-                                              label="Tipo de veiculo"/>
+                                <Input value={involved.Reference} type="text"
+                                       id="involvedReference" required="required"
+                                       onChange={this.saveNestedAlteration.bind(this, 'involved', 'Reference', involved.id - 1)}
+                                       label="Referência"/>
                             </Col>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomSelect value={involved.VehiclePosition}
-                                              id="involvedVehiclePosition"
-                                              name="involvedVehiclePosition"
-                                              onChange={this.saveNestedAlteration.bind(this, 'involved', 'VehiclePosition', involved.id - 1)}
-                                              options={this.props.options.involved.involvedVehiclePositions}
-                                              label="Posição no Veículo"/>
+                                <Input value={involved.Mom} type="text"
+                                       id="involvedMom" required="required"
+                                       onChange={this.saveNestedAlteration.bind(this, 'involved', 'Mom', involved.id - 1)}
+                                       label="Nome da mãe"/>
                             </Col>
                         </Row>
                         <Row>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomSelect value={involved.SecurityCondition}
-                                              id="involvedSecurityCondition"
-                                              name="involvedSecurityCondition"
-                                              onChange={this.saveNestedAlteration.bind(this, 'involved', 'SecurityCondition', involved.id - 1)}
-                                              options={this.props.options.involved.involvedSecurityConditions}
-                                              label="Condição de segurança"/>
+                                <Select value={involved.Situation}
+                                        id="involvedSituation"
+                                        name="involvedSituation"
+                                        onChange={this.saveNestedAlteration.bind(this, 'involved', 'Situation', involved.id - 1)}
+                                        options={this.props.options.involved.involvedSituations}
+                                        label="Situação"/>
                             </Col>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomSelect value={involved.InjuryLevel}
-                                              id="involvedInjuryLevel"
-                                              name="involvedInjuryLevel"
-                                              onChange={this.saveNestedAlteration.bind(this, 'involved', 'InjuryLevel', involved.id - 1)}
-                                              options={this.props.options.involved.involvedInjuryLevels}
-                                              label="Gravidade da lesão"/>
+                                <Select value={involved.VehicleType}
+                                        id="involvedVehicleType"
+                                        name="involvedVehicleType"
+                                        onChange={this.saveNestedAlteration.bind(this, 'involved', 'VehicleType', involved.id - 1)}
+                                        options={this.props.options.involved.involvedVehicleTypes}
+                                        label="Tipo de veiculo"/>
                             </Col>
                             <Col xs={4} md={4} sm={4}>
-                                <CustomSelect value={involved.ProbableConduct}
-                                              id="involvedProbableConduct"
-                                              name="involvedProbableConduct"
-                                              onChange={this.saveNestedAlteration.bind(this, 'involved', 'ProbableConduct', involved.id - 1)}
-                                              options={this.props.options.involved.involvedProbableConducts}
-                                              label="Conduta provável"/>
+                                <Select value={involved.VehiclePosition}
+                                        id="involvedVehiclePosition"
+                                        name="involvedVehiclePosition"
+                                        onChange={this.saveNestedAlteration.bind(this, 'involved', 'VehiclePosition', involved.id - 1)}
+                                        options={this.props.options.involved.involvedVehiclePositions}
+                                        label="Posição no Veículo"/>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={4} md={4} sm={4}>
+                                <Select value={involved.SecurityCondition}
+                                        id="involvedSecurityCondition"
+                                        name="involvedSecurityCondition"
+                                        onChange={this.saveNestedAlteration.bind(this, 'involved', 'SecurityCondition', involved.id - 1)}
+                                        options={this.props.options.involved.involvedSecurityConditions}
+                                        label="Condição de segurança"/>
+                            </Col>
+                            <Col xs={4} md={4} sm={4}>
+                                <Select value={involved.InjuryLevel}
+                                        id="involvedInjuryLevel"
+                                        name="involvedInjuryLevel"
+                                        onChange={this.saveNestedAlteration.bind(this, 'involved', 'InjuryLevel', involved.id - 1)}
+                                        options={this.props.options.involved.involvedInjuryLevels}
+                                        label="Gravidade da lesão"/>
+                            </Col>
+                            <Col xs={4} md={4} sm={4}>
+                                <Select value={involved.ProbableConduct}
+                                        id="involvedProbableConduct"
+                                        name="involvedProbableConduct"
+                                        onChange={this.saveNestedAlteration.bind(this, 'involved', 'ProbableConduct', involved.id - 1)}
+                                        options={this.props.options.involved.involvedProbableConducts}
+                                        label="Conduta provável"/>
                             </Col>
                         </Row>
                         <Row>
                             <Col xs={12}>
-                                <CustomInput value={involved.Evolution} type="text"
-                                             id="involvedEvolution" required="required"
-                                             onChange={this.saveNestedAlteration.bind(this, 'involved', 'Evolution', involved.id - 1)}
-                                             label="Evolução"/>
+                                <Input value={involved.Evolution} type="text"
+                                       id="involvedEvolution" required="required"
+                                       onChange={this.saveNestedAlteration.bind(this, 'involved', 'Evolution', involved.id - 1)}
+                                       label="Evolução"/>
                             </Col>
                         </Row>
                     </Col>
@@ -403,52 +403,52 @@ class EForm extends Component {
                                         <br/>
                                         <Row>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomInput value={this.state.general.date} type="date" id="date"
-                                                             required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'general', 'date')}
-                                                             label="Data"/>
+                                                <Input value={this.state.general.date} type="date" id="date"
+                                                       required="required"
+                                                       onChange={this.saveAlteration.bind(this, 'general', 'date')}
+                                                       label="Data"/>
                                             </Col>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomInput value={this.state.general.street} type="text" id="street"
-                                                             required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'general', 'street')}
-                                                             label="Rua"/>
+                                                <Input value={this.state.general.street} type="text" id="street"
+                                                       required="required"
+                                                       onChange={this.saveAlteration.bind(this, 'general', 'street')}
+                                                       label="Rua"/>
                                             </Col>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomInput value={this.state.general.number} type="text" id="number"
-                                                             required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'general', 'number')}
-                                                             label="Numero"/>
+                                                <Input value={this.state.general.number} type="text" id="number"
+                                                       required="required"
+                                                       onChange={this.saveAlteration.bind(this, 'general', 'number')}
+                                                       label="Numero"/>
                                             </Col>
                                         </Row>
 
                                         <Row>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomInput value={this.state.general.cross} type="text" id="cross"
-                                                             required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'general', 'cross')}
-                                                             label="Cruzamento"/>
+                                                <Input value={this.state.general.cross} type="text" id="cross"
+                                                       required="required"
+                                                       onChange={this.saveAlteration.bind(this, 'general', 'cross')}
+                                                       label="Cruzamento"/>
                                             </Col>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomInput value={this.state.general.lat} type="number" id="lat"
-                                                             required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'general', 'lat')}
-                                                             label="Latitude"/>
+                                                <Input value={this.state.general.lat} type="number" id="lat"
+                                                       required="required"
+                                                       onChange={this.saveAlteration.bind(this, 'general', 'lat')}
+                                                       label="Latitude"/>
                                             </Col>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomInput value={this.state.general.lng} type="number" id="lng"
-                                                             required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'general', 'lng')}
-                                                             label="Longitude"/>
+                                                <Input value={this.state.general.lng} type="number" id="lng"
+                                                       required="required"
+                                                       onChange={this.saveAlteration.bind(this, 'general', 'lng')}
+                                                       label="Longitude"/>
                                             </Col>
                                         </Row>
 
                                         <Row>
                                             <Col xs={12}>
-                                                <CustomInput value={this.state.general.middleName} type="text"
-                                                             id="middleName" required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'general', 'middleName')}
-                                                             label="Nome do meio / Inicial"/>
+                                                <Input value={this.state.general.middleName} type="text"
+                                                       id="middleName" required="required"
+                                                       onChange={this.saveAlteration.bind(this, 'general', 'middleName')}
+                                                       label="Nome do meio / Inicial"/>
                                             </Col>
                                         </Row>
 
@@ -459,114 +459,114 @@ class EForm extends Component {
                                         <br/>
                                         <Row>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.accidentType}
-                                                              id="accidentType" name="accidentType"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'accidentType')}
-                                                              options={this.props.options.statisticData.accidentTypes}
-                                                              label="Tipo de Acidente"/>
+                                                <Select value={this.state.statisticData.accidentType}
+                                                        id="accidentType" name="accidentType"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'accidentType')}
+                                                        options={this.props.options.statisticData.accidentTypes}
+                                                        label="Tipo de Acidente"/>
                                             </Col>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.pavementType}
-                                                              id="pavementType" name="pavementType"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'pavementType')}
-                                                              options={this.props.options.statisticData.pavementTypes}
-                                                              label="Tipo de Pavimento"/>
+                                                <Select value={this.state.statisticData.pavementType}
+                                                        id="pavementType" name="pavementType"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'pavementType')}
+                                                        options={this.props.options.statisticData.pavementTypes}
+                                                        label="Tipo de Pavimento"/>
                                             </Col>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.surface} id="surface"
-                                                              name="surface"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'surface')}
-                                                              options={this.props.options.statisticData.surfaces}
-                                                              label="Superficie"/>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.accidentClassification}
-                                                              id="accidentClassification" name="accidentClassification"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'accidentClassification')}
-                                                              options={this.props.options.statisticData.accidentClassifications}
-                                                              label="Classificação do acidente"/>
-                                            </Col>
-                                            <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.roadState} id="roadState"
-                                                              name="roadState"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'roadState')}
-                                                              options={this.props.options.statisticData.roadStates}
-                                                              label="Estado da pista"/>
-                                            </Col>
-                                            <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.roadProfile}
-                                                              id="roadProfile"
-                                                              name="roadProfile"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'roadProfile')}
-                                                              options={this.props.options.statisticData.roadProfiles}
-                                                              label="Perfil da pista"/>
+                                                <Select value={this.state.statisticData.surface} id="surface"
+                                                        name="surface"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'surface')}
+                                                        options={this.props.options.statisticData.surfaces}
+                                                        label="Superficie"/>
                                             </Col>
                                         </Row>
                                         <Row>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.roadCondition}
-                                                              id="roadCondition"
-                                                              name="roadCondition"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'roadCondition')}
-                                                              options={this.props.options.statisticData.roadConditions}
-                                                              label="Condição da pista"/>
+                                                <Select value={this.state.statisticData.accidentClassification}
+                                                        id="accidentClassification" name="accidentClassification"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'accidentClassification')}
+                                                        options={this.props.options.statisticData.accidentClassifications}
+                                                        label="Classificação do acidente"/>
                                             </Col>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.climaticCondition}
-                                                              id="climaticCondition"
-                                                              name="climaticCondition"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'climaticCondition')}
-                                                              options={this.props.options.statisticData.climaticConditions}
-                                                              label="Condição climática"/>
+                                                <Select value={this.state.statisticData.roadState} id="roadState"
+                                                        name="roadState"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'roadState')}
+                                                        options={this.props.options.statisticData.roadStates}
+                                                        label="Estado da pista"/>
                                             </Col>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.verticalSignaling}
-                                                              id="verticalSignaling"
-                                                              name="verticalSignaling"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'verticalSignaling')}
-                                                              options={this.props.options.statisticData.verticalSignals}
-                                                              label="Sinalização vertical"/>
+                                                <Select value={this.state.statisticData.roadProfile}
+                                                        id="roadProfile"
+                                                        name="roadProfile"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'roadProfile')}
+                                                        options={this.props.options.statisticData.roadProfiles}
+                                                        label="Perfil da pista"/>
                                             </Col>
                                         </Row>
                                         <Row>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.horizontalSignaling}
-                                                              id="horizontalSignaling"
-                                                              name="horizontalSignaling"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'horizontalSignaling')}
-                                                              options={this.props.options.statisticData.horizontalSignals}
-                                                              label="Sinalização horizontal"/>
+                                                <Select value={this.state.statisticData.roadCondition}
+                                                        id="roadCondition"
+                                                        name="roadCondition"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'roadCondition')}
+                                                        options={this.props.options.statisticData.roadConditions}
+                                                        label="Condição da pista"/>
                                             </Col>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.direction} id="direction"
-                                                              name="direction"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'direction')}
-                                                              options={this.props.options.statisticData.directions}
-                                                              label="Direção"/>
+                                                <Select value={this.state.statisticData.climaticCondition}
+                                                        id="climaticCondition"
+                                                        name="climaticCondition"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'climaticCondition')}
+                                                        options={this.props.options.statisticData.climaticConditions}
+                                                        label="Condição climática"/>
                                             </Col>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.zone} id="zone"
-                                                              name="zone"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'zone')}
-                                                              options={this.props.options.statisticData.zones}
-                                                              label="Zona"/>
+                                                <Select value={this.state.statisticData.verticalSignaling}
+                                                        id="verticalSignaling"
+                                                        name="verticalSignaling"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'verticalSignaling')}
+                                                        options={this.props.options.statisticData.verticalSignals}
+                                                        label="Sinalização vertical"/>
                                             </Col>
                                         </Row>
                                         <Row>
                                             <Col xs={4} md={4} sm={4}>
-                                                <CustomSelect value={this.state.statisticData.cause} id="cause"
-                                                              name="cause"
-                                                              onChange={this.saveAlteration.bind(this, 'statisticData', 'cause')}
-                                                              options={this.props.options.statisticData.causes}
-                                                              label="Causa provável"/>
+                                                <Select value={this.state.statisticData.horizontalSignaling}
+                                                        id="horizontalSignaling"
+                                                        name="horizontalSignaling"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'horizontalSignaling')}
+                                                        options={this.props.options.statisticData.horizontalSignals}
+                                                        label="Sinalização horizontal"/>
+                                            </Col>
+                                            <Col xs={4} md={4} sm={4}>
+                                                <Select value={this.state.statisticData.direction} id="direction"
+                                                        name="direction"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'direction')}
+                                                        options={this.props.options.statisticData.directions}
+                                                        label="Direção"/>
+                                            </Col>
+                                            <Col xs={4} md={4} sm={4}>
+                                                <Select value={this.state.statisticData.zone} id="zone"
+                                                        name="zone"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'zone')}
+                                                        options={this.props.options.statisticData.zones}
+                                                        label="Zona"/>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col xs={4} md={4} sm={4}>
+                                                <Select value={this.state.statisticData.cause} id="cause"
+                                                        name="cause"
+                                                        onChange={this.saveAlteration.bind(this, 'statisticData', 'cause')}
+                                                        options={this.props.options.statisticData.causes}
+                                                        label="Causa provável"/>
                                             </Col>
                                             <Col className="control-label" xs={8}>
-                                                <CustomInput value={this.state.statisticData.additionalInfo} type="text"
-                                                             id="additionalInfo" required="required"
-                                                             onChange={this.saveAlteration.bind(this, 'statisticData', 'additionalInfo')}
-                                                             label="Informações adicionais"/>
+                                                <Input value={this.state.statisticData.additionalInfo} type="text"
+                                                       id="additionalInfo" required="required"
+                                                       onChange={this.saveAlteration.bind(this, 'statisticData', 'additionalInfo')}
+                                                       label="Informações adicionais"/>
                                             </Col>
                                         </Row>
                                     </Row>
@@ -605,7 +605,7 @@ class EForm extends Component {
                                 </Tab>
                             </Tabs>
                             <Col xs={1} md={1} sm={1} mdOffset={11} smOffset={11} xsOffset={11}>
-                                <CustomSubmit label="Gravar"/>
+                                <Submit label="Gravar"/>
                             </Col>
                         </Col>
                     </Form>
