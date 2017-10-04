@@ -15,7 +15,7 @@ export default class Factor extends Component {
                             onChange={this.props.onChange}/>
                 </Col>
                 <Col md={2} style={this.props.style}>
-                    Combobox aqui
+                    Select Here
                 </Col>
             </div>
         )

@@ -24,6 +24,7 @@
 }
 */
 /* Rules for sizing the icon. */
+
 .material-icons.md-18 {
     font-size: 18px;
 }
@@ -95,7 +96,7 @@ h1 small, h4 small {
 }
 
 .custom-modal {
-    width: 95vw;
+    width: 88vw;
 }
 
 .spanLine {

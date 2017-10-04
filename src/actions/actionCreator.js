@@ -14,6 +14,10 @@ export function listDeathEvents(loading, deathEvents) {
     return {type: 'LISTDEATHEVENTS', loading, deathEvents};
 }
 
+export function listDeathOptions(deathOptions) {
+    return {type: 'LISTDEATHOPTIONS', deathOptions}
+}
+
 export function toggleDeathModal(showModal, id) {
     return {type: 'TOGGLEDEATHMODAL', showModal, id};
 }

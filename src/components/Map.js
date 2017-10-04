@@ -8,9 +8,10 @@ class MapContainer extends Component {
             width: '100%',
             height: '100%'
         };
+
         const initialCenter = {
-            lat: -24.959565,
-            lng: -53.458563
+            lat: -24.9558266,
+            lng: -53.4617911
         };
 
         return (
