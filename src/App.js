@@ -14,7 +14,9 @@ import IconButton from 'react-toolbox/lib/button/IconButton';
 import {connect} from 'react-redux';
 
 class App extends Component {
+
     render() {
+
         const menu = [
             {
                 icon: 'dashboard',
@@ -53,6 +55,7 @@ class App extends Component {
                 to: '/relatorios'
             }
         ];
+
         return (
             <div id="root">
                 <div className="main">
@@ -90,6 +93,7 @@ class App extends Component {
             </div>
         );
     }
+
 }
 
 App.contextTypes = {

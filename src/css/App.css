@@ -156,3 +156,12 @@ h1 small, h4 small {
     border-color: #3897f0;
     color: white;
 }
+
+.mapRow {
+    height: 30vh;
+    padding: 2px 2px 2px 1%;
+}
+
+.firstRow {
+    padding: 0 0 1% 0;
+}

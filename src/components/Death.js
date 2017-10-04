@@ -2,33 +2,16 @@
  * Created by natal on 17/04/17.
  */
 
-// import MetisMenu from "react-metismenu";
-// import NavDrawer from "react-toolbox/lib/layout/NavDrawer";
-// import RouterLink from "react-metismenu-router-link";
-// import CustomSubmit from './CustomSubmit'
-// import Input from './Input'
-// import CustomSelect from './CustomSelect'
-// import $ from 'jquery';
-// import PubSub from 'pubsub-js';
-// import ErrHandler from  './ErrHandler';
-// import update from 'immutability-helper';
-// import Navigation from "react-toolbox/lib/navigation/Navigation";
-// import Link from "react-toolbox/lib/link/Link";
-// import AppBar from "react-toolbox/lib/app_bar/AppBar";
-// import Layout from "react-toolbox/lib/layout/Layout";
-// import Panel from "react-toolbox/lib/layout/Panel";
-// import FontIcon from "react-toolbox/lib/font_icon";
-// import Sidebar from 'react-toolbox/lib/layout/Sidebar';
-// import IconButton from 'react-toolbox/lib/button/IconButton';
-
 import React, {Component} from "react";
 import Button from 'react-toolbox/lib/button/Button';
 import DeathApi from '../logics/DeathApi'
 import {Col, Form, Grid, Modal, PageHeader, Row} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import {connect} from 'react-redux';
-import Slider from 'react-toolbox/lib/slider/Slider';
 import Input from "./CustomInput";
+// import Slider from 'react-toolbox/lib/slider/Slider';
+import Map from "./Map";
+import Fator from "./Factor"
 
 class Death extends Component {
 
@@ -38,17 +21,15 @@ class Death extends Component {
 
     render() {
         return (
-            <div>
-                <DGrid
-                    data={this.props.deaths.deathEvents}
-                    loading={this.props.deaths.loading}
-                    showModal={this.props.deaths.showModal}
-                    selectedEvent={this.props.deaths.selectedEvent}
-                    selectedEventID={this.props.deaths.selectedEventID}
-                    handleToggle={this.props.handleToggle}
-                    slider={this.props.deaths.slider}
-                />
-            </div>
+            <DGrid
+                data={this.props.deaths.deathEvents}
+                loading={this.props.deaths.loading}
+                showModal={this.props.deaths.showModal}
+                selectedEvent={this.props.deaths.selectedEvent}
+                selectedEventID={this.props.deaths.selectedEventID}
+                handleToggle={this.props.handleToggle}
+                slider={this.props.deaths.slider}
+            />
         );
     }
 
@@ -62,6 +43,7 @@ class DGrid extends Component {
     }
 
     render() {
+
         const columns = [
             {
                 style: {textAlign: "center"},
@@ -131,14 +113,10 @@ class DGrid extends Component {
 
                             <Modal.Body>
                                 <DeathAnalysis
+                                    event={this.props.selectedEvent}
                                     slider={this.props.slider}
                                 />
                             </Modal.Body>
-
-                            {/*<Modal.Footer>*/}
-                            {/*/!*<Button onClick={this.handleToggle}>Close</Button>*!/*/}
-                            {/*</Modal.Footer>*/}
-
                         </Modal>
                     </div>
                 </div>
@@ -157,7 +135,7 @@ class DeathAnalysis extends Component {
                     <Form>
                         {/*<Col xs={12} md={12} sm={12}>*/}
                             {/*general*/}
-                            <Row>
+                        <Row className="firstRow">
                                 <Col xs={6} md={6} sm={6}>
                                     <Row className="form-group">
                                         <Row>
@@ -201,81 +179,39 @@ class DeathAnalysis extends Component {
                                     </Row>
                                 </Col>
                                 {/*Map*/}
-                                <Col xs={6} md={6} sm={6}
-                                     style={{height: '400px', padding: "3px 3px 3px 3px"}}>
-                                    <Row style={{
-                                        position: 'relative',
-                                        float: 'left',
-                                        top: '50%',
-                                        left: '50%',
-                                        transform: 'translate(-50%, -50%)'
-                                    }}>
-                                        MAP HERE
+                            <Col xs={6} md={6} sm={6}>
+                                <Row className='mapRow'>
+                                    <Map/>
                                     </Row>
                                 </Col>
                             </Row>
-                            {/*sliders*/}
+
+                        {/*sliders*/}
                             <Row className="form-group">
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
-                                <Col md={4} style={padding}>
-                                    <p>Fator/Causa</p>
-                                    <Slider pinned snaps min={0} max={10} step={2} editable value={this.slider}
-                                            onChange={(value) => this.slider = value}/>
-                                </Col>
+                                <Fator value={this.slider} style={padding}
+                                       factor="Fator"
+                                       onChange={(value) => this.slider = value}
+                                />
+                                <Fator value={this.props.slider} style={padding}
+                                       factor="Fator"
+                                       onChange={(value) => this.slider = value}
+                                />
+                                <Fator value={this.props.slider} style={padding}
+                                       factor="Fator"
+                                       onChange={(value) => this.slider = value}
+                                />
+                                <Fator value={this.props.slider} style={padding}
+                                       factor="Fator"
+                                       onChange={(value) => this.slider = value}
+                                />
+                                <Fator value={this.props.slider} style={padding}
+                                       factor="Fator"
+                                       onChange={(value) => this.slider = value}
+                                />
+                                <Fator value={this.props.slider} style={padding}
+                                       factor="Fator"
+                                       onChange={(value) => this.slider = value}
+                                />
                             </Row>
                             {/*victims*/}
                             <Row className="form-group">
