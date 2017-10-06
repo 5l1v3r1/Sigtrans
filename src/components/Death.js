@@ -45,7 +45,6 @@ class DGrid extends Component {
     }
 
     render() {
-
         const columns = [
             {
                 style: {textAlign: "center"},
@@ -87,6 +86,9 @@ class DGrid extends Component {
                 <PageHeader>Ocorrencias fatais</PageHeader>
                 <div className="content" id="content">
                     <ReactTable
+                        filterable
+                        defaultFilterMethod={(filter, row) =>
+                            String(row[filter.id]) === filter.value}
                         previousText='Anterior'
                         nextText='Proximo'
                         loadingText='Carregando...'
@@ -131,11 +133,12 @@ class DGrid extends Component {
 //make new js file
 class DeathAnalysis extends Component {
 
-    /**
-     * TODO NANI
-     * */
-
     render() {
+        let mapCenter = {
+            lat: this.props.selectedEvent.general.lat,
+            lng: this.props.selectedEvent.general.lng
+        };
+
         let padding = {paddingLeft: '2px'};
         let padding5px = {paddingLeft: '5px'};
 
@@ -154,10 +157,12 @@ class DeathAnalysis extends Component {
                 <div key={item.id}>
                     <Factor value={this.props.slider} style={padding}
                             factor={item.name} responsible
+                            options={this.props.options.involved.involvedVehiclePositions}
                             onChange={(value) => this.props.slider = value}
                     />
                 </div>
             )
+
         }, this);
 
         let causeList = [
@@ -176,6 +181,7 @@ class DeathAnalysis extends Component {
                 <div key={item.id}>
                     <Factor value={this.props.slider} style={padding}
                             factor={item.name} responsible
+                            options={this.props.options.involved.involvedVehiclePositions}
                             onChange={(value) => this.props.slider = value}
                     />
                 </div>
@@ -184,230 +190,149 @@ class DeathAnalysis extends Component {
         }, this);
 
         let Involved = this.props.selectedEvent.involved.map((involved) => {
-
             return (
                 <Panel header={"Envolvido: " + involved.Name} eventKey={involved.id} key={involved.id} collapsible>
-                    <Col xs={10} md={10} sm={10}>
-                        <Row>
-                            <Col sm={4}>
-                                <Input value={involved.Name} type="text"
-                                       id="involvedName" required="required"
-                                       label="Nome"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'Name', involved.id - 1)}*/}
-                            </ Col>
-                            <Col sm={4}>
-                                <Input value={involved.Age} type="number"
-                                       id="involvedAge" required="required"
-                                       label="Idade"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'Age', involved.id - 1)}*/}
-                            </ Col>
-                            <Col sm={4}>
-                                <Select value={involved.Sex} id="involvedSex"
-                                        name="involvedSex"
-                                        options={this.props.options.involved.involvedSexes}
-                                        label="Sexo"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'Sex', involved.id - 1)}*/}
-                            </ Col>
-                        </Row>
-                        <Row>
-                            <Col sm={4}>
-                                <Input value={involved.Street} type="text"
-                                       id="involvedStreet" required="required"
-                                       label="Rua"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'Street', involved.id - 1)}*/}
-                            </Col>
-                            <Col sm={4}>
-                                <Input value={involved.Number} type="text"
-                                       id="involvedNumber" required="required"
-                                       label="Numero"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'Number', involved.id - 1)}*/}
-                            </Col>
-                            <Col sm={4}>
-                                <Input value={involved.Corner} type="text"
-                                       id="involvedCorner" required="required"
-                                       label="Esquina"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'Corner', involved.id - 1)}*/}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col sm={4}>
-                                <Select value={involved.Neighborhood}
-                                        id="involvedNeighborhood"
-                                        name="involvedNeighborhood"
-                                        options={this.props.options.involved.involvedNeighborhoods}
-                                        label="Bairro"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'Neighborhood', involved.id - 1)}*/}
-                            </Col>
-                            <Col sm={4}>
-                                <Input value={involved.Reference} type="text"
-                                       id="involvedReference" required="required"
-                                       label="Referência"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'Reference', involved.id - 1)}*/}
-                            </Col>
-                            <Col sm={4}>
-                                <Input value={involved.Mom} type="text"
-                                       id="involvedMom" required="required"
-                                       label="Nome da mãe"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'Mom', involved.id - 1)}*/}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col sm={4}>
-                                <Select value={involved.Situation}
-                                        id="involvedSituation"
-                                        name="involvedSituation"
-                                        options={this.props.options.involved.involvedSituations}
-                                        label="Situação"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'Situation', involved.id - 1)}*/}
-                            </Col>
-                            <Col sm={4}>
-                                <Select value={involved.VehicleType}
-                                        id="involvedVehicleType"
-                                        name="involvedVehicleType"
-                                        options={this.props.options.involved.involvedVehicleTypes}
-                                        label="Tipo de veiculo"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'VehicleType', involved.id - 1)}*/}
-                            </Col>
-                            <Col sm={4}>
-                                <Select value={involved.VehiclePosition}
-                                        id="involvedVehiclePosition"
-                                        name="involvedVehiclePosition"
-                                        options={this.props.options.involved.involvedVehiclePositions}
-                                        label="Posição no Veículo"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'VehiclePosition', involved.id - 1)}*/}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col sm={4}>
-                                <Select value={involved.SecurityCondition}
-                                        id="involvedSecurityCondition"
-                                        name="involvedSecurityCondition"
-                                        options={this.props.options.involved.involvedSecurityConditions}
-                                        label="Condição de segurança"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'SecurityCondition', involved.id - 1)}*/}
-                            </Col>
-                            <Col sm={4}>
-                                <Select value={involved.InjuryLevel}
-                                        id="involvedInjuryLevel"
-                                        name="involvedInjuryLevel"
-                                        options={this.props.options.involved.involvedInjuryLevels}
-                                        label="Gravidade da lesão"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'InjuryLevel', involved.id - 1)}*/}
-                            </Col>
-                            <Col sm={4}>
-                                <Select value={involved.ProbableConduct}
-                                        id="involvedProbableConduct"
-                                        name="involvedProbableConduct"
-                                        options={this.props.options.involved.involvedProbableConducts}
-                                        label="Conduta provável"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'ProbableConduct', involved.id - 1)}*/}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col xs={12}>
-                                <Input value={involved.Evolution} type="text"
-                                       id="involvedEvolution" required="required"
-                                       label="Evolução"/>
-                                {/*onChange={this.saveNestedAlteration.bind(this, 'involved', 'Evolution', involved.id - 1)}*/}
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col md={2}>
-                        {/*<Button icon='close' onClick={this.removeInvolved.bind(this, involved.id - 1)}>Remover</Button>*/}
+                    <Col xs={11} md={11} sm={11}>
+                        <Col sm={4}>
+                            <Input value={involved.Name} type="text" readOnly disabled
+                                   id="involvedName" required="required"
+                                   label="Nome"/>
+                        </ Col>
+                        <Col sm={2}>
+                            <Input value={involved.Age} type="number" readOnly disabled
+                                   id="involvedAge" required="required"
+                                   label="Idade"/>
+                        </ Col>
+                        <Col sm={2}>
+                            <Select value={involved.Sex} id="involvedSex" readOnly disabled
+                                    name="involvedSex"
+                                    options={this.props.options.involved.involvedSexes}
+                                    label="Sexo"/>
+                        </ Col>
+                        <Col sm={4}>
+                            <Select value={involved.Situation} readOnly disabled
+                                    id="involvedSituation"
+                                    name="involvedSituation"
+                                    options={this.props.options.involved.involvedSituations}
+                                    label="Situação"/>
+                        </Col>
+                        <Col sm={4}>
+                            <Select value={involved.VehiclePosition} readOnly disabled
+                                    id="involvedVehiclePosition"
+                                    name="involvedVehiclePosition"
+                                    options={this.props.options.involved.involvedVehiclePositions}
+                                    label="Posição no Veículo"/>
+                        </Col>
+                        <Col sm={4}>
+                            <Select value={involved.SecurityCondition} readOnly disabled
+                                    id="involvedSecurityCondition"
+                                    name="involvedSecurityCondition"
+                                    options={this.props.options.involved.involvedSecurityConditions}
+                                    label="Condição de segurança"/>
+                        </Col>
+                        <Col sm={4}>
+                            <Select value={involved.InjuryLevel} readOnly disabled
+                                    id="involvedInjuryLevel"
+                                    name="involvedInjuryLevel"
+                                    options={this.props.options.involved.involvedInjuryLevels}
+                                    label="Gravidade da lesão"/>
+                        </Col>
                     </Col>
                 </Panel>
-            );
+            )
         }, this);
 
         return (
             <div className='clearfix'>
                 <Grid>
-                    <Form>
-                        {/*general*/}
-                        <Row className="firstRow">
-                            <Panel>
-                                <Col sm={6}>
-                                    <Row className="form-group">
-                                        <h4>Informações Gerais</h4>
-                                        <Col sm={4} style={padding}>
-                                            <Input type="date" name="deathDate"
-                                                   id="date"
-                                                   label="Data" readOnly
-                                                   value={this.props.selectedEvent.general.date}
-                                            />
-                                        </Col>
-                                        <Col sm={2} style={padding5px}>
-                                            <Input type="time" name="deathTime"
-                                                   id="deathTime"
-                                                   label="Hora" readOnly
-                                            />
-                                        </Col>
-                                        <Col sm={4} style={padding5px}>
-                                            <Input type="text" name="accidentType"
-                                                   id="accidentType"
-                                                   label="Tipo do Acidente" readOnly
-                                                   value={this.props.options.statisticData.accidentTypes[this.props.selectedEvent.statisticData.accidentType]['value']}
-                                            />
-                                        </Col>
-                                        <Col sm={2} style={padding5px}>
-                                            <Input type="text" name="severity"
-                                                   id="severity"
-                                                   label="Severidade" readOnly
-                                                   value={this.props.options.statisticData.accidentClassifications[this.props.selectedEvent.statisticData.accidentClassification - 1]['value']}
+                    <Col xs={12}>
+                        <Form>
+                            {/*general*/}
+                            <Row className="firstRow">
+                                <Panel>
+                                    <Col sm={6}>
+                                        <Row className="form-group">
+                                            <h4>Informações Gerais</h4>
+                                            <Col sm={4} style={padding}>
+                                                <Input type="date" name="deathDate"
+                                                       id="date"
+                                                       label="Data" readOnly disabled
+                                                       value={this.props.selectedEvent.general.date}
+                                                />
+                                            </Col>
+                                            <Col sm={2} style={padding5px}>
+                                                <Input type="time" name="deathTime"
+                                                       id="deathTime"
+                                                       label="Hora" readOnly disabled
+                                                />
+                                            </Col>
+                                            <Col sm={4} style={padding5px}>
+                                                <Input type="text" name="accidentType"
+                                                       id="accidentType"
+                                                       label="Tipo do Acidente" readOnly disabled
+                                                       value={this.props.options.statisticData.accidentTypes[this.props.selectedEvent.statisticData.accidentType]['value']}
+                                                />
+                                            </Col>
+                                            <Col sm={2} style={padding5px}>
+                                                <Input type="text" name="severity"
+                                                       id="severity"
+                                                       label="Severidade" readOnly disabled
+                                                       value={this.props.options.statisticData.accidentClassifications[this.props.selectedEvent.statisticData.accidentClassification - 1]['value']}
 
-                                            />
-                                        </Col>
-                                        <Col sm={8} style={padding}>
-                                            <Input type="text" name="eventAddress1"
-                                                   id="eventAddress1" placeholder="Endereço 1"
-                                                   label="Local da Ocorrência" readOnly
-                                                   value={this.props.selectedEvent.general.street}
-                                            />
-                                        </Col>
-                                        <Col sm={4} style={padding}>
-                                            <Input type="text" name="eventAddressNumber1"
-                                                   id="eventAddressNumber1" placeholder="Numero"
-                                                   label="Número" readOnly
-                                                   value={this.props.selectedEvent.general.number}
-                                            />
-                                        </Col>
-                                        <Col sm={12} style={padding}>
-                                            <Input type="text" name="eventCross"
-                                                   id="eventCross" placeholder="Cruzamento"
-                                                   label="Cruzamento" readOnly
-                                                   value={this.props.selectedEvent.general.cross}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </Col>
-                                {/*Map*/}
-                                <Col sm={6} style={{paddingLeft: '1%'}}>
-                                    <Row className='mapRow'>
-                                        <Map/>
-                                    </Row>
-                                </Col>
-                            </Panel>
-                        </Row>
-                        {/*Fatores*/}
-                        <Row className="form-group">
-                            <Panel>
-                                <h4>Fatores</h4>
-                                {factors}
-                            </Panel>
-                            <Panel>
-                                <h4>Causas</h4>
-                                {causes}
-                            </Panel>
-                        </Row>
-                        {/*victims*/}
-                        <Row className="form-group">
-                            <h4>
-                                Informações sobre as vítimas
-                            </h4>
-                            {Involved}
-                        </Row>
-                        {/*</Col>*/}
-                    </Form>
+                                                />
+                                            </Col>
+                                            <Col sm={8} style={padding}>
+                                                <Input type="text" name="eventAddress1"
+                                                       id="eventAddress1" placeholder="Endereço 1"
+                                                       label="Local da Ocorrência" readOnly disabled
+                                                       value={this.props.selectedEvent.general.street}
+                                                />
+                                            </Col>
+                                            <Col sm={4} style={padding}>
+                                                <Input type="text" name="eventAddressNumber1"
+                                                       id="eventAddressNumber1" placeholder="Numero"
+                                                       label="Número" readOnly disabled
+                                                       value={this.props.selectedEvent.general.number}
+                                                />
+                                            </Col>
+                                            <Col sm={12} style={padding}>
+                                                <Input type="text" name="eventCross"
+                                                       id="eventCross" placeholder="Cruzamento"
+                                                       label="Cruzamento" readOnly disabled
+                                                       value={this.props.selectedEvent.general.cross}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                    {/*Map*/}
+                                    <Col sm={6} style={{paddingLeft: '1%'}}>
+                                        <Row className='mapRow'>
+                                            <Map center={mapCenter}/>
+                                        </Row>
+                                    </Col>
+                                </Panel>
+                            </Row>
+                            {/*Fatores*/}
+                            <Row className="form-group">
+                                <Panel>
+                                    <h4>Fatores</h4>
+                                    {factors}
+                                </Panel>
+                                <Panel>
+                                    <h4>Causas</h4>
+                                    {causes}
+                                </Panel>
+                            </Row>
+                            {/*victims*/}
+                            <Row className="form-group">
+                                <h4>
+                                    Informações sobre as vítimas
+                                </h4>
+                                {Involved}
+                            </Row>
+                            {/*</Col>*/}
+                        </Form>
+                    </Col>
                 </Grid>
             </div>
         )

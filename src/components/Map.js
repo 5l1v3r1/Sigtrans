@@ -9,10 +9,8 @@ class MapContainer extends Component {
             height: '100%'
         };
 
-        const initialCenter = {
-            lat: -24.9558266,
-            lng: -53.4617911
-        };
+        const initialCenter = this.props.center;
+        // console.log(JSON.stringify(initialCenter));
 
         return (
             <Map google={this.props.google}

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import Slider from 'react-toolbox/lib/slider/Slider';
-// import Select from "./CustomSelect";
+import Select from "./CustomSelect";
 import {Col} from 'react-bootstrap';
 
 export default class Factor extends Component {
@@ -15,7 +15,10 @@ export default class Factor extends Component {
                             onChange={this.props.onChange}/>
                 </Col>
                 <Col md={2} style={this.props.style}>
-                    Select Here
+                    {/*// onChange={this.saveNestedAlteration.bind(this, 'vehicles', 'carStatus', vehicle.id - 1)}*/}
+                    <Select value={0}
+                            options={this.props.options}
+                            label="Responsável"/>
                 </Col>
             </div>
         )

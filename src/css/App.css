@@ -166,3 +166,11 @@ h1 small, h4 small {
 .firstRow {
     padding: 0 0 1% 0;
 }
+
+.paddingLeft2Px {
+    padding-left: 2px;
+}
+
+.paddingLeft5Px {
+    padding-left: 5px;
+}
