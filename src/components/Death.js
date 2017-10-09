@@ -11,7 +11,8 @@ import {connect} from 'react-redux';
 import Input from "./CustomInput";
 import Select from "./CustomSelect";
 import Map from "./Map";
-import Factor from "./Factor"
+import Factor from "./Factor";
+import matchSorter from 'match-sorter';
 
 class Death extends Component {
 
@@ -48,34 +49,59 @@ class DGrid extends Component {
         const columns = [
             {
                 style: {textAlign: "center"},
-                header: 'Data',
-                accessor: 'general.date'
+                Header: 'Data',
+                id: 'date',
+                accessor: d => d.general.date,
+                filterMethod: (filter, rows) =>
+                    matchSorter(rows, filter.value, {keys: ["date"]}),
+                filterAll: true
             }, {
                 style: {textAlign: "center"},
-                header: 'Rua',
-                accessor: 'general.street'
+                Header: 'Rua',
+                id: 'street',
+                accessor: d => d.general.street,
+                filterMethod: (filter, rows) =>
+                    matchSorter(rows, filter.value, {keys: ["street"]}),
+                filterAll: true
+
             }, {
                 style: {textAlign: "center"},
-                header: 'Numero/KM',
-                accessor: 'general.number'
+                Header: 'Numero/KM',
+                id: 'number',
+                accessor: d => d.general.number,
+                filterMethod: (filter, row) =>
+                    row[filter.id].startsWith(filter.value)
             }, {
                 style: {textAlign: "center"},
-                header: 'Cruzamento com',
-                accessor: 'general.cross'
+                Header: 'Cruzamento com',
+                id: 'cross',
+                accessor: d => d.general.cross,
+                filterMethod: (filter, rows) =>
+                    matchSorter(rows, filter.value, {keys: ["cross"]}),
+                filterAll: true
             }, {
                 style: {textAlign: "center"},
-                header: 'Bairro',
-                accessor: 'general.Neighborhood'
+                Header: 'Bairro',
+                id: 'neighborhood',
+                accessor: d => d.general.Neighborhood,
+                filterMethod: (filter, rows) =>
+                    matchSorter(rows, filter.value, {keys: ["neighborhood"]}),
+                filterAll: true
             }, {
                 style: {textAlign: "center"},
-                header: 'Referencia',
-                accessor: 'general.Reference'
+                Header: 'Referencia',
+                id: 'reference',
+                accessor: d => d.general.Reference,
+                filterMethod: (filter, rows) =>
+                    matchSorter(rows, filter.value, {keys: ["reference"]}),
+                filterAll: true
             }, {
                 style: {textAlign: "center"},
-                header: 'Análise',
+                Header: 'Análise',
                 accessor: 'id',
+                filterable: false,
                 sortable: false,
-                render: props => (
+                Cell: props => (
                     <Button icon="edit" primary id={props.value} onClick={() => this.handleToggle(props.value)}/>
                 )
             }
@@ -93,11 +119,11 @@ class DGrid extends Component {
                         nextText='Proximo'
                         loadingText='Carregando...'
                         pageText='Pagina'
-                        noDataText='Opa! Algo deu errado!'
+                        noDataText='Sem dados correspondentes'
                         ofText='de'
                         rowsText='linhas'
                         data={this.props.data}
-                        className="-striped"
+                        className="-striped -highlight"
                         loading={(this.props.loading === undefined)}
                         columns={columns}
                         defaultPageSize={5}
@@ -341,7 +367,7 @@ class DeathAnalysis extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        deaths: state.death,
+        deaths: state.death
     }
 };
 
