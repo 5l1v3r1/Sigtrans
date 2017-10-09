@@ -22,6 +22,10 @@ export function toggleDeathModal(showModal, id) {
     return {type: 'TOGGLEDEATHMODAL', showModal, id};
 }
 
+export function handleDeathSlider(name, value) {
+    return {type: 'HANDLEDEATHSLIDER', name, value}
+}
+
 export function authERR(msg) {
     return {type: 'AUTHERR', msg}
 }

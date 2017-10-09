@@ -24,14 +24,15 @@ class Death extends Component {
     render() {
         return (
             <DGrid
-                options={this.props.deaths.deathOptions}
                 data={this.props.deaths.deathEvents}
+                deathAnalysis={this.props.deaths.deathAnalysis}
+                options={this.props.deaths.deathOptions}
                 loading={this.props.deaths.loading}
                 showModal={this.props.deaths.showModal}
                 selectedEvent={this.props.deaths.selectedEvent}
                 selectedEventID={this.props.deaths.selectedEventID}
-                handleToggle={this.props.handleToggle}
-                slider={this.props.deaths.slider}
+                handleToggleModal={this.props.handleToggleModal}
+                handleSlider={this.props.handleSlider}
             />
         );
     }
@@ -41,11 +42,12 @@ class Death extends Component {
 //make new js file for both grids
 class DGrid extends Component {
 
-    handleToggle(id) {
-        this.props.handleToggle(this.props.showModal, id)
+    handleToggleModal(id) {
+        this.props.handleToggleModal(this.props.showModal, id)
     }
 
     render() {
+
         const columns = [
             {
                 style: {textAlign: "center"},
@@ -102,7 +104,7 @@ class DGrid extends Component {
                 filterable: false,
                 sortable: false,
                 Cell: props => (
-                    <Button icon="edit" primary id={props.value} onClick={() => this.handleToggle(props.value)}/>
+                    <Button icon="edit" primary id={props.value} onClick={() => this.handleToggleModal(props.value)}/>
                 )
             }
         ];
@@ -113,8 +115,6 @@ class DGrid extends Component {
                 <div className="content" id="content">
                     <ReactTable
                         filterable
-                        defaultFilterMethod={(filter, row) =>
-                            String(row[filter.id]) === filter.value}
                         previousText='Anterior'
                         nextText='Proximo'
                         loadingText='Carregando...'
@@ -127,13 +127,16 @@ class DGrid extends Component {
                         loading={(this.props.loading === undefined)}
                         columns={columns}
                         defaultPageSize={5}
+                        defaultFilterMethod={(filter, row) =>
+                            String(row[filter.id]) === filter.value
+                        }
                     />
                     <div className="modal-container">
                         <Modal show={this.props.showModal}
                                container={this}
                                dialogClassName="custom-modal"
                                aria-labelledby="contained-modal-title"
-                               onHide={() => this.handleToggle(this.props.selectedEventID)}>
+                               onHide={() => this.handleToggleModal(this.props.selectedEventID)}>
 
                             <Modal.Header closeButton>
                                 <Modal.Title id="contained-modal-title">Análise do Óbito
@@ -145,7 +148,8 @@ class DGrid extends Component {
                                 <DeathAnalysis
                                     selectedEvent={this.props.selectedEvent}
                                     options={this.props.options}
-                                    slider={this.props.slider}
+                                    deathAnalysis={this.props.deathAnalysis}
+                                    handleSlider={this.props.handleSlider}
                                 />
                             </Modal.Body>
                         </Modal>
@@ -160,61 +164,83 @@ class DGrid extends Component {
 class DeathAnalysis extends Component {
 
     render() {
+
         let mapCenter = {
             lat: this.props.selectedEvent.general.lat,
             lng: this.props.selectedEvent.general.lng
         };
-
-        let padding = {paddingLeft: '2px'};
-        let padding5px = {paddingLeft: '5px'};
+        let padding = {
+            paddingLeft: '2px'
+        };
+        let padding5px = {
+            paddingLeft: '5px'
+        };
 
         let factorList = [
-            {name: 'Velocidade', id: 1},
-            {name: 'Alcool', id: 2},
-            {name: 'Infraestrutura', id: 3},
-            {name: 'Veiculo', id: 4},
-            {name: 'Fadiga', id: 5},
-            {name: 'Visibilidade', id: 6},
-            {name: 'Drogas', id: 7},
-            {name: 'Celulares', id: 8}
+            {name: 'Velocidade', id: 'speed'},
+            {name: 'Alcool', id: 'alcohol'},
+            {name: 'Infraestrutura', id: 'infrastructure'},
+            {name: 'Veiculo', id: 'vehicle'},
+            {name: 'Fadiga', id: 'fatigue'},
+            {name: 'Visibilidade', id: 'visibility'},
+            {name: 'Drogas', id: 'drugs'},
+            {name: 'Celulares', id: 'cellphone'}
         ];
         let factors = factorList.map((item) => {
             return (
                 <div key={item.id}>
-                    <Factor value={this.props.slider} style={padding}
-                            factor={item.name} responsible
+                    <Factor sliderValue={this.props.deathAnalysis[item.id]} style={padding}
+                            factor={item.name} itemId={item.id} responsible
                             options={this.props.options.involved.involvedVehiclePositions}
-                            onChange={(value) => this.props.slider = value}
+                            handleSlider={this.props.handleSlider} max={10} step={2}
                     />
                 </div>
             )
-
         }, this);
-
         let causeList = [
-            {name: 'Avanço de Sinal', id: 1},
-            {name: 'Condutor sem habilitação', id: 2},
-            {name: 'Transitar em local proibido', id: 3},
-            {name: 'Transitar em local Improprio', id: 4},
-            {name: 'Mudança de pista sem sinalização prévia', id: 5},
-            {name: 'Distância mínima não respeitada', id: 6},
-            {name: 'Converter / Cruzar sem dar preferência', id: 7},
-            {name: 'Não dar preferência ao pedestre na faixa', id: 8},
-            {name: 'Falta de Atenção', id: 9}
+            {name: 'Avanço de Sinal', id: 'signalAdvance'},
+            {name: 'Condutor sem habilitação', id: 'noLicence'},
+            {name: 'Transitar em local proibido', id: 'transitProhibited'},
+            {name: 'Transitar em local Improprio', id: 'transitImproper'},
+            {name: 'Mudança de pista sem sinalização prévia', id: 'laneChange'},
+            {name: 'Distância mínima não respeitada', id: 'minimalDistance'},
+            {name: 'Converter / Cruzar sem dar preferência', id: 'conversionPreference'},
+            {name: 'Não dar preferência ao pedestre na faixa', id: 'pedestrianPreference'},
+            {name: 'Falta de Atenção', id: 'lackOfAttention'}
         ];
         let causes = causeList.map((item) => {
             return (
                 <div key={item.id}>
-                    <Factor value={this.props.slider} style={padding}
-                            factor={item.name} responsible
+                    <Factor sliderValue={this.props.deathAnalysis[item.id]} style={padding}
+                            factor={item.name} itemId={item.id} responsible
                             options={this.props.options.involved.involvedVehiclePositions}
-                            onChange={(value) => this.props.slider = value}
+                            handleSlider={this.props.handleSlider} max={10} step={2}
                     />
                 </div>
             )
+            // onChange={(value) => this.props.slider = value}
 
         }, this);
+        let othersList = [
+            {name: 'Cintos de Segurança', id: 'securityBelt'},
+            {name: 'Veículo sem "crash protection"', id: 'crashProtection'},
+            {name: 'Fatores Pré-hospitalares', id: 'preHosp'},
+            {name: 'Objetos Lateriais à Via', id: 'sideObjects'},
+            {name: 'Capacete', id: 'helmet'},
+        ];
+        let others = othersList.map((item) => {
+            return (
+                <div key={item.id}>
+                    <Factor sliderValue={this.props.deathAnalysis[item.id]} style={padding}
+                            factor={item.name} itemId={item.id} responsible
+                            handleSlider={this.props.handleSlider} max={5} step={1}
+                    />
+                </div>
+            )
+            // options={this.props.options.involved.involvedVehiclePositions}
+            //                 onChange={(value) => this.handleSlider(item.name, value)}
 
+        }, this);
         let Involved = this.props.selectedEvent.involved.map((involved) => {
             return (
                 <Panel header={"Envolvido: " + involved.Name} eventKey={involved.id} key={involved.id} collapsible>
@@ -280,28 +306,24 @@ class DeathAnalysis extends Component {
                                         <Row className="form-group">
                                             <h4>Informações Gerais</h4>
                                             <Col sm={4} style={padding}>
-                                                <Input type="date" name="deathDate"
-                                                       id="date"
+                                                <Input type="date" name="deathDate" id="date"
                                                        label="Data" readOnly disabled
                                                        value={this.props.selectedEvent.general.date}
                                                 />
                                             </Col>
                                             <Col sm={2} style={padding5px}>
-                                                <Input type="time" name="deathTime"
-                                                       id="deathTime"
+                                                <Input type="time" name="deathTime" id="deathTime"
                                                        label="Hora" readOnly disabled
                                                 />
                                             </Col>
                                             <Col sm={4} style={padding5px}>
-                                                <Input type="text" name="accidentType"
-                                                       id="accidentType"
+                                                <Input type="text" name="accidentType" id="accidentType"
                                                        label="Tipo do Acidente" readOnly disabled
                                                        value={this.props.options.statisticData.accidentTypes[this.props.selectedEvent.statisticData.accidentType]['value']}
                                                 />
                                             </Col>
                                             <Col sm={2} style={padding5px}>
-                                                <Input type="text" name="severity"
-                                                       id="severity"
+                                                <Input type="text" name="severity" id="severity"
                                                        label="Severidade" readOnly disabled
                                                        value={this.props.options.statisticData.accidentClassifications[this.props.selectedEvent.statisticData.accidentClassification - 1]['value']}
 
@@ -348,6 +370,10 @@ class DeathAnalysis extends Component {
                                     <h4>Causas</h4>
                                     {causes}
                                 </Panel>
+                                <Panel>
+                                    <h4>Outros</h4>
+                                    {others}
+                                </Panel>
                             </Row>
                             {/*victims*/}
                             <Row className="form-group">
@@ -362,7 +388,9 @@ class DeathAnalysis extends Component {
                 </Grid>
             </div>
         )
+
     }
+
 }
 
 const mapStateToProps = (state) => {
@@ -372,6 +400,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => {
+
     return {
         listDeathEvents: (loading) => {
             dispatch(DeathApi.listDeaths(loading));
@@ -379,10 +408,14 @@ const mapDispatchToProps = dispatch => {
         listDeathOptions: () => {
             dispatch(DeathApi.listDeathsOpts());
         },
-        handleToggle: (showModal, id) => {
+        handleToggleModal: (showModal, id) => {
             dispatch(DeathApi.handleDeathModal(showModal, id));
+        },
+        handleSlider: (name, value) => {
+            dispatch(DeathApi.handleSlider(name, value))
         }
     }
+
 };
 
 const DeathContainer = connect(mapStateToProps, mapDispatchToProps)(Death);
