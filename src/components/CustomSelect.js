@@ -1,9 +1,9 @@
 /**
  * Created by natal on 06/04/17.
  */
+
 import React, {Component} from 'react';
-//import PubSub from 'pubsub-js';
-import {FormControl, FormGroup, ControlLabel} from 'react-bootstrap';
+import {ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
 
 export default class CustomSelect extends Component {
 

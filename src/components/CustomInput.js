@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-//import PubSub from 'pubsub-js';
-import {FormControl, FormGroup, ControlLabel} from 'react-bootstrap';
+
+import {ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
 
 export default class CustomInput extends Component {
 
@@ -19,15 +19,4 @@ export default class CustomInput extends Component {
         );
     }
 
-    /*componentDidMount() {
-     PubSub.subscribe("erro-validacao",function(topico,erro){
-     if(erro.field === this.props.name){
-     this.setState({msgErro:erro.defaultMessage});
-     }
-     }.bind(this));
-
-     PubSub.subscribe("limpa-erros",function(topico){
-     this.setState({msgErro:''});
-     }.bind(this));
-     }*/
 }
