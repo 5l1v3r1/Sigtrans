@@ -5,19 +5,13 @@
 import React, {Component} from "react";
 import DeathApi from '../logics/DeathApi'
 import {connect} from 'react-redux';
-import Wizard from 'react-stepzilla';
 
 class Reports extends Component {
 
     render() {
-        const steps = [
-            {name: 'Step 1', component: (<div>test</div>)},
-            {name: 'Step 2', component: (<div>test2</div>)}
-        ];
-
         return (
             <div className='step-progress'>
-                <Wizard steps={steps}/>
+                okay
             </div>
         );
     }
