@@ -5,36 +5,28 @@
 import React, {Component} from "react";
 import DeathApi from '../logics/DeathApi'
 import {connect} from 'react-redux';
-import {PageHeader} from 'react-bootstrap';
-
-// Form, Modal, PageHeader
+import {Col, Grid, PageHeader, Row} from 'react-bootstrap';
 
 class ManagementReports extends Component {
-
     render() {
         return (
             <div>
                 <PageHeader>Relatórios Gerenciais</PageHeader>
                 <div className="content" id="content">
-                    Por Severidade
-                    <br/>
-                    Óbitos por Data
-                    <br/>
-
-                    {/*<Grid>*/}
-                    {/*<Row>*/}
-                    {/*<Col sm={10}>*/}
-                    {/*<Panel header='Gerenciais'>*/}
-                    {/*</Panel>*/}
-                    {/*</Col>*/}
-                    {/*</Row>*/}
-                    {/*</Grid>*/}
-
+                    <Grid>
+                        <Row style={{height: '80vh'}}>
+                            <Col sm={8} style={{height: '50%'}}>
+                                Relatorio
+                            </Col>
+                            <Col sm={3} style={{height: '50%'}}>
+                                Opções
+                            </Col>
+                        </Row>
+                    </Grid>
                 </div>
             </div>
         );
     }
-
 }
 
 const mapStateToProps = (state) => {

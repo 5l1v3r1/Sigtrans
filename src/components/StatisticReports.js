@@ -5,7 +5,7 @@
 import React, {Component} from "react";
 import DeathApi from '../logics/DeathApi'
 import {connect} from 'react-redux';
-import {Col, Grid, PageHeader, Panel, Row} from 'react-bootstrap';
+import {PageHeader} from 'react-bootstrap';
 
 // Form, Modal
 
@@ -16,43 +16,44 @@ class StatisticReports extends Component {
             <div>
                 <PageHeader>Relatórios Estatísticos</PageHeader>
                 <div className="content" id="content">
-                    <Grid>
-                        <Row>
-                            <Col sm={10}>
-                                <Panel header='Estatísticos'>
-                                    Por Ocorrência (abertas, por data, por condutor, por vítima...)
-                                    <br/>
-                                    Por Bairro
-                                    <br/>
-                                    Por Rua
-                                    <br/>
-                                    Por Cruzamento
-                                    <br/>
-                                    Por Horário
-                                    <br/>
-                                    Por dia da semana
-                                    <br/>
-                                    Por Idade
-                                    <br/>
-                                    Por Severidade
-                                    <br/>
-                                    Por Sexo
-                                    <br/>
-                                    Por Tipo de Acidente
-                                    <br/>
-                                    Por Tipo de Veiculo
-                                    <br/>
-                                    Pela Placa do Veículo
-                                    <br/>
-                                    Por Habilitação (não habilitado,cassado...)
-                                    <br/>
-                                    Por condição de Segurança
-                                    <br/>
-                                    Por Conduta Provável
-                                </Panel>
-                            </Col>
-                        </Row>
-                    </Grid>
+                    Por Ocorrência (abertas, por data, por condutor, por vítima...)
+                    <br/>
+                    Por Bairro
+                    <br/>
+                    Por Rua
+                    <br/>
+                    Por Cruzamento
+                    <br/>
+                    Por Horário
+                    <br/>
+                    Por dia da semana
+                    <br/>
+                    Por Idade
+                    <br/>
+                    Por Severidade
+                    <br/>
+                    Por Sexo
+                    <br/>
+                    Por Tipo de Acidente
+                    <br/>
+                    Por Tipo de Veiculo
+                    <br/>
+                    Pela Placa do Veículo
+                    <br/>
+                    Por Habilitação (não habilitado,cassado...)
+                    <br/>
+                    Por condição de Segurança
+                    <br/>
+                    Por Conduta Provável
+                    {/*<Grid>*/}
+                    {/*<Row>*/}
+                    {/*<Col sm={10}>*/}
+                    {/*<Panel header='Estatísticos'>*/}
+                    {/**/}
+                    {/*</Panel>*/}
+                    {/*</Col>*/}
+                    {/*</Row>*/}
+                    {/*</Grid>*/}
                 </div>
             </div>
         );
