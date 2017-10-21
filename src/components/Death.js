@@ -23,17 +23,21 @@ class Death extends Component {
 
     render() {
         return (
-            <DGrid
-                data={this.props.deaths.deathEvents}
-                deathAnalysis={this.props.deaths.deathAnalysis}
-                options={this.props.deaths.deathOptions}
-                loading={this.props.deaths.loading}
-                showModal={this.props.deaths.showModal}
-                selectedEvent={this.props.deaths.selectedEvent}
-                selectedEventID={this.props.deaths.selectedEventID}
-                handleToggleModal={this.props.handleToggleModal}
-                handleSlider={this.props.handleSlider}
-            />
+            <div>
+                <PageHeader>Ocorrencias fatais</PageHeader>
+                <div className="content" id="content">
+                    <DGrid data={this.props.deaths.deathEvents}
+                           deathAnalysis={this.props.deaths.deathAnalysis}
+                           options={this.props.deaths.deathOptions}
+                           loading={this.props.deaths.loading}
+                           showModal={this.props.deaths.showModal}
+                           selectedEvent={this.props.deaths.selectedEvent}
+                           selectedEventID={this.props.deaths.selectedEventID}
+                           handleToggleModal={this.props.handleToggleModal}
+                           handleSlider={this.props.handleSlider}
+                    />
+                </div>
+            </div>
         );
     }
 
@@ -111,7 +115,6 @@ class DGrid extends Component {
 
         return (
             <div>
-                <PageHeader>Ocorrencias fatais</PageHeader>
                 <div className="content" id="content">
                     <ReactTable
                         filterable
@@ -197,6 +200,7 @@ class DeathAnalysis extends Component {
                 </div>
             )
         }, this);
+
         let causeList = [
             {name: 'Avanço de Sinal', id: 'signalAdvance'},
             {name: 'Condutor sem habilitação', id: 'noLicence'},
@@ -221,6 +225,7 @@ class DeathAnalysis extends Component {
             // onChange={(value) => this.props.slider = value}
 
         }, this);
+
         let othersList = [
             {name: 'Cintos de Segurança', id: 'securityBelt'},
             {name: 'Veículo sem "crash protection"', id: 'crashProtection'},
@@ -241,6 +246,7 @@ class DeathAnalysis extends Component {
             //                 onChange={(value) => this.handleSlider(item.name, value)}
 
         }, this);
+
         let Involved = this.props.selectedEvent.involved.map((involved) => {
             return (
                 <Panel header={"Envolvido: " + involved.Name} eventKey={involved.id} key={involved.id} collapsible>

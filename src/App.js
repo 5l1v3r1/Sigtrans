@@ -28,31 +28,42 @@ class App extends Component {
                 label: 'Ocorrencias',
                 content: [
                     {
-                        icon: 'bolt',
+                        // icon: 'bolt',
                         label: 'Abertas',
                         to: '/ocorrencias/abertas'
                     },
                     {
-                        icon: 'bolt',
+                        // icon: 'bolt',
                         label: 'Fechadas',
                         to: '/ocorrencias/fechadas'
                     },
                     {
-                        icon: 'bolt',
+                        // icon: 'bolt',
                         label: 'Criar',
                         to: '/ocorrencias/criar',
                     }
                 ]
             },
             {
-                icon: 'bell',
+                icon: 'ambulance',
                 label: 'Ocorrencias fatais',
                 to: '/obitos'
             },
             {
-                icon: 'bell',
+                icon: 'area-chart',
                 label: 'Relatórios',
-                to: '/relatorios'
+                content: [
+                    {
+                        // icon: 'line-chart',
+                        label: 'Estatisticos',
+                        to: '/relatorios/estatisticos'
+                    },
+                    {
+                        // icon: 'bar-chart',
+                        label: 'Gerenciais',
+                        to: '/relatorios/gerenciais'
+                    },
+                ]
             }
         ];
 

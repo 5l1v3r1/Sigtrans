@@ -9,7 +9,8 @@ import EBox, {EGrid} from './components/Event';
 import Death from './components/Death';
 import Home from './components/Home';
 import Login from './components/Login';
-import Reports from './components/Reports'
+import Management from './components/ManagementReports'
+import Statistic from './components/StatisticReports'
 //Router
 import {browserHistory, IndexRoute, Route, Router} from 'react-router';
 //React Toolbox Themer (PostCSS Issues)
@@ -71,7 +72,10 @@ ReactDOM.render(
                             <Route path="/ocorrencias/criar" component={EBox}/>
                         </Route>
                         <Route path="/obitos" component={Death}/>
-                        <Route path="/relatorios" component={Reports}/>
+                        <Route path="/relatorios">
+                            <Route path="/relatorios/gerenciais" component={Management}/>
+                            <Route path="/relatorios/estatisticos" component={Statistic}/>
+                        </Route>
                     </Route>
                 </Router>
             </Provider>
