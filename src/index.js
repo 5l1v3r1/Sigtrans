@@ -22,9 +22,10 @@ import {Provider} from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 // import {matchPattern} from 'react-router/lib/PatternUtils';
 //reducers
-import {navegation} from './reducers/menus';
+import {menus} from './reducers/menus';
 import {death} from './reducers/death';
 import {auth} from './reducers/auth';
+import {reports} from './reducers/reports';
 //CSS
 import './css/wizard.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -55,7 +56,7 @@ function verifyLogin(nextState, replace) {
 }*/
 
 // Create Reducers
-const reducers = combineReducers({death, navegation, auth});
+const reducers = combineReducers({death, menus, auth, reports});
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(

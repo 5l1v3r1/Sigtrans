@@ -4,7 +4,7 @@
 
 import {List} from 'immutable';
 
-export function navegation(state = new List(), action) {
+export function menus(state = new List(), action) {
     if (action.type === 'TOGGLEDRAWER') {
         const drawer = !state.drawer;
         return Object.assign({}, state, {drawer});

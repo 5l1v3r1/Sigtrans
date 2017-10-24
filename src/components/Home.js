@@ -7,7 +7,7 @@ export default class Home extends Component {
             <div>
                 <PageHeader>Bem Vindo</PageHeader>
                 <div className="content" id="content">
-                    Sigtrans
+                    {/*Sigtrans*/}
                 </div>
             </div>
 

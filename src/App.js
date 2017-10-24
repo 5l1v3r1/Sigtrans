@@ -15,6 +15,10 @@ import {connect} from 'react-redux';
 
 class App extends Component {
 
+    // componentDidMount(){
+    //     this.props.toggleDrawer();
+    // }
+
     render() {
 
         const menu = [
@@ -113,7 +117,7 @@ App.contextTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        menus: state.navegation
+        menus: state.menus
     }
 };
 
