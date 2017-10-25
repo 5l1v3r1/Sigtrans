@@ -26,6 +26,7 @@ import {menus} from './reducers/menus';
 import {death} from './reducers/death';
 import {auth} from './reducers/auth';
 import {reports} from './reducers/reports';
+import metisMenuStore from 'react-metismenu/lib/reducers'
 //CSS
 import './css/wizard.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -36,33 +37,32 @@ import './css/App.css';
 import './toolbox/theme.css';
 import 'react-table/react-table.css';
 
-//TESTPAGE
-// import Test from './TestPage';
+// function verifyAuth(nextState, replace) {
+//     // console.log(nextState.location.pathname);
+//     const resultado = matchPattern('/', nextState.location.pathname);
+//     const privatePath = resultado.paramValues[0] === undefined;
+//
+//     if (privatePath && !Cookies.get('auth-token')) {
+//         replace('/?msg=Você precisa estar logado');
+//     }
+// }
+//
+// function verifyLogin(nextState, replace) {
+//     if (Cookies.get('auth-token')) {
+//         replace('/home');
+//     }
+// }
 
-/*function verifyAuth(nextState, replace) {
-    // console.log(nextState.location.pathname);
-    const resultado = matchPattern('/', nextState.location.pathname);
-    const privatePath = resultado.paramValues[0] === undefined;
-
-    if (privatePath && !Cookies.get('auth-token')) {
-        replace('/?msg=Você precisa estar logado');
-    }
-}
-
-function verifyLogin(nextState, replace) {
-    if (Cookies.get('auth-token')) {
-        replace('/home');
-    }
-}*/
 
 // Create Reducers
-const reducers = combineReducers({death, menus, auth, reports});
+const reducers = combineReducers({death, menus, auth, reports, metisMenuStore});
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
     (
-        <ThemeProvider theme={theme}>
-            <Provider store={store}>
+
+        <Provider store={store} useExternalReduxStore={store}>
+            <ThemeProvider theme={theme}>
                 <Router history={browserHistory}>
                     <Route path="/" component={Login}/>{/*onEnter={verifyLogin}*/}
                     <Route path="/home" component={App}>{/*onEnter={verifyAuth}*/}
@@ -79,8 +79,8 @@ ReactDOM.render(
                         </Route>
                     </Route>
                 </Router>
-            </Provider>
-        </ThemeProvider>
+            </ThemeProvider>
+        </Provider>
     ),
     document.getElementById('root')
 );

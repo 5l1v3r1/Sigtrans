@@ -25,6 +25,18 @@
 */
 /* Rules for sizing the icon. */
 
+:root {
+    --main-color: #01579b;
+    --main-color-light: #4f83cc;
+    --main-color-dark: #002f6c;
+    --main-text-color: #ffffff;
+
+    --secondary-color: #ff5533;
+    --secondary-color-light: #ff895f;
+    --secondary-color-dark: #c41804;
+    --secondary-text-color: #000000;
+}
+
 .material-icons.md-18 {
     font-size: 18px;
 }
@@ -64,28 +76,29 @@ h1 small, h4 small {
 }
 
 .metismenu {
-    background: #2A3F54;
+    background: var(--main-color);
     position: fixed;
     width: 100%; /*255px; 230px*/
-    color: #ffffff;
+    color: var(--main-text-color);
+
     bottom: 0;
     left: 0;
     top: 0;
 }
 
-.metismenu-link.has-active-child {
-    border-right: 5px solid #1ABB9C;
-    color: #ffffff;
+/*.metismenu-link.has-active-child {
+    border-right: 5px solid var(--secondary-color);
+    color: var(--secondary-text-color);
 }
 
 .metismenu-link {
     font-size: 12px;
-    color: #ffffff;
+    color: var(--main-text-color);
 }
 
-/*.metismenu-link.active{*/
-/*background: rgba(42,63,84,1);*/
-/*}*/
+.metismenu-link.active{
+    background: var(--secondary-color);
+}*/
 
 .modal-container {
     position: relative;
@@ -99,13 +112,13 @@ h1 small, h4 small {
     width: 88vw;
 }
 
-.spanLine {
-    border-top: 1px solid #eee;
+.app-bar {
+    background: var(--main-color) !important;
+    color: var(--main-text-color) !important;
 }
 
-.app-bar {
-    background: #ededed !important;
-    color: #000000 !important;
+.spanLine {
+    border-top: 1px solid #eee;
 }
 
 /*.app-bar-title{*/
@@ -117,7 +130,6 @@ h1 small, h4 small {
     background: #ffffff;
     padding: 1.8rem;
     border-radius: 5px
-
 }
 
 :global .login-back {

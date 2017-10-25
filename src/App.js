@@ -20,7 +20,6 @@ class App extends Component {
     // }
 
     render() {
-
         const menu = [
             {
                 icon: 'dashboard',
@@ -32,17 +31,14 @@ class App extends Component {
                 label: 'Ocorrencias',
                 content: [
                     {
-                        // icon: 'bolt',
                         label: 'Abertas',
                         to: '/ocorrencias/abertas'
                     },
                     {
-                        // icon: 'bolt',
                         label: 'Fechadas',
                         to: '/ocorrencias/fechadas'
                     },
                     {
-                        // icon: 'bolt',
                         label: 'Criar',
                         to: '/ocorrencias/criar',
                     }
@@ -58,25 +54,27 @@ class App extends Component {
                 label: 'Relatórios',
                 content: [
                     {
-                        // icon: 'line-chart',
                         label: 'Estatisticos',
                         to: '/relatorios/estatisticos'
                     },
                     {
-                        // icon: 'bar-chart',
                         label: 'Gerenciais',
                         to: '/relatorios/gerenciais'
                     },
                 ]
             }
         ];
-
         return (
             <div id="root">
                 <div className="main">
                     <Layout>
                         <NavDrawer pinned={this.props.menus.drawer}>
-                            <MetisMenu content={menu} LinkComponent={RouterLink}/>
+                            <MetisMenu content={menu}
+                                       LinkComponent={RouterLink}
+                                       useExternalReduxStore={this.props.useExternalReduxStore}
+                            />
+                            {console.log(JSON.stringify(this.store, null, 4))}
+                            {console.log(JSON.stringify(this.props.store, null, 4))}
                         </NavDrawer>
                         <Panel>
                             <AppBar title=" "
@@ -84,7 +82,6 @@ class App extends Component {
                                     rightIcon={<FontIcon className="md-24 md-dark" value='account_circle'/>}
                                     onLeftIconClick={this.props.toggleDrawer}
                                     onRightIconClick={this.props.toggleSidebar}
-                                    flat
                                     className="app-bar">
                                 <Navigation type="horizontal">
                                     <Link href="#" label="Mensagens" icon="inbox"/>
@@ -108,11 +105,11 @@ class App extends Component {
             </div>
         );
     }
-
 }
 
 App.contextTypes = {
-    store: React.PropTypes.object.isRequired
+    store: React.PropTypes.object.isRequired,
+    useExternalReduxStore: React.PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {

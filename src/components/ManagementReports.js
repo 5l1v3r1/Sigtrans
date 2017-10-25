@@ -45,9 +45,9 @@ class ManagementReports extends Component {
                                 <Button onClick={this.props.makeData} raised primary label='Gerar'/>
                             </Col>
                         </Row>
-                        <Row>
-                            <pre>{JSON.stringify(this.props.reports, null, 2)}</pre>
-                        </Row>
+                        {/*<Row>*/}
+                        {/*<pre>{JSON.stringify(this.props.reports, null, 2)}</pre>*/}
+                        {/*</Row>*/}
                     </Grid>
                 </div>
             </div>
