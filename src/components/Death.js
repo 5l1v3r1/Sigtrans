@@ -26,15 +26,15 @@ class Death extends Component {
             <div>
                 <PageHeader>Ocorrencias fatais</PageHeader>
                 <div className="content" id="content">
-                    <DGrid data={this.props.deaths.deathEvents}
-                           deathAnalysis={this.props.deaths.deathAnalysis}
-                           options={this.props.deaths.deathOptions}
-                           loading={this.props.deaths.loading}
-                           showModal={this.props.deaths.showModal}
-                           selectedEvent={this.props.deaths.selectedEvent}
-                           selectedEventID={this.props.deaths.selectedEventID}
-                           handleToggleModal={this.props.handleToggleModal}
-                           handleSlider={this.props.handleSlider}
+                    <DeathEventsGrid data={this.props.deaths.deathEvents}
+                                     deathAnalysis={this.props.deaths.deathAnalysis}
+                                     options={this.props.deaths.deathOptions}
+                                     loading={this.props.deaths.loading}
+                                     showModal={this.props.deaths.showModal}
+                                     selectedEvent={this.props.deaths.selectedEvent}
+                                     selectedEventID={this.props.deaths.selectedEventID}
+                                     handleToggleModal={this.props.handleToggleModal}
+                                     handleSlider={this.props.handleSlider}
                     />
                 </div>
             </div>
@@ -44,7 +44,7 @@ class Death extends Component {
 }
 
 //make new js file for both grids
-class DGrid extends Component {
+class DeathEventsGrid extends Component {
 
     handleToggleModal(id) {
         this.props.handleToggleModal(this.props.showModal, id)

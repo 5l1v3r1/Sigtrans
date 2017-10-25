@@ -5,7 +5,8 @@ import ReactDOM from 'react-dom';
 // import Cookies from 'js-cookie';
 //Components
 import App from './App';
-import EBox, {EGrid} from './components/Event';
+// import EBox, {EGrid} from './components/Event';
+import OpenEvents from './components/Event'
 import Death from './components/Death';
 import Home from './components/Home';
 import Login from './components/Login';
@@ -26,7 +27,8 @@ import {menus} from './reducers/menus';
 import {death} from './reducers/death';
 import {auth} from './reducers/auth';
 import {reports} from './reducers/reports';
-import metisMenuStore from 'react-metismenu/lib/reducers'
+import {events} from './reducers/events';
+import metisMenuReducer from 'react-metismenu/lib/reducers';
 //CSS
 import './css/wizard.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -53,34 +55,28 @@ import 'react-table/react-table.css';
 //     }
 // }
 
-
 // Create Reducers
-const reducers = combineReducers({death, menus, auth, reports, metisMenuStore});
+const reducers = combineReducers({metisMenuReducer, death, menus, auth, reports, events});
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
     (
-
-        <Provider store={store} useExternalReduxStore={store}>
-            <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+            <Provider store={store}>
                 <Router history={browserHistory}>
-                    <Route path="/" component={Login}/>{/*onEnter={verifyLogin}*/}
-                    <Route path="/home" component={App}>{/*onEnter={verifyAuth}*/}
+                    <Route path="/login" component={Login}/>{/*onEnter={verifyLogin}*/}
+                    <Route path="/" component={App}>{/*onEnter={verifyAuth}*/}
                         <IndexRoute component={Home}/>
-                        <Route path="/ocorrencias">
-                            <Route path="/ocorrencias/abertas" component={EGrid}/>
-                            <Route path="/ocorrencias/fechadas" component={EGrid}/>
-                            <Route path="/ocorrencias/criar" component={EBox}/>
-                        </Route>
-                        <Route path="/obitos" component={Death}/>
-                        <Route path="/relatorios">
-                            <Route path="/relatorios/gerenciais" component={Management}/>
-                            <Route path="/relatorios/estatisticos" component={Statistic}/>
-                        </Route>
+                        <Route path="obitos" component={Death}/>
+                        <Route path="abertas" component={OpenEvents}/>
+                        {/*<Route path="fechadas" component={EGrid}/>*/}
+                        {/*<Route path="criar" component={EBox}/>*/}
+                        <Route path="gerenciais" component={Management}/>
+                        <Route path="estatisticos" component={Statistic}/>
                     </Route>
                 </Router>
-            </ThemeProvider>
-        </Provider>
+            </Provider>
+        </ThemeProvider>
     ),
     document.getElementById('root')
 );

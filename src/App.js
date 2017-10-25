@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import NavegationApi from './logics/NavigationApi'
-import MetisMenu from "react-metismenu";
 import NavDrawer from "react-toolbox/lib/layout/NavDrawer";
 import RouterLink from "react-metismenu-router-link";
 import Navigation from "react-toolbox/lib/navigation/Navigation";
@@ -12,19 +11,17 @@ import FontIcon from "react-toolbox/lib/font_icon";
 import Sidebar from 'react-toolbox/lib/layout/Sidebar';
 import IconButton from 'react-toolbox/lib/button/IconButton';
 import {connect} from 'react-redux';
+import MetisMenu from "react-metismenu";
 
 class App extends Component {
 
-    // componentDidMount(){
-    //     this.props.toggleDrawer();
-    // }
-
     render() {
+
         const menu = [
             {
                 icon: 'dashboard',
                 label: 'Sigtrans',
-                to: '/home'
+                to: '/'
             },
             {
                 icon: 'bell',
@@ -32,22 +29,22 @@ class App extends Component {
                 content: [
                     {
                         label: 'Abertas',
-                        to: '/ocorrencias/abertas'
+                        to: 'abertas'
                     },
                     {
                         label: 'Fechadas',
-                        to: '/ocorrencias/fechadas'
+                        to: 'fechadas'
                     },
                     {
                         label: 'Criar',
-                        to: '/ocorrencias/criar',
+                        to: 'criar',
                     }
                 ]
             },
             {
                 icon: 'ambulance',
                 label: 'Ocorrencias fatais',
-                to: '/obitos'
+                to: 'obitos'
             },
             {
                 icon: 'area-chart',
@@ -55,11 +52,11 @@ class App extends Component {
                 content: [
                     {
                         label: 'Estatisticos',
-                        to: '/relatorios/estatisticos'
+                        to: 'estatisticos'
                     },
                     {
                         label: 'Gerenciais',
-                        to: '/relatorios/gerenciais'
+                        to: 'gerenciais'
                     },
                 ]
             }
@@ -68,24 +65,25 @@ class App extends Component {
             <div id="root">
                 <div className="main">
                     <Layout>
-                        <NavDrawer pinned={this.props.menus.drawer}>
-                            <MetisMenu content={menu}
-                                       LinkComponent={RouterLink}
-                                       useExternalReduxStore={this.props.useExternalReduxStore}
+                        <NavDrawer pinned={this.props.menus.drawer} permanentAt='xxxl'>
+                            <MetisMenu content={menu} LinkComponent={RouterLink}
+                                       className='mainMenu'
+                                       reduxStoreName={"metisMenuReducer"}
+                                       useExternalReduxStore={this.context.store}
+                                       activeLinkFromLocation
                             />
-                            {console.log(JSON.stringify(this.store, null, 4))}
-                            {console.log(JSON.stringify(this.props.store, null, 4))}
                         </NavDrawer>
                         <Panel>
-                            <AppBar title=" "
-                                    leftIcon={<FontIcon className="md-24 md-dark" value='menu'/>}
-                                    rightIcon={<FontIcon className="md-24 md-dark" value='account_circle'/>}
+
+                            <AppBar className="app-bar" title=" " flat
+                                    leftIcon={<FontIcon className="md-24 md-light" value='menu'/>}
+                                    rightIcon={<FontIcon className="md-24 md-light" value='account_circle'/>}
                                     onLeftIconClick={this.props.toggleDrawer}
                                     onRightIconClick={this.props.toggleSidebar}
-                                    className="app-bar">
+                            >
                                 <Navigation type="horizontal">
-                                    <Link href="#" label="Mensagens" icon="inbox"/>
-                                    <Link href="#" active label="Perfil" icon="person"/>
+                                    <Link href="#" className='app-bar' label="Mensagens" icon="inbox"/>
+                                    <Link href="#" className='app-bar' active label="Perfil" icon="person"/>
                                 </Navigation>
                             </AppBar>
                             <div style={{flex: 1, overflowY: 'auto', padding: '1.8rem'}}>
@@ -94,7 +92,7 @@ class App extends Component {
                                 </div>
                             </div>
                         </Panel>
-                        <Sidebar pinned={ this.props.menus.sidebar } width={ 5 }>
+                        <Sidebar pinned={this.props.menus.sidebar} width={5}>
                             <div><IconButton icon='close' onClick={this.props.toggleSidebar}/></div>
                             <div style={{flex: 1}}>
                                 <p>Supplemental content goes here.</p>
@@ -105,16 +103,16 @@ class App extends Component {
             </div>
         );
     }
+
 }
 
 App.contextTypes = {
-    store: React.PropTypes.object.isRequired,
-    useExternalReduxStore: React.PropTypes.object.isRequired
+    store: React.PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
     return {
-        menus: state.menus
+        menus: state.menus,
     }
 };
 
