@@ -1,7 +1,13 @@
 /**
  * Created by natal on 05/06/17.
  */
-import {listEventsOptions, listOpenEvents, toggleEventsModal} from '../actions/actionCreator'
+import {
+    changeInput,
+    listEventsOptions,
+    listOpenEvents,
+    selectOpenEvent,
+    toggleEventsModal
+} from '../actions/actionCreator'
 
 export default class EventsApi {
 
@@ -27,9 +33,21 @@ export default class EventsApi {
         }
     }
 
-    static handleEventsModal(showModal, id) {
+    static handleEventsModal() {
         return dispatch => {
-            return dispatch(toggleEventsModal(showModal, id));
+            return dispatch(toggleEventsModal())
+        }
+    }
+
+    static selectEvent(id) {
+        return dispatch => {
+            return dispatch(selectOpenEvent(id));
+        }
+    }
+
+    static onChangeInput(newValue, operator, subMenu) {
+        return dispatch => {
+            return dispatch(changeInput(newValue, operator, subMenu));
         }
     }
 

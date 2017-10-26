@@ -18,10 +18,10 @@ export function death(state = new List(), action) {
     }
 
     if (action.type === 'TOGGLEDEATHMODAL') {
-        const deathAnalysis = state.deathAnalysis ? state.deathAnalysis : {}; //Add DeathAnalysis on Server
         const showModal = !action.showModal;
-        const selectedEventID = state.selectedEventID ? state.selectedEventID : action.id;
-        const selectedEvent = state.selectedEvent ? state.selectedEvent : state.deathEvents[selectedEventID - 1];
+        const deathAnalysis = state.deathAnalysis ? state.deathAnalysis : {}; //Add DeathAnalysis on Server
+        const selectedEventID = action.id;
+        const selectedEvent = (!state.selectedEvent || !state.showModal) ? state.deathEvents[selectedEventID - 1] : null;
         return Object.assign({}, state, {showModal, selectedEventID, selectedEvent, deathAnalysis});
     }
 

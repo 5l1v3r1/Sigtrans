@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 // import Cookies from 'js-cookie';
 //Components
 import App from './App';
-// import EBox, {EGrid} from './components/Event';
+import EBox from './components/Event_old';
 import OpenEvents from './components/Event'
 import Death from './components/Death';
 import Home from './components/Home';
@@ -70,9 +70,9 @@ ReactDOM.render(
                         <Route path="obitos" component={Death}/>
                         <Route path="abertas" component={OpenEvents}/>
                         {/*<Route path="fechadas" component={EGrid}/>*/}
-                        {/*<Route path="criar" component={EBox}/>*/}
                         <Route path="gerenciais" component={Management}/>
                         <Route path="estatisticos" component={Statistic}/>
+                        <Route path="criar" component={EBox}/>
                     </Route>
                 </Router>
             </Provider>

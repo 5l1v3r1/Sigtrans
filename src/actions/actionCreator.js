@@ -6,27 +6,32 @@
 export function toggleD() {
     return {type: 'TOGGLEDRAWER'};
 }
-
 export function toggleS() {
     return {type: 'TOGGLESIDEBAR'};
 }
 
 //EVENTS
-export function toggleEventsModal(showModal, id) {
-    return {type: 'TOGGLEEVENTSMODAL', showModal, id};
+export function toggleEventsModal() {
+    return {type: 'TOGGLEEVENTSMODAL'};
+}
+
+export function selectOpenEvent(id) {
+    return {type: 'SELECTOPENEVENT', id};
+}
+
+export function changeInput(newValue, operator, subMenu) {
+    return {type: 'ONCHANGEINPUT', newValue, operator, subMenu};
 }
 
 //OPEN EVENTS
 export function listOpenEvents(loading, events) {
     return {type: 'LISTOPENEVENTS', loading, events};
 }
-
 export function listEventsOptions(options) {
     return {type: 'LISTEVENTSOPTIONS', options};
 }
 
 //CLOSED EVENTS
-
 
 //DEATH
 export function listDeathEvents(loading, deathEvents) {

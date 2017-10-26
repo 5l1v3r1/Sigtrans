@@ -10,17 +10,16 @@ import Panel from "react-toolbox/lib/layout/Panel";
 import FontIcon from "react-toolbox/lib/font_icon";
 import Sidebar from 'react-toolbox/lib/layout/Sidebar';
 import IconButton from 'react-toolbox/lib/button/IconButton';
-import {connect} from 'react-redux';
 import MetisMenu from "react-metismenu";
+import {connect} from 'react-redux';
 
 class App extends Component {
-
     render() {
 
         const menu = [
             {
                 icon: 'dashboard',
-                label: 'Sigtrans',
+                label: 'Inicio',
                 to: '/'
             },
             {
@@ -43,7 +42,7 @@ class App extends Component {
             },
             {
                 icon: 'ambulance',
-                label: 'Ocorrencias fatais',
+                label: 'Análise de Óbitos',
                 to: 'obitos'
             },
             {
@@ -103,7 +102,6 @@ class App extends Component {
             </div>
         );
     }
-
 }
 
 App.contextTypes = {

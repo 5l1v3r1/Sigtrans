@@ -3,9 +3,10 @@
  */
 
 import React, {Component} from "react";
-import Button from 'react-toolbox/lib/button/Button';
+import {Dialog} from 'react-toolbox/lib/dialog/Dialog';
+import {Button} from 'react-toolbox/lib/button/Button';
 import DeathApi from '../logics/DeathApi'
-import {Col, Form, Grid, Modal, PageHeader, Panel, Row} from 'react-bootstrap';
+import {Col, Form, Grid, PageHeader, Panel, Row} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import {connect} from 'react-redux';
 import Input from "./CustomInput";
@@ -108,11 +109,13 @@ class DeathEventsGrid extends Component {
                 filterable: false,
                 sortable: false,
                 Cell: props => (
-                    <Button icon="edit" primary id={props.value} onClick={() => this.handleToggleModal(props.value)}/>
+                    <Button icon="edit" primary id={props.value} onClick={() => this.handleToggleModal()}/>
                 )
             }
         ];
-
+        // const actions = [
+        //     { label: "Fechar" , onClick: this.props.handleToggleModal}
+        // ];
         return (
             <div>
                 <div className="content" id="content">
@@ -135,27 +138,17 @@ class DeathEventsGrid extends Component {
                         }
                     />
                     <div className="modal-container">
-                        <Modal show={this.props.showModal}
-                               container={this}
-                               dialogClassName="custom-modal"
-                               aria-labelledby="contained-modal-title"
-                               onHide={() => this.handleToggleModal(this.props.selectedEventID)}>
-
-                            <Modal.Header closeButton>
-                                <Modal.Title id="contained-modal-title">Análise do Óbito
-                                    <small> Nº: {this.props.selectedEventID}</small>
-                                </Modal.Title>
-                            </Modal.Header>
-
-                            <Modal.Body>
-                                <DeathAnalysis
-                                    selectedEvent={this.props.selectedEvent}
-                                    options={this.props.options}
-                                    deathAnalysis={this.props.deathAnalysis}
-                                    handleSlider={this.props.handleSlider}
-                                />
-                            </Modal.Body>
-                        </Modal>
+                        <Dialog active={this.props.showModal === undefined}
+                                onEscKeyDown={this.props.handleToggleModal}
+                                onOverlayClick={this.props.handleToggleModal}
+                                title='Análise do Óbito'>
+                            <DeathAnalysis
+                                selectedEvent={this.props.selectedEvent}
+                                options={this.props.options}
+                                deathAnalysis={this.props.deathAnalysis}
+                                handleSlider={this.props.handleSlider}
+                            />
+                        </Dialog>
                     </div>
                 </div>
             </div>
@@ -242,9 +235,6 @@ class DeathAnalysis extends Component {
                     />
                 </div>
             )
-            // options={this.props.options.involved.involvedVehiclePositions}
-            //                 onChange={(value) => this.handleSlider(item.name, value)}
-
         }, this);
 
         let Involved = this.props.selectedEvent.involved.map((involved) => {
