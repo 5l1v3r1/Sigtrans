@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from "react";
-import ReportsApi from '../logics/ReportsApi'
+import ReportsApi from '../../logics/ReportsApi'
 import {connect} from 'react-redux';
 import {Col, Grid, PageHeader, Row} from 'react-bootstrap';
 import {Axis, Chart, Pie, Series, Tooltip} from 'react-charts';

@@ -14,11 +14,14 @@ import MetisMenu from "react-metismenu";
 import {connect} from 'react-redux';
 
 class App extends Component {
-    render() {
 
+    componentDidMount() {
+        this.props.toggleDrawer();
+    }
+    render() {
         const menu = [
             {
-                icon: 'dashboard',
+                icon: 'home',
                 label: 'Inicio',
                 to: '/'
             },
@@ -28,22 +31,22 @@ class App extends Component {
                 content: [
                     {
                         label: 'Abertas',
-                        to: 'abertas'
+                        to: '/abertas'
                     },
                     {
                         label: 'Fechadas',
-                        to: 'fechadas'
+                        to: '/fechadas'
                     },
                     {
                         label: 'Criar',
-                        to: 'criar',
+                        to: '/criar',
                     }
                 ]
             },
             {
                 icon: 'ambulance',
                 label: 'Análise de Óbitos',
-                to: 'obitos'
+                to: '/obitos'
             },
             {
                 icon: 'area-chart',
@@ -51,11 +54,11 @@ class App extends Component {
                 content: [
                     {
                         label: 'Estatisticos',
-                        to: 'estatisticos'
+                        to: '/estatisticos'
                     },
                     {
                         label: 'Gerenciais',
-                        to: 'gerenciais'
+                        to: '/gerenciais'
                     },
                 ]
             }
@@ -67,15 +70,15 @@ class App extends Component {
                         <NavDrawer pinned={this.props.menus.drawer} permanentAt='xxxl'>
                             <MetisMenu content={menu} LinkComponent={RouterLink}
                                        className='mainMenu'
-                                       reduxStoreName={"metisMenuReducer"}
+                                       reduxStoreName="metisMenuReducer"
                                        useExternalReduxStore={this.context.store}
                                        activeLinkFromLocation
                             />
                         </NavDrawer>
                         <Panel>
-
-                            <AppBar className="app-bar" title=" " flat
-                                    leftIcon={<FontIcon className="md-24 md-light" value='menu'/>}
+                            <AppBar className="app-bar" title=''
+                                    leftIcon={<FontIcon className="md-24 md-light"
+                                                        value={this.props.menus.drawer ? 'close' : 'menu'}/>}
                                     rightIcon={<FontIcon className="md-24 md-light" value='account_circle'/>}
                                     onLeftIconClick={this.props.toggleDrawer}
                                     onRightIconClick={this.props.toggleSidebar}
@@ -102,6 +105,7 @@ class App extends Component {
             </div>
         );
     }
+
 }
 
 App.contextTypes = {

@@ -6,11 +6,11 @@ import Button from 'react-toolbox/lib/button/Button';
 import $ from 'jquery';
 import PubSub from 'pubsub-js';
 
-import ErrHandler from './ErrHandler';
+import ErrHandler from '../custom/ErrHandler';
 import update from 'immutability-helper';
-import Submit from './CustomSubmit'
-import Input from './CustomInput'
-import Select from './CustomSelect'
+import Submit from '../custom/CustomSubmit'
+import Input from '../custom/CustomInput'
+import Select from '../custom/CustomSelect'
 
 // import IconButton from 'react-toolbox/lib/button/IconButton';
 
@@ -293,7 +293,12 @@ class EForm extends Component {
 
     addVehicle() {
         this.setState({
-            vehicles: update(this.state.vehicles, {$push: [{id: this.state.vehicles.length + 1}]})
+            vehicles: update(this.state.vehicles, {
+                $push: [
+                    {
+                        id: eval(this.state.vehicles[this.state.vehicles.length - 1].id) + 1
+                    }]
+            })
         });
     }
 

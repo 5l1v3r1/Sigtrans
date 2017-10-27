@@ -5,13 +5,13 @@
 import React, {Component} from "react";
 import {Dialog} from 'react-toolbox/lib/dialog/Dialog';
 import {Button} from 'react-toolbox/lib/button/Button';
-import DeathApi from '../logics/DeathApi'
+import DeathApi from '../../logics/DeathApi'
 import {Col, Form, Grid, PageHeader, Panel, Row} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import {connect} from 'react-redux';
-import Input from "./CustomInput";
-import Select from "./CustomSelect";
-import Map from "./Map";
+import Input from "../custom/CustomInput";
+import Select from "../custom/CustomSelect";
+import Map from "../maps/Map";
 import Factor from "./Factor";
 import matchSorter from 'match-sorter';
 

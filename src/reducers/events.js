@@ -40,6 +40,50 @@ export function events(state = new List(), action) {
         return Object.assign({}, state, {selectedEvent});
     }
 
+    if (action.type === 'ADDINVOLVED') {
+        const selectedEvent = update(state.selectedEvent, {
+            ['vehicles']: {
+                $push: {
+                    id: eval(state.vehicles[state.vehicles.length - 1].id) + 1
+                }
+            }
+        });
+        return Object.assign({}, state, {selectedEvent});
+    }
+
+    if (action.type === 'ADDVEHICLE') {
+        const selectedEvent = update(state.selectedEvent, {
+            [action.subMenu]: {
+                $set: update(state.selectedEvent[action.subMenu], {
+                    [action.operator]: {$set: action.newValue}
+                })
+            }
+        });
+        return Object.assign({}, state, {selectedEvent});
+    }
+
+    if (action.type === 'REMOVEINVOLVED') {
+        const selectedEvent = update(state.selectedEvent, {
+            [action.subMenu]: {
+                $set: update(state.selectedEvent[action.subMenu], {
+                    [action.operator]: {$set: action.newValue}
+                })
+            }
+        });
+        return Object.assign({}, state, {selectedEvent});
+    }
+
+    if (action.type === 'REMOVEVEHICLE') {
+        const selectedEvent = update(state.selectedEvent, {
+            [action.subMenu]: {
+                $set: update(state.selectedEvent[action.subMenu], {
+                    [action.operator]: {$set: action.newValue}
+                })
+            }
+        });
+        return Object.assign({}, state, {selectedEvent});
+    }
+
     return state;
 
 }

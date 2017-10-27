@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from "react";
-import DeathApi from '../logics/DeathApi'
+import DeathApi from '../../logics/DeathApi'
 import {connect} from 'react-redux';
 import {PageHeader} from 'react-bootstrap';
 
