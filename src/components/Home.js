@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {PageHeader} from 'react-bootstrap';
+import {Map} from './Map'
+
 
 export default class Home extends Component {
     render() {
@@ -7,7 +9,12 @@ export default class Home extends Component {
             <div>
                 <PageHeader>Bem Vindo</PageHeader>
                 <div className="content" id="content">
-                    {/*Sigtrans*/}
+                    <div>
+                        <Map 
+                            containerElement={<div style={{height:100+'%'}}/>}
+                            mapElement={<div style={{height:100+'%'}}/>}
+                        />
+                    </div>
                 </div>
             </div>
 

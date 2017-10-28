@@ -17,6 +17,7 @@
     "react-bootstrap": "^0.31.5",
     "react-charts": "^0.1.0",
     "react-dom": "^15.5.4",
+    "react-google-maps": "^9.2.1",
     "react-metismenu": "^1.4.0-alpha.1",
     "react-metismenu-router-link": "^1.0.2",
     "react-redux": "^5.0.5",
@@ -31,7 +32,8 @@
   },
   "devDependencies": {
     "react-scripts": "0.9.4",
-    "react-toolbox-themr": "^1.0.2"
+    "react-toolbox-themr": "^1.0.2",
+    "webpack": "^3.8.1"
   },
   "scripts": {
     "start": "set PORT=3006 && react-scripts start ",

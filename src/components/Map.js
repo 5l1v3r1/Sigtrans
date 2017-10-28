@@ -14,11 +14,11 @@ class MapContainer extends Component {
 
         return (
             <Map google={this.props.google}
-                 zoom={15}
-                 style={style}
+                 zoom={15} 
+            style={style}
                  initialCenter={initialCenter}
-                 clickableIcons={false}
-            >
+                 clickableIcons={false} >
+
                 <Marker onClick={this.onMarkerClick}
                         name={'Current location'}/>
             </Map>
