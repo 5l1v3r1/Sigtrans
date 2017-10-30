@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import Slider from 'react-toolbox/lib/slider/Slider';
-import Select from "./CustomSelect";
+import Select from "../custom/CustomSelect";
 import {Col} from 'react-bootstrap';
 
 export default class Factor extends Component {

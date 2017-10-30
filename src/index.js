@@ -5,13 +5,13 @@ import ReactDOM from 'react-dom';
 // import Cookies from 'js-cookie';
 //Components
 import App from './App';
-// import EBox, {EGrid} from './components/Event';
-import OpenEvents from './components/Event'
-import Death from './components/Death';
+import EBox from './components/events/Event_old';
+import OpenEvents from './components/events/Event'
+import Death from './components/death/Death';
 import Home from './components/Home';
 import Login from './components/Login';
-import Management from './components/ManagementReports'
-import Statistic from './components/StatisticReports'
+import Management from './components/reports/ManagementReports'
+import Statistic from './components/reports/StatisticReports'
 //Router
 import {browserHistory, IndexRoute, Route, Router} from 'react-router';
 //React Toolbox Themer (PostCSS Issues)
@@ -67,12 +67,12 @@ ReactDOM.render(
                     <Route path="/login" component={Login}/>{/*onEnter={verifyLogin}*/}
                     <Route path="/" component={App}>{/*onEnter={verifyAuth}*/}
                         <IndexRoute component={Home}/>
-                        <Route path="obitos" component={Death}/>
-                        <Route path="abertas" component={OpenEvents}/>
+                        <Route path="/obitos" component={Death}/>
+                        <Route path="/abertas" component={OpenEvents}/>
                         {/*<Route path="fechadas" component={EGrid}/>*/}
-                        {/*<Route path="criar" component={EBox}/>*/}
-                        <Route path="gerenciais" component={Management}/>
-                        <Route path="estatisticos" component={Statistic}/>
+                        <Route path="/gerenciais" component={Management}/>
+                        <Route path="/estatisticos" component={Statistic}/>
+                        <Route path="/criar" component={EBox}/>
                     </Route>
                 </Router>
             </Provider>
