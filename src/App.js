@@ -12,6 +12,7 @@ import Sidebar from 'react-toolbox/lib/layout/Sidebar';
 import IconButton from 'react-toolbox/lib/button/IconButton';
 import MetisMenu from "react-metismenu";
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 class App extends Component {
 
@@ -104,7 +105,7 @@ class App extends Component {
 }
 
 App.contextTypes = {
-    store: React.PropTypes.object.isRequired
+    store: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
