@@ -23,21 +23,16 @@ export function changeInput(newValue, operator, subMenu) {
 
 export function addVehicle(vehicle) {
     return {type: 'ADDVEHICLE', vehicle}
-
 }
-
 export function removeVehicle(vehicle) {
     return {type: 'REMOVEVEHICLE', vehicle}
 }
-
 export function addInvolved() {
     return {type: 'ADDINVOLVED'}
 }
-
 export function removeInvolved(involved) {
     return {type: 'REMOVEINVOLVED', involved}
 }
-
 
 //OPEN EVENTS
 export function listOpenEvents(loading, events) {

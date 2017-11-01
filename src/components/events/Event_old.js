@@ -183,7 +183,10 @@ class EForm extends Component {
                 date: '', street: '', number: '', cross: '', lat: '', lng: '', middleName: '',
             },
             statisticData: {
-                accidentType: '', pavementType: '', surface: '', accidentClassification: '',
+                accidentType: {
+                    opcao1:'',
+                    opcao2:''
+                }, pavementType: '', surface: '', accidentClassification: '',
                 roadState: '', roadProfile: '', roadCondition: '', climaticCondition: '',
                 verticalSignaling: '', horizontalSignaling: '', direction: '',
                 zone: '', cause: '', additionalInfo: '',
@@ -296,8 +299,9 @@ class EForm extends Component {
             vehicles: update(this.state.vehicles, {
                 $push: [
                     {
-                        id: eval(this.state.vehicles[this.state.vehicles.length - 1].id) + 1
-                    }]
+                        id: parseInt(this.state.vehicles[this.state.vehicles.length - 1].id, 10) + 1
+                    }
+                ]
             })
         });
     }

@@ -32,9 +32,7 @@ export function events(state = new List(), action) {
     if (action.type === 'ONCHANGEINPUT') {
         const selectedEvent = update(state.selectedEvent, {
             [action.subMenu]: {
-                $set: update(state.selectedEvent[action.subMenu], {
-                    [action.operator]: {$set: action.newValue}
-                })
+                [action.operator]: {$set: action.newValue}
             }
         });
         return Object.assign({}, state, {selectedEvent});
@@ -42,10 +40,11 @@ export function events(state = new List(), action) {
 
     if (action.type === 'ADDINVOLVED') {
         const selectedEvent = update(state.selectedEvent, {
-            ['vehicles']: {
-                $push: {
-                    id: eval(state.vehicles[state.vehicles.length - 1].id) + 1
-                }
+            involved: {
+                $push: [{
+                    id: parseInt(state.selectedEvent.involved[state.selectedEvent.involved.length - 1].id, 10) + 1,
+                    Name: ''
+                }]
             }
         });
         return Object.assign({}, state, {selectedEvent});
@@ -53,34 +52,24 @@ export function events(state = new List(), action) {
 
     if (action.type === 'ADDVEHICLE') {
         const selectedEvent = update(state.selectedEvent, {
-            [action.subMenu]: {
-                $set: update(state.selectedEvent[action.subMenu], {
-                    [action.operator]: {$set: action.newValue}
-                })
+            vehicles: {
+                $push: [{
+                    id: parseInt(state.selectedEvent.vehicles[state.selectedEvent.vehicles.length - 1].id, 10) + 1
+                }]
             }
         });
         return Object.assign({}, state, {selectedEvent});
     }
 
     if (action.type === 'REMOVEINVOLVED') {
-        const selectedEvent = update(state.selectedEvent, {
-            [action.subMenu]: {
-                $set: update(state.selectedEvent[action.subMenu], {
-                    [action.operator]: {$set: action.newValue}
-                })
-            }
-        });
+        const id = state.selectedEvent.involved.indexOf(action.involved);
+        const selectedEvent = update(state.selectedEvent, {involved: {$splice: [[id, 1]]}});
         return Object.assign({}, state, {selectedEvent});
     }
 
     if (action.type === 'REMOVEVEHICLE') {
-        const selectedEvent = update(state.selectedEvent, {
-            [action.subMenu]: {
-                $set: update(state.selectedEvent[action.subMenu], {
-                    [action.operator]: {$set: action.newValue}
-                })
-            }
-        });
+        const id = state.selectedEvent.vehicles.indexOf(action.vehicle);
+        const selectedEvent = update(state.selectedEvent, {vehicles: {$splice: [[id, 1]]}});
         return Object.assign({}, state, {selectedEvent});
     }
 

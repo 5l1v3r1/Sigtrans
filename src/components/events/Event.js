@@ -14,9 +14,7 @@ class Event extends Component {
     render() {
         return (
             <div>
-                <PageHeader>Ocorrencias
-                    <small>Abertas</small>
-                </PageHeader>
+                <PageHeader>Ocorrencias <small>Abertas</small></PageHeader>
                 <EventsGrid data={this.props.events.events} options={this.props.events.options}
                             loading={this.props.events.loading} showModal={this.props.events.showModal}
                             selectedEvent={this.props.events.selectedEvent}
@@ -33,15 +31,12 @@ class Event extends Component {
 }
 
 const mapStateToProps = (state) => {
-
     return {
         events: state.events
     }
-
 };
 
 const mapDispatchToProps = dispatch => {
-
     return {
         listEvents: (loading, type) => {
             dispatch(EventsApi.listOpenEvents(loading, type));
@@ -61,18 +56,17 @@ const mapDispatchToProps = dispatch => {
         addVehicle: () => {
             dispatch(EventsApi.addVehicle());
         },
-        removeVehicle: () => {
-            dispatch(EventsApi.removeVehicle());
+        removeVehicle: (vehicle) => {
+            dispatch(EventsApi.removeVehicle(vehicle));
         },
         addInvolved: () => {
             dispatch(EventsApi.addInvolved());
         },
-        removeInvolved: () => {
-            dispatch(EventsApi.removeInvolved());
+        removeInvolved: (involved) => {
+            dispatch(EventsApi.removeInvolved(involved));
         },
 
     }
-
 };
 
 const EventContainer = connect(mapStateToProps, mapDispatchToProps)(Event);

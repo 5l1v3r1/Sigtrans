@@ -14,10 +14,13 @@ export default class CustomSelect extends Component {
 
     render() {
         const selectProps = Object.assign({}, this.props);
-        let opts = selectProps.options.map(function (type) {
-            return <option key={type.id} value={type.id}>{type.value}</option>;
-        });
-        delete selectProps.options;
+        let opts;
+        if (selectProps.options) {
+            opts = selectProps.options.map(function (type) {
+                return <option key={type.id} value={type.id}>{type.value}</option>;
+            });
+            delete selectProps.options;
+        }
 
         return (
             <FormGroup >

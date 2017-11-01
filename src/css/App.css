@@ -95,8 +95,15 @@ h1 small, h4 small {
 
 .custom-modal {
     height: 90vh;
-    /*width: 88vw;*/
-    overflow: auto;
+    width: 88vw;
+    overflow:auto;
+
+}
+
+:global .imagemdodemonio {
+    height: 80vh;
+    background: url("../images/heatmap.PNG") no-repeat;
+    background-size: 100% 95%;
 }
 
 .app-bar {

@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import NavegationApi from './logics/NavigationApi'
 import NavDrawer from "react-toolbox/lib/layout/NavDrawer";
 import RouterLink from "react-metismenu-router-link";
-import Navigation from "react-toolbox/lib/navigation/Navigation";
-import Link from "react-toolbox/lib/link/Link";
+// import Navigation from "react-toolbox/lib/navigation/Navigation";
+// import Link from "react-toolbox/lib/link/Link";
 import AppBar from "react-toolbox/lib/app_bar/AppBar";
 import Layout from "react-toolbox/lib/layout/Layout";
 import Panel from "react-toolbox/lib/layout/Panel";
@@ -82,12 +82,7 @@ class App extends Component {
                                     rightIcon={<FontIcon className="md-24 md-light" value='account_circle'/>}
                                     onLeftIconClick={this.props.toggleDrawer}
                                     onRightIconClick={this.props.toggleSidebar}
-                            >
-                                <Navigation type="horizontal">
-                                    <Link href="#" className='app-bar' label="Mensagens" icon="inbox"/>
-                                    <Link href="#" className='app-bar' active label="Perfil" icon="person"/>
-                                </Navigation>
-                            </AppBar>
+                            />
                             <div style={{flex: 1, overflowY: 'auto', padding: '1.8rem'}}>
                                 <div className="content-interior">
                                     {this.props.children}
