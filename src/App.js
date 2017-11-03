@@ -16,9 +16,9 @@ import PropTypes from 'prop-types';
 
 class App extends Component {
 
-    componentDidMount() {
-        this.props.toggleDrawer();
-    }
+    // componentDidMount() {
+    //     this.props.toggleDrawer();
+    // }
     render() {
         const menu = [
             {
@@ -79,7 +79,7 @@ class App extends Component {
                         <Panel>
                             <AppBar className="app-bar" title=''
                                     leftIcon={<FontIcon className="md-24 md-light"
-                                                        value={this.props.menus.drawer ? 'close' : 'menu'}/>}
+                                                        value={this.props.menus.drawer ? 'chevron_left' : 'menu'}/>}
                                     rightIcon={<FontIcon className="md-24 md-light" value='account_circle'/>}
                                     onLeftIconClick={this.props.toggleDrawer}
                                     onRightIconClick={this.props.toggleSidebar}

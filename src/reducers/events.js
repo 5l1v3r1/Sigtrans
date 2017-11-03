@@ -32,7 +32,19 @@ export function events(state = new List(), action) {
     if (action.type === 'ONCHANGEINPUT') {
         const selectedEvent = update(state.selectedEvent, {
             [action.subMenu]: {
-                [action.operator]: {$set: action.newValue}
+                $set: update(state.selectedEvent[action.subMenu], (action.operator !== 'lat' && action.operator !== 'lng') ?
+                    {
+                        [action.operator]: {$set: action.newValue}
+                    } :
+                    {
+                        geolocation: {
+                            $set: update(state.selectedEvent[action.subMenu].geolocation, {
+                                    [action.operator]: {$set: action.newValue}
+                                }
+                            )
+                        }
+                    }
+                )
             }
         });
         return Object.assign({}, state, {selectedEvent});
