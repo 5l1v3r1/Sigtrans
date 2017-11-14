@@ -142,7 +142,6 @@ export default class EventsApi {
         }
     }
 
-
 	static handleEventsModal() {
 		return dispatch => {
 			return dispatch(toggleEventsModal())
