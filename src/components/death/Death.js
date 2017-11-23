@@ -3,8 +3,8 @@
  */
 
 import React, {Component} from "react";
-import {Dialog} from 'react-toolbox/lib/dialog/Dialog';
-import {Button} from 'react-toolbox/lib/button/Button';
+import Dialog from 'react-toolbox/lib/dialog/Dialog';
+import Button from 'react-toolbox/lib/button/Button';
 import DeathApi from '../../logics/DeathApi'
 import {Col, Form, Grid, PageHeader, Panel, Row} from 'react-bootstrap';
 import ReactTable from 'react-table';
@@ -18,8 +18,8 @@ import matchSorter from 'match-sorter';
 class Death extends Component {
 
 	componentDidMount() {
+        this.props.listDeathEvents(this.props.deaths.loading);
 		this.props.listDeathOptions();
-		this.props.listDeathEvents(this.props.deaths.loading);
 	}
 
 	render() {
@@ -36,6 +36,7 @@ class Death extends Component {
 									 selectedEventID={this.props.deaths.selectedEventID}
 									 handleToggleModal={this.props.handleToggleModal}
 									 handleSlider={this.props.handleSlider}
+									 selectEvent={this.props.selectEvent}
 					/>
 				</div>
 			</div>
@@ -59,7 +60,10 @@ class DeathEventsGrid extends Component {
 				style: {textAlign: "center"},
 				Header: 'Data',
 				id: 'date',
-				accessor: d => {let date = new Date(d.date); return date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear()},
+                accessor: d => {
+                    let date = new Date(d.general.date);
+                    return date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear()
+                },
 				filterMethod: (filter, rows) =>
 					matchSorter(rows, filter.value, {keys: ["date"]}),
 				filterAll: true
@@ -67,7 +71,7 @@ class DeathEventsGrid extends Component {
 				style: {textAlign: "center"},
 				Header: 'Rua',
 				id: 'street',
-				accessor: d => d.address.street,
+                accessor: d => d.general.street,
 				filterMethod: (filter, rows) =>
 					matchSorter(rows, filter.value, {keys: ["street"]}),
 				filterAll: true
@@ -76,14 +80,14 @@ class DeathEventsGrid extends Component {
 				style: {textAlign: "center"},
 				Header: 'Numero/KM',
 				id: 'number',
-				accessor: d => d.address.number,
+                accessor: d => d.general.number,
 				filterMethod: (filter, row) =>
 					row[filter.id].startsWith(filter.value)
 			}, {
 				style: {textAlign: "center"},
 				Header: 'Cruzamento com',
 				id: 'crossRoad',
-				accessor: d => d.address.crossRoad,
+                accessor: d => d.general.crossRoad,
 				filterMethod: (filter, rows) =>
 					matchSorter(rows, filter.value, {keys: ["crossRoad"]}),
 				filterAll: true
@@ -91,7 +95,7 @@ class DeathEventsGrid extends Component {
 				style: {textAlign: "center"},
 				Header: 'Bairro',
 				id: 'neighborhood',
-				accessor: d => d.address.neighborhood.name,
+                accessor: d => d.general.neighborhood,
 				filterMethod: (filter, rows) =>
 					matchSorter(rows, filter.value, {keys: ["neighborhood"]}),
 				filterAll: true
@@ -99,7 +103,7 @@ class DeathEventsGrid extends Component {
 				style: {textAlign: "center"},
 				Header: 'Referencia',
 				id: 'reference',
-				accessor: d => d.reference,
+                accessor: d => d.general.reference,
 				filterMethod: (filter, rows) =>
 					matchSorter(rows, filter.value, {keys: ["reference"]}),
 				filterAll: true
@@ -114,9 +118,10 @@ class DeathEventsGrid extends Component {
 				)
 			}
 		];
-		// const actions = [
-		//     { label: "Fechar" , onClick: this.props.handleToggleModal}
-		// ];
+        const actions = [
+            {label: "Fechar", onClick: this.props.handleToggleModal},
+            {label: "Salvar", onClick: this.props.handleToggleModal}
+        ];
 		return (
 			<div>
 				<div className="content" id="content">
@@ -139,16 +144,22 @@ class DeathEventsGrid extends Component {
 						}
 					/>
 					<div className="modal-container">
-						<Dialog active={this.props.showModal === undefined}
+						<Dialog active={this.props.showModal === !(undefined)}
+								actions={actions} type='fullscreen'
+								className="custom-modal"
 								onEscKeyDown={this.props.handleToggleModal}
 								onOverlayClick={this.props.handleToggleModal}
 								title='Análise do Óbito'>
-							<DeathAnalysis
-								selectedEvent={this.props.selectedEvent}
-								options={this.props.options}
-								deathAnalysis={this.props.deathAnalysis}
-								handleSlider={this.props.handleSlider}
-							/>
+                            {
+                                this.props.deathAnalysis ?
+									<DeathAnalysis
+										selectedEvent={this.props.selectedEvent}
+										options={this.props.options}
+										deathAnalysis={this.props.deathAnalysis}
+										handleSlider={this.props.handleSlider}
+									/> :
+									<div>Filho de una purostituta da algusta, filho da putaAAAAAAAA</div>
+                            }
 						</Dialog>
 					</div>
 				</div>
@@ -161,11 +172,13 @@ class DeathEventsGrid extends Component {
 class DeathAnalysis extends Component {
 
 	render() {
-
-		let mapCenter = {
-			lat: this.props.selectedEvent.general.lat,
-			lng: this.props.selectedEvent.general.lng
-		};
+        let mapCenter = this.props.selectedEvent ? {
+            lat: this.props.selectedEvent.general.lat,
+            lng: this.props.selectedEvent.general.lng
+        } : {
+            lat: 0,
+            lng: 0
+        };
 		let padding = {
 			paddingLeft: '2px'
 		};
@@ -409,7 +422,10 @@ const mapDispatchToProps = dispatch => {
 		},
 		handleSlider: (name, value) => {
 			dispatch(DeathApi.handleSlider(name, value))
-		}
+        },
+        selectEvent: (event) => {
+            dispatch(DeathApi.selectEvent(event));
+        },
 	}
 
 };

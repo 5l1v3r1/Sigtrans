@@ -58,6 +58,9 @@ export function handleDeathSlider(name, value) {
     return {type: 'HANDLEDEATHSLIDER', name, value};
 }
 
+export function selectDeathEvent(id) {
+    return {type: 'SELECTDEATHEVENT', id};
+}
 //AUTH
 export function authERR(msg) {
     return {type: 'AUTHERR', msg};

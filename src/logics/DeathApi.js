@@ -1,7 +1,13 @@
 /**
  * Created by natal on 05/06/17.
  */
-import {handleDeathSlider, listDeathEvents, listDeathOptions, toggleDeathModal} from '../actions/actionCreator'
+import {
+    handleDeathSlider,
+    listDeathEvents,
+    listDeathOptions,
+    selectDeathEvent,
+    toggleDeathModal
+} from '../actions/actionCreator'
 
 export default class DeathApi {
 
@@ -19,10 +25,19 @@ export default class DeathApi {
     static listDeathsOpts() {
         return dispatch => {
             fetch('https://ocorrencias-teste-api.herokuapp.com/api/options')
-                .then(response => response.json())
-                .then(deathOptions => {
-                    dispatch(listDeathOptions(deathOptions));
-                    return deathOptions;
+                .then(response => {
+                    if (response.ok) {
+                        response.json()
+                            .then(options => {
+                                return dispatch(listDeathOptions(options));
+                            })
+                    }
+                    else {
+                        console.log('Falha ao receber opcoes: ' + response.status);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
         }
     }
@@ -36,6 +51,12 @@ export default class DeathApi {
     static handleSlider(name, value) {
         return dispatch => {
             return dispatch(handleDeathSlider(name, value));
+        }
+    }
+
+    static selectEvent(id) {
+        return dispatch => {
+            return dispatch(selectDeathEvent(id));
         }
     }
 
