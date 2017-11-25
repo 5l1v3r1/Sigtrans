@@ -19,8 +19,8 @@ export default class CustomSelect extends Component {
             opts = selectProps.options.map(function (type) {
                 return <option key={type.id} value={type.id}>{type.value}</option>;
             });
-            delete selectProps.options;
         }
+        delete selectProps.options;
 
         return (
             <FormGroup >

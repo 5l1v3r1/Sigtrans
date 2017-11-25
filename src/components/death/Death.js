@@ -157,8 +157,7 @@ class DeathEventsGrid extends Component {
 										options={this.props.options}
 										deathAnalysis={this.props.deathAnalysis}
 										handleSlider={this.props.handleSlider}
-									/> :
-									<div>Filho de una purostituta da algusta, filho da putaAAAAAAAA</div>
+									/> : undefined
                             }
 						</Dialog>
 					</div>
@@ -186,6 +185,38 @@ class DeathAnalysis extends Component {
 			paddingLeft: '5px'
 		};
 
+        let victimList = [
+            {name: "Motociclista / Garupa", id: "M"},
+            {name: "Pedestre", id: "P"},
+            {name: "Ciclista", id: "B"},
+            {name: "Condutor veículo leve", id: "Cc"},
+            {name: "Passageiro veículo leve", id: "Cp"},
+            {name: "Cond. / passag. ônibus", id: "O"},
+            {name: "Cond. / passag. veículo pesado", id: "V"}
+        ];
+
+        let victimsGroup = victimList.map((item) => {
+            return (
+				<div key={item.id}>
+					<Col md={3}>
+						<Input value={0} type="number"
+							   id={item.id}
+							   label={item.name}
+						/>
+					</Col>
+					<Col md={3} style={{borderRight: "thin solid #eeeeee"}}>
+						<Select value={0}
+								options={[
+                                    {id: 1, value: "Vítima Fatal"},
+                                    {id: 2, value: "Vítima Grave"}
+                                ]}
+								label="Situação"
+						/>
+					</Col>
+				</div>
+            )
+        });
+
 		let factorList = [
 			{name: 'Velocidade', id: 'speed'},
 			{name: 'Alcool', id: 'alcohol'},
@@ -201,6 +232,7 @@ class DeathAnalysis extends Component {
 				<div key={item.id}>
 					<Factor sliderValue={this.props.deathAnalysis[item.id]} style={padding}
 							factor={item.name} itemId={item.id} responsible
+							specification={(item.id === "speed" || item.id === "infrastructure")}
 							options={this.props.options.involved.involvedVehiclePositions}
 							handleSlider={this.props.handleSlider} max={10} step={2}
 					/>
@@ -208,7 +240,7 @@ class DeathAnalysis extends Component {
 			)
 		}, this);
 
-		let causeList = [
+        let conductsList = [
 			{name: 'Avanço de Sinal', id: 'signalAdvance'},
 			{name: 'Condutor sem habilitação', id: 'noLicence'},
 			{name: 'Transitar em local proibido', id: 'transitProhibited'},
@@ -219,7 +251,8 @@ class DeathAnalysis extends Component {
 			{name: 'Não dar preferência ao pedestre na faixa', id: 'pedestrianPreference'},
 			{name: 'Falta de Atenção', id: 'lackOfAttention'}
 		];
-		let causes = causeList.map((item) => {
+
+        let conducts = conductsList.map((item) => {
 			return (
 				<div key={item.id}>
 					<Factor sliderValue={this.props.deathAnalysis[item.id]} style={padding}
@@ -232,18 +265,21 @@ class DeathAnalysis extends Component {
 			// onChange={(value) => this.props.slider = value}
 		}, this);
 
-		let othersList = [
-			{name: 'Cintos de Segurança', id: 'securityBelt'},
+        let gravityList = [
+            {name: 'Cinto de Segurança', id: 'securityBelt'},
 			{name: 'Veículo sem "crash protection"', id: 'crashProtection'},
 			{name: 'Fatores Pré-hospitalares', id: 'preHosp'},
 			{name: 'Objetos Lateriais à Via', id: 'sideObjects'},
 			{name: 'Capacete', id: 'helmet'},
 		];
-		let others = othersList.map((item) => {
+
+        let gravity = gravityList.map((item) => {
 			return (
 				<div key={item.id}>
 					<Factor sliderValue={this.props.deathAnalysis[item.id]} style={padding}
-							factor={item.name} itemId={item.id} responsible
+							factor={item.name} itemId={item.id}
+							options={this.props.options.involved.involvedVehiclePositions}
+							responsible={(item.id === "crashProtection" || item.id === "helmet")}
 							handleSlider={this.props.handleSlider} max={5} step={1}
 					/>
 				</div>
@@ -313,7 +349,7 @@ class DeathAnalysis extends Component {
 								<Panel>
 									<Col sm={6}>
 										<Row className="form-group">
-											<h4>Informações Gerais</h4>
+											<h4>Identificação do Acidente</h4>
 											<Col sm={4} style={padding}>
 												<Input type="date" name="deathDate" id="date"
 													   label="Data" readOnly disabled
@@ -372,16 +408,28 @@ class DeathAnalysis extends Component {
 							{/*Fatores*/}
 							<Row className="form-group">
 								<Panel>
-									<h4>Fatores</h4>
+									<h4>Fatores de Risco
+										<small>(FR-EA)</small>
+									</h4>
 									{factors}
 								</Panel>
 								<Panel>
-									<h4>Causas</h4>
-									{causes}
+									<h4>Condutas de Risco
+										<small>(CLR-EA)</small>
+									</h4>
+                                    {conducts}
 								</Panel>
 								<Panel>
-									<h4>Outros</h4>
-									{others}
+									<h4>Fatores / Gravidade
+										<small>(FG)</small>
+									</h4>
+                                    {gravity}
+								</Panel>
+								<Panel>
+									<h4>Grupo de Vítimas
+										<small>(GV)</small>
+									</h4>
+                                    {victimsGroup}
 								</Panel>
 							</Row>
 							{/*victims*/}
