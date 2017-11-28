@@ -67,8 +67,8 @@ export function authERR(msg) {
 }
 
 //REPORTS
-export function makeReportsData() {
-    return {type: 'MAKEREPORTSDATA'};
+export function makeReportsData(reportData, reportType) {
+    return {type: 'MAKEREPORTSDATA', reportData, reportType};
 }
 
 export function changeReportsType(value) {
@@ -77,4 +77,8 @@ export function changeReportsType(value) {
 
 export function initializeReportsData(reportTypes) {
     return {type: 'INITIALIZEREPORTSDATA', reportTypes};
+}
+
+export function handleDatePicker(value, picker) {
+    return {type: 'HANDLEDATEPICKER', value, picker};
 }

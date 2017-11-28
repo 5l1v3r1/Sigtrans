@@ -3,44 +3,33 @@
  */
 
 import {List} from 'immutable';
-import _ from 'lodash';
 
 export function reports(state = new List(), action) {
 
     if (action.type === 'INITIALIZEREPORTSDATA') {
-        const managementReportTypes = action.reportTypes;
-        const managementReportType = 1;
-        return Object.assign({}, state, {managementReportTypes, managementReportType});
+        const date1 = new Date();
+        const date2 = new Date();
+        const reportTypes = action.reportTypes;
+        return Object.assign({}, state, {reportTypes, date1, date2});
     }
 
     if (action.type === 'MAKEREPORTSDATA') {
-        const makeSeries = () => {
-            const startDate = new Date();
-            // const length = Math.round(Math.random() * 30)
-            const length = 10;
-            const max = 150;
-            // const max = Math.random() > 0.5 ? 100000 : 10
-            // const multiplier = 10
-            // const multiplier = Math.round((Math.random() * 10) + Math.round(Math.random() * 50))
-            return _.map(_.range(length), d => ({
-                // x: d * multiplier,
-                x: new Date().setDate(startDate.getDay() + 1 * d),
-                y: Math.round(Math.random() * max + Math.round(Math.random() * 50)),
-                r: Math.round(Math.random() * 5)
-            }))
-        };
-        const makeData = () => {
-            return _.map(_.range(Math.max(Math.round(Math.random() * 8), 1)), d =>
-                makeSeries()
-            )
-        };
-        const data = makeData();
-        return Object.assign({}, state, {data});
+        const reportData = action.reportData;
+        const index = state.reportTypes.map(d => {
+            return d['value'];
+        }).indexOf(action.reportType);
+        const reportTypeName = state.reportTypes[index].label;
+        return Object.assign({}, state, {reportData, reportTypeName});
     }
 
     if (action.type === 'CHANGEREPORTTYPE') {
-        const managementReportType = action.value;
-        return Object.assign({}, state, {managementReportType});
+        const reportType = action.value;
+        return Object.assign({}, state, {reportType});
+    }
+
+    if (action.type === 'HANDLEDATEPICKER') {
+        // console.log(new Date(action.value));
+        return Object.assign({}, state, {[action.picker]:action.value});
     }
     return state;
 }

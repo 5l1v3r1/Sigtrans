@@ -17,6 +17,7 @@
     "react": "^15.6.0-rc.1",
     "react-bootstrap": "^0.31.5",
     "react-charts": "^0.1.0",
+    "react-csv": "^1.0.8",
     "react-dom": "^15.5.4",
     "react-metismenu": "^1.4.0-alpha.2",
     "react-metismenu-router-link": "^1.0.2",
@@ -26,6 +27,7 @@
     "react-select": "^1.0.0-rc.5",
     "react-table": "^6.6.0",
     "react-toolbox": "^2.0.0-beta.12",
+    "recharts": "^1.0.0-beta.5",
     "redux": "^3.7.2",
     "redux-oauth": "^2.0.8",
     "redux-thunk": "^2.2.0"

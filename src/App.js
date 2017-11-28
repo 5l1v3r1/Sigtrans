@@ -55,11 +55,11 @@ class App extends Component {
                 content: [
                     {
                         label: 'Estatisticos',
-                        to: '/estatisticos'
+                        to: '/relatorios/estatisticos'
                     },
                     {
-                        label: 'Gerenciais',
-                        to: '/gerenciais'
+                        label: 'Óbitos',
+                        to: '/relatorios/obitos'
                     },
                 ]
             }

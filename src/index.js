@@ -10,7 +10,7 @@ import OpenEvents from './components/events/Event'
 import Death from './components/death/Death';
 import Home from './components/Home';
 import Login from './components/Login';
-import Management from './components/reports/ManagementReports'
+import DeceasedReports from './components/reports/DeceasedReports'
 import Statistic from './components/reports/StatisticReports'
 import Test from './components/TestPage'
 //Router
@@ -70,9 +70,9 @@ ReactDOM.render(
                         <IndexRoute component={Home}/>
                         <Route path="/obitos" component={Death}/>
                         <Route path="/abertas" component={OpenEvents}/>
-                        <Route path="fechadas" component={Test}/>
-                        <Route path="/gerenciais" component={Management}/>
-                        <Route path="/estatisticos" component={Statistic}/>
+                        <Route path="/fechadas" component={Test}/>
+                        <Route path="/relatorios/obitos" component={DeceasedReports}/>
+                        <Route path="/relatorios/estatisticos" component={Statistic}/>
                         <Route path="/criar" component={EBox}/>
                     </Route>
                 </Router>

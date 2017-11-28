@@ -169,9 +169,9 @@ h1 small, h4 small {
 }
 
 .paddingLeft2Px {
-    padding-left: 2px;
+    padding-left: 2px!important;
 }
 
 .paddingLeft5Px {
-    padding-left: 5px;
+    padding-left: 5px!important;
 }
