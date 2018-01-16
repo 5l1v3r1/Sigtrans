@@ -20,6 +20,7 @@ class App extends Component {
     //     this.props.toggleDrawer();
     // }
     render() {
+
         const menu = [
             {
                 icon: 'home',
@@ -62,7 +63,12 @@ class App extends Component {
                         to: '/relatorios/obitos'
                     },
                 ]
-            }
+            },
+            {
+                icon: 'upload',
+                label: 'Dados de Parceiros',
+                to: '/dados'
+            },
         ];
         return (
             <div id="root">
@@ -93,7 +99,7 @@ class App extends Component {
                         <Sidebar pinned={this.props.menus.sidebar} width={5}>
                             <div><IconButton icon='close' onClick={this.props.toggleSidebar}/></div>
                             <div style={{flex: 1}}>
-                                <p>Supplemental content goes here.</p>
+                                <p>Em construção</p>
                             </div>
                         </Sidebar>
                     </Layout>

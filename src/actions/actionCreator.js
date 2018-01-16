@@ -82,3 +82,8 @@ export function initializeReportsData(reportTypes) {
 export function handleDatePicker(value, picker) {
     return {type: 'HANDLEDATEPICKER', value, picker};
 }
+
+//FILES
+export function handleFiles(files) {
+    return {type: 'HANDLEFILES', files};
+}

@@ -12,6 +12,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import DeceasedReports from './components/reports/DeceasedReports'
 import Statistic from './components/reports/StatisticReports'
+import DataReceive from './components/datareceive/DataReceive'
 import Test from './components/TestPage'
 //Router
 import {browserHistory, IndexRoute, Route, Router} from 'react-router';
@@ -29,9 +30,9 @@ import {death} from './reducers/death';
 import {auth} from './reducers/auth';
 import {reports} from './reducers/reports';
 import {events} from './reducers/events';
+import {datareceive} from './reducers/datareceive';
 import metisMenuReducer from 'react-metismenu/lib/reducers';
 //CSS
-import './css/wizard.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import './css/font-awesome-4.7.0/css/font-awesome.min.css';
@@ -39,7 +40,6 @@ import './css/index.css';
 import './css/App.css';
 import './toolbox/theme.css';
 import 'react-table/react-table.css';
-
 // function verifyAuth(nextState, replace) {
 //     // console.log(nextState.location.pathname);
 //     const resultado = matchPattern('/', nextState.location.pathname);
@@ -57,7 +57,7 @@ import 'react-table/react-table.css';
 // }
 
 // Create Reducers
-const reducers = combineReducers({metisMenuReducer, death, menus, auth, reports, events});
+const reducers = combineReducers({metisMenuReducer, death, menus, auth, reports, events, datareceive});
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
@@ -71,6 +71,7 @@ ReactDOM.render(
                         <Route path="/obitos" component={Death}/>
                         <Route path="/abertas" component={OpenEvents}/>
                         <Route path="/fechadas" component={Test}/>
+                        <Route path="/dados" component={DataReceive}/>
                         <Route path="/relatorios/obitos" component={DeceasedReports}/>
                         <Route path="/relatorios/estatisticos" component={Statistic}/>
                         <Route path="/criar" component={EBox}/>
