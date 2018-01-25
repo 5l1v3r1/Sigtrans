@@ -15,6 +15,7 @@ import {
 } from '../actions/actionCreator'
 
 export default class EventsApi {
+
 	static listOpenEvents(loading) {
 		return dispatch => {
             fetch(getUrl('carAccidents'))
@@ -65,7 +66,6 @@ export default class EventsApi {
                                             // probableConducts: involved.,
                                         })
                                     });
-
                                     return ({
                                         id: event.id,
                                         partner: event.partner,
@@ -99,7 +99,7 @@ export default class EventsApi {
                                             roadDirection: event.statisticData.roadDirection ? event.statisticData.roadDirection.id : '',
                                             visibility: event.statisticData.visibility ? event.statisticData.visibility.id : '',
                                             zone: event.statisticData.zone ? event.statisticData.zone.id : '',
-                                            probableCause: event.statisticData.probableCause ? event.statisticData.probableCause.id : '',
+                                            probableCause: event.statisticData.probableCause ? event.statisticData.probableCause: '',
                                             otherInformation: event.statisticData.otherInformation ? event.statisticData.otherInformation : '',
                                             // roadState: event.statisticData.roadState.id,
                                         },

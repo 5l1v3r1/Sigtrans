@@ -4,6 +4,7 @@
 
 import React, {Component} from "react";
 import Dialog from 'react-toolbox/lib/dialog/Dialog';
+import MultiInput from 'react-toolbox/lib/input/Input';
 import Button from 'react-toolbox/lib/button/Button';
 import DeathApi from '../../logics/DeathApi'
 import {Col, Form, Grid, PageHeader, Panel, Row} from 'react-bootstrap';
@@ -37,6 +38,7 @@ class Death extends Component {
 									 handleToggleModal={this.props.handleToggleModal}
 									 handleSlider={this.props.handleSlider}
 									 selectEvent={this.props.selectEvent}
+                                     onChangeInput={this.props.onChangeInput}
 					/>
 				</div>
 			</div>
@@ -143,24 +145,23 @@ class DeathEventsGrid extends Component {
 							String(row[filter.id]) === filter.value
 						}
 					/>
-					<div className="modal-container">
-						<Dialog active={this.props.showModal === !(undefined)}
-								actions={actions} type='fullscreen'
-								className="custom-modal"
-								onEscKeyDown={this.props.handleToggleModal}
-								onOverlayClick={this.props.handleToggleModal}
-								title='Análise do Óbito'>
-                            {
-                                this.props.deathAnalysis ?
-									<DeathAnalysis
-										selectedEvent={this.props.selectedEvent}
-										options={this.props.options}
-										deathAnalysis={this.props.deathAnalysis}
-										handleSlider={this.props.handleSlider}
-									/> : undefined
-                            }
-						</Dialog>
-					</div>
+					<Dialog active={this.props.showModal === !(undefined)}
+							actions={actions} type='fullscreen'
+							className="custom-modal"
+							onEscKeyDown={this.props.handleToggleModal}
+							onOverlayClick={this.props.handleToggleModal}
+							title='Análise do Óbito'>
+						{
+							this.props.deathAnalysis ?
+								<DeathAnalysis
+									onChangeInput={this.props.onChangeInput}
+									selectedEvent={this.props.selectedEvent}
+									options={this.props.options}
+									deathAnalysis={this.props.deathAnalysis}
+									handleSlider={this.props.handleSlider}
+								/> : undefined
+						}
+					</Dialog>
 				</div>
 			</div>
 		);
@@ -171,6 +172,7 @@ class DeathEventsGrid extends Component {
 class DeathAnalysis extends Component {
 
 	render() {
+
         let mapCenter = this.props.selectedEvent ? {
             lat: this.props.selectedEvent.general.lat,
             lng: this.props.selectedEvent.general.lng
@@ -194,22 +196,24 @@ class DeathAnalysis extends Component {
             {name: "Cond. / passag. ônibus", id: "O"},
             {name: "Cond. / passag. veículo pesado", id: "V"}
         ];
-
+        let counter = 1;
         let victimsGroup = victimList.map((item) => {
             return (
 				<div key={item.id}>
 					<Col md={3}>
-						<Input value={0} type="number"
-							   id={item.id}
-							   label={item.name}
+						<Input value={this.props.deathAnalysis[item.id] ? this.props.deathAnalysis[item.id].amount:''} type="number"
+							   id={item.id} label={item.name}
+							   onChange={(e)=>this.props.onChangeInput(e.target.value, 'amount', item.id)}
 						/>
 					</Col>
-					<Col md={3} style={{borderRight: "thin solid #eeeeee"}}>
-						<Select value={0}
+					<Col md={3} style={(counter++)%2?{borderRight: "thin solid #eeeeee"}:{}}>
+						<Select value={this.props.deathAnalysis[item.id] ? this.props.deathAnalysis[item.id].situation:0}
 								options={[
                                     {id: 1, value: "Vítima Fatal"},
                                     {id: 2, value: "Vítima Grave"}
                                 ]}
+								disabled={!this.props.deathAnalysis[item.id]}
+                                onChange={(e)=>this.props.onChangeInput(e.target.value, 'situation', item.id)}
 								label="Situação"
 						/>
 					</Col>
@@ -230,11 +234,12 @@ class DeathAnalysis extends Component {
 		let factors = factorList.map((item) => {
 			return (
 				<div key={item.id}>
-					<Factor sliderValue={this.props.deathAnalysis[item.id]} style={padding}
-							factor={item.name} itemId={item.id} responsible
+					<Factor values={this.props.deathAnalysis[item.id]}
+							style={padding} factor={item.name} itemId={item.id}
+							responsible={(item.id!=="infrastructure" && item.id!=="visibility")}
 							specification={(item.id === "speed" || item.id === "infrastructure")}
 							options={this.props.options.involved.involvedVehiclePositions}
-							handleSlider={this.props.handleSlider} max={10} step={2}
+                            onChangeInput={this.props.onChangeInput} max={10} step={2}
 					/>
 				</div>
 			)
@@ -251,14 +256,13 @@ class DeathAnalysis extends Component {
 			{name: 'Não dar preferência ao pedestre na faixa', id: 'pedestrianPreference'},
 			{name: 'Falta de Atenção', id: 'lackOfAttention'}
 		];
-
         let conducts = conductsList.map((item) => {
 			return (
 				<div key={item.id}>
-					<Factor sliderValue={this.props.deathAnalysis[item.id]} style={padding}
-							factor={item.name} itemId={item.id} responsible
+					<Factor values={this.props.deathAnalysis[item.id]}
+							style={padding} factor={item.name} itemId={item.id} responsible
 							options={this.props.options.involved.involvedVehiclePositions}
-							handleSlider={this.props.handleSlider} max={10} step={2}
+                            onChangeInput={this.props.onChangeInput} max={10} step={2}
 					/>
 				</div>
 			)
@@ -272,15 +276,14 @@ class DeathAnalysis extends Component {
 			{name: 'Objetos Lateriais à Via', id: 'sideObjects'},
 			{name: 'Capacete', id: 'helmet'},
 		];
-
         let gravity = gravityList.map((item) => {
 			return (
 				<div key={item.id}>
-					<Factor sliderValue={this.props.deathAnalysis[item.id]} style={padding}
-							factor={item.name} itemId={item.id}
+					<Factor values={this.props.deathAnalysis[item.id]}
+							style={padding} factor={item.name} itemId={item.id}
 							options={this.props.options.involved.involvedVehiclePositions}
-							responsible={(item.id === "crashProtection" || item.id === "helmet")}
-							handleSlider={this.props.handleSlider} max={5} step={1}
+							responsible={(item.id === "helmet" || item.id === "securityBelt" )}
+                            onChangeInput={this.props.onChangeInput} max={5} step={1}
 					/>
 				</div>
 			)
@@ -289,161 +292,162 @@ class DeathAnalysis extends Component {
 		let Involved = this.props.selectedEvent.involved.map((involved) => {
 			return (
 				<Panel header={"Envolvido: " + involved.Name} eventKey={involved.id} key={involved.id} collapsible>
-					<Col xs={11} md={11} sm={11}>
-						<Col sm={4}>
-							<Input value={involved.Name} type="text" readOnly disabled
-								   id="involvedName" required="required"
-								   label="Nome"/>
-						</ Col>
-						<Col sm={2}>
-							<Input value={involved.Age} type="number" readOnly disabled
-								   id="involvedAge" required="required"
-								   label="Idade"/>
-						</ Col>
-						<Col sm={2}>
-							<Select value={involved.Sex} id="involvedSex" readOnly disabled
-									name="involvedSex"
-									options={this.props.options.involved.involvedSexes}
-									label="Sexo"/>
-						</ Col>
-						<Col sm={4}>
-							<Select value={involved.Situation} readOnly disabled
-									id="involvedSituation"
-									name="involvedSituation"
-									options={this.props.options.involved.involvedSituations}
-									label="Situação"/>
-						</Col>
-						<Col sm={4}>
-							<Select value={involved.VehiclePosition} readOnly disabled
-									id="involvedVehiclePosition"
-									name="involvedVehiclePosition"
-									options={this.props.options.involved.involvedVehiclePositions}
-									label="Posição no Veículo"/>
-						</Col>
-						<Col sm={4}>
-							<Select value={involved.SecurityCondition} readOnly disabled
-									id="involvedSecurityCondition"
-									name="involvedSecurityCondition"
-									options={this.props.options.involved.involvedSecurityConditions}
-									label="Condição de segurança"/>
-						</Col>
-						<Col sm={4}>
-							<Select value={involved.InjuryLevel} readOnly disabled
-									id="involvedInjuryLevel"
-									name="involvedInjuryLevel"
-									options={this.props.options.involved.involvedInjuryLevels}
-									label="Gravidade da lesão"/>
-						</Col>
+					<Col md={4}>
+						<Input value={involved.Name} type="text" readOnly disabled
+							   id="involvedName" required="required"
+							   label="Nome"/>
+					</ Col>
+					<Col md={2}>
+						<Input value={involved.Age} type="number" readOnly disabled
+							   id="involvedAge" required="required"
+							   label="Idade"/>
+					</ Col>
+					<Col md={2}>
+						<Select value={involved.Sex} id="involvedSex" readOnly disabled
+								name="involvedSex"
+								options={this.props.options.involved.involvedSexes}
+								label="Sexo"/>
+					</ Col>
+					<Col md={4}>
+						<Select value={involved.Situation} readOnly disabled
+								id="involvedSituation"
+								name="involvedSituation"
+								options={this.props.options.involved.involvedSituations}
+								label="Situação"/>
+					</Col>
+					<Col md={4}>
+						<Select value={involved.VehiclePosition} readOnly disabled
+								id="involvedVehiclePosition"
+								name="involvedVehiclePosition"
+								options={this.props.options.involved.involvedVehiclePositions}
+								label="Posição no Veículo"/>
+					</Col>
+					<Col md={4}>
+						<Select value={involved.SecurityCondition} readOnly disabled
+								id="involvedSecurityCondition"
+								name="involvedSecurityCondition"
+								options={this.props.options.involved.involvedSecurityConditions}
+								label="Condição de segurança"/>
+					</Col>
+					<Col md={4}>
+						<Select value={involved.InjuryLevel} readOnly disabled
+								id="involvedInjuryLevel"
+								name="involvedInjuryLevel"
+								options={this.props.options.involved.involvedInjuryLevels}
+								label="Gravidade da lesão"/>
 					</Col>
 				</Panel>
 			)
 		}, this);
 
 		return (
-			<div className='clearfix'>
-				<Grid>
-					<Col xs={12}>
-						<Form>
-							{/*general*/}
-							<Row className="firstRow">
-								<Panel>
-									<Col sm={6}>
-										<Row className="form-group">
-											<h4>Identificação do Acidente</h4>
-											<Col sm={4} style={padding}>
-												<Input type="date" name="deathDate" id="date"
-													   label="Data" readOnly disabled
-													   value={this.props.selectedEvent.general.date}
-												/>
-											</Col>
-											<Col sm={2} style={padding5px}>
-												<Input type="time" name="deathTime" id="deathTime"
-													   label="Hora" readOnly disabled
-												/>
-											</Col>
-											<Col sm={4} style={padding5px}>
-												<Input type="text" name="accidentType" id="accidentType"
-													   label="Tipo do Acidente" readOnly disabled
-													   value={this.props.options.statisticData.accidentTypes[this.props.selectedEvent.statisticData.accidentType]['value']}
-												/>
-											</Col>
-											<Col sm={2} style={padding5px}>
-												<Input type="text" name="severity" id="severity"
-													   label="Severidade" readOnly disabled
-													   value={this.props.options.statisticData.accidentClassifications[this.props.selectedEvent.statisticData.accidentClassification - 1]['value']}
+			<Grid>
+				<Form>
+					{/*general*/}
+					<Panel>
+						<Col md={6}>
+							<h4>Identificação do Acidente</h4>
+							<Col md={4} style={padding}>
+								<Input type="date" name="deathDate" id="date"
+									   label="Data" readOnly
+									   value={this.props.selectedEvent.general.date}
+								/>
+							</Col>
+							<Col md={4} style={padding5px}>
+								<Input type="time" name="deathTime" id="deathTime"
+									   label="Hora" readOnly
+								/>
+							</Col>
+							<Col md={4} style={padding5px}>
+								<Input type="text" name="accidentType" id="accidentType"
+									   label="Tipo do Acidente" readOnly
+									   value={this.props.options.statisticData.accidentTypes[this.props.selectedEvent.statisticData.accidentType]['value']}
+								/>
+							</Col>
+							<Col md={8} style={padding}>
+								<Input type="text" name="eventAddress1"
+									   id="eventAddress1" placeholder="Endereço 1"
+									   label="Local da Ocorrência" readOnly
+									   value={this.props.selectedEvent.general.street}
+								/>
+							</Col>
+							<Col md={4} style={padding5px}>
+								<Input type="text" name="severity" id="severity"
+									   label="Severidade" readOnly
+									   value={this.props.options.statisticData.accidentClassifications[this.props.selectedEvent.statisticData.accidentClassification - 1]['value']}
 
-												/>
-											</Col>
-											<Col sm={8} style={padding}>
-												<Input type="text" name="eventAddress1"
-													   id="eventAddress1" placeholder="Endereço 1"
-													   label="Local da Ocorrência" readOnly disabled
-													   value={this.props.selectedEvent.general.street}
-												/>
-											</Col>
-											<Col sm={4} style={padding}>
-												<Input type="text" name="eventAddressNumber1"
-													   id="eventAddressNumber1" placeholder="Numero"
-													   label="Número" readOnly disabled
-													   value={this.props.selectedEvent.general.number}
-												/>
-											</Col>
-											<Col sm={12} style={padding}>
-												<Input type="text" name="eventCross"
-													   id="eventCross" placeholder="Cruzamento"
-													   label="Cruzamento" readOnly disabled
-													   value={this.props.selectedEvent.general.cross}
-												/>
-											</Col>
-										</Row>
-									</Col>
-									{/*Map*/}
-									<Col sm={6} style={{paddingLeft: '1%'}}>
-										<Row className='mapRow'>
-											<Map center={mapCenter}/>
-										</Row>
-									</Col>
-								</Panel>
+								/>
+							</Col>
+							<Col md={8} style={padding}>
+								<Input type="text" name="eventCross"
+									   id="eventCross" placeholder="Cruzamento"
+									   label="Cruzamento" readOnly
+									   value={this.props.selectedEvent.general.cross}
+								/>
+							</Col>
+							<Col md={4} style={padding}>
+								<Input type="text" name="eventAddressNumber1"
+									   id="eventAddressNumber1" placeholder="Numero"
+									   label="Número" readOnly
+									   value={this.props.selectedEvent.general.number}
+								/>
+							</Col>
+						</Col>
+						{/*Map*/}
+						<Col md={6}>
+							<Row className="mapRow">
+								<Map center={mapCenter}/>
 							</Row>
-							{/*Fatores*/}
-							<Row className="form-group">
-								<Panel>
-									<h4>Fatores de Risco
-										<small>(FR-EA)</small>
-									</h4>
-									{factors}
-								</Panel>
-								<Panel>
-									<h4>Condutas de Risco
-										<small>(CLR-EA)</small>
-									</h4>
-                                    {conducts}
-								</Panel>
-								<Panel>
-									<h4>Fatores / Gravidade
-										<small>(FG)</small>
-									</h4>
-                                    {gravity}
-								</Panel>
-								<Panel>
-									<h4>Grupo de Vítimas
-										<small>(GV)</small>
-									</h4>
-                                    {victimsGroup}
-								</Panel>
-							</Row>
-							{/*victims*/}
-							<Row className="form-group">
-								<h4>
-									Informações sobre as vítimas
-								</h4>
-								{Involved}
-							</Row>
-							{/*</Col>*/}
-						</Form>
-					</Col>
-				</Grid>
-			</div>
+						</Col>
+					</Panel>
+					{/*Fatores*/}
+					<Panel>
+						<h4>Fatores de Risco <small>(FR-EA)</small></h4>
+						{factors}
+					</Panel>
+					<Panel>
+						<h4>Condutas de Risco <small>(CLR-EA)</small></h4>
+						{conducts}
+					</Panel>
+					<Panel>
+						<h4>Fatores / Gravidade <small>(FG)</small></h4>
+						{gravity}
+					</Panel>
+					<Panel>
+						<h4>Grupo de Vítimas <small>(GV)</small></h4>
+						{victimsGroup}
+					</Panel>
+				{/*victims*/}
+					<Panel>
+						<h4>Informações sobre as vítimas</h4>
+						{Involved}
+					</Panel>
+					<Panel>
+						<h4>Informações dos Parceiros</h4>
+
+						<MultiInput type='text' multiline
+                                    label='Informações dos Parceiros' name="partnerInfo" id="partnerInfo"
+                                    hint='Informações dos parceiros sobre a ocorrência'
+									value={this.props.deathAnalysis.additionalInfos?this.props.deathAnalysis.additionalInfos.partnerInfo:''}
+									onChange={(value)=>this.props.onChangeInput(value, 'partnerInfo', 'additionalInfos')} />
+
+                        <MultiInput type='text' multiline
+                                    label='Ações' name="actionsToBeTaken" id="actionsToBeTaken"
+                                    hint='Ações a serem tomadas, decorrentes da análise'
+                                    value={this.props.deathAnalysis.additionalInfos?this.props.deathAnalysis.additionalInfos.actionsToBeTaken:''}
+                                    onChange={(value)=>this.props.onChangeInput(value, 'actionsToBeTaken', 'additionalInfos')} />
+					</Panel>
+				{/*</Row>*/}
+				<Row>
+					<Panel>
+						<pre>
+							{JSON.stringify(this.props.deathAnalysis, null, 4)}
+							{/*{console.log(JSON.stringify(this.props.deathAnalysis, null, 4))}*/}
+						</pre>
+					</Panel>
+				</Row>
+				</Form>
+			</Grid>
 		)
 
 	}
@@ -468,11 +472,11 @@ const mapDispatchToProps = dispatch => {
 		handleToggleModal: (showModal, id) => {
 			dispatch(DeathApi.handleDeathModal(showModal, id));
 		},
-		handleSlider: (name, value) => {
-			dispatch(DeathApi.handleSlider(name, value))
-        },
         selectEvent: (event) => {
             dispatch(DeathApi.selectEvent(event));
+        },
+        onChangeInput: (newValue, operator, subMenu) => {
+            dispatch(DeathApi.onChangeInput(newValue, operator, subMenu));
         },
 	}
 

@@ -16,119 +16,122 @@ import PropTypes from 'prop-types';
 
 class App extends Component {
 
-    // componentDidMount() {
-    //     this.props.toggleDrawer();
-    // }
-    render() {
+	// componentDidMount() {
+	//     this.props.toggleDrawer();
+	// }
+	render() {
 
-        const menu = [
-            {
-                icon: 'home',
-                label: 'Inicio',
-                to: '/'
-            },
-            {
-                icon: 'bell',
-                label: 'Ocorrencias',
-                content: [
-                    {
-                        label: 'Abertas',
-                        to: '/abertas'
-                    },
-                    {
-                        label: 'Fechadas',
-                        to: '/fechadas'
-                    },
-                    {
-                        label: 'Criar',
-                        to: '/criar',
-                    }
-                ]
-            },
-            {
-                icon: 'ambulance',
-                label: 'Análise de Óbitos',
-                to: '/obitos'
-            },
-            {
-                icon: 'area-chart',
-                label: 'Relatórios',
-                content: [
-                    {
-                        label: 'Estatisticos',
-                        to: '/relatorios/estatisticos'
-                    },
-                    {
-                        label: 'Óbitos',
-                        to: '/relatorios/obitos'
-                    },
-                ]
-            },
-            {
-                icon: 'upload',
-                label: 'Dados de Parceiros',
-                to: '/dados'
-            },
-        ];
-        return (
-            <div id="root">
-                <div className="main">
-                    <Layout>
-                        <NavDrawer pinned={this.props.menus.drawer} permanentAt='xxxl'>
-                            <MetisMenu content={menu} LinkComponent={RouterLink}
-                                       className='mainMenu'
-                                       reduxStoreName="metisMenuReducer"
-                                       useExternalReduxStore={this.context.store}
-                                       activeLinkFromLocation
-                            />
-                        </NavDrawer>
-                        <Panel>
-                            <AppBar className="app-bar" title=''
-                                    leftIcon={<FontIcon className="md-24 md-light"
-                                                        value={this.props.menus.drawer ? 'chevron_left' : 'menu'}/>}
-                                    rightIcon={<FontIcon className="md-24 md-light" value='account_circle'/>}
-                                    onLeftIconClick={this.props.toggleDrawer}
-                                    onRightIconClick={this.props.toggleSidebar}
-                            />
-                            <div style={{flex: 1, overflowY: 'auto', padding: '1.8rem'}}>
-                                <div className="content-interior">
-                                    {this.props.children}
-                                </div>
-                            </div>
-                        </Panel>
-                        <Sidebar pinned={this.props.menus.sidebar} width={5}>
-                            <div><IconButton icon='close' onClick={this.props.toggleSidebar}/></div>
-                            <div style={{flex: 1}}>
-                                <p>Em construção</p>
-                            </div>
-                        </Sidebar>
-                    </Layout>
-                </div>
-            </div>
-        );
-    }
+		const menu = [
+			{
+				icon: 'home',
+				label: 'Inicio',
+				to: '/'
+			},
+			{
+				icon: 'bell',
+				label: 'Ocorrencias',
+				content: [
+					{
+						label: 'Abertas',
+						to: '/abertas'
+					},
+					{
+						label: 'Fechadas',
+						to: '/fechadas'
+					},
+					{
+						label: 'Criar',
+						to: '/criar',
+					}
+				]
+			},
+			{
+				icon: 'ambulance',
+				label: 'Análise de Óbitos',
+				to: '/obitos'
+			},
+			{
+				icon: 'area-chart',
+				label: 'Relatórios',
+				content: [
+					{
+						label: 'Estatisticos',
+						to: '/relatorios/estatisticos'
+					},
+					{
+						label: 'Óbitos',
+						to: '/relatorios/obitos'
+					},
+				]
+			},
+			{
+				icon: 'upload',
+				label: 'Dados de Parceiros',
+				to: '/dados'
+			},
+		];
+		return (
+			<div id="root">
+				<div className="main">
+					<Layout>
+						<NavDrawer pinned={this.props.menus.drawer} permanentAt='xxxl'>
+							<MetisMenu content={menu} LinkComponent={RouterLink}
+									   className='mainMenu'
+									   reduxStoreName="metisMenuReducer"
+									   useExternalReduxStore={this.context.store}
+									   activeLinkFromLocation
+							/>
+						</NavDrawer>
+						<Panel>
+							<AppBar className="app-bar" title=''
+									leftIcon={
+									    <FontIcon className="md-24 md-light"
+												  value={this.props.menus.drawer ? 'chevron_left' : 'menu'}
+                                        />
+									}
+									rightIcon={<FontIcon className="md-24 md-light" value='account_circle'/>}
+									onLeftIconClick={this.props.toggleDrawer}
+									onRightIconClick={this.props.toggleSidebar}
+							/>
+							<div style={{flex: 1, overflowY: 'auto', padding: '1.8rem'}}>
+								<div className="content-interior">
+									{this.props.children}
+								</div>
+							</div>
+						</Panel>
+						<Sidebar pinned={this.props.menus.sidebar} width={5}>
+							<div><IconButton icon='close' onClick={this.props.toggleSidebar}/></div>
+							<div style={{flex: 1}}>
+								<p>Em construção</p>
+							</div>
+						</Sidebar>
+					</Layout>
+				</div>
+			</div>
+		);
+	}
 
 }
 
 App.contextTypes = {
-    store: PropTypes.object.isRequired
+	store: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
-    return {
-        menus: state.menus,
-    }
+	return {
+		menus: state.menus,
+	}
 };
 
 const mapDispatchToProps = dispatch => {
-    return {
-        toggleDrawer: () => {
-            dispatch(NavegationApi.toggleDrawer());
-        },
-        toggleSidebar: () => {
-            dispatch(NavegationApi.toggleSidebar());
-        }
-    }
+	return {
+		toggleDrawer: () => {
+			dispatch(NavegationApi.toggleDrawer());
+		},
+		toggleSidebar: () => {
+			dispatch(NavegationApi.toggleSidebar());
+		}
+	}
 };
 
 const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);

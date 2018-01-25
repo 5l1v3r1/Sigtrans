@@ -54,12 +54,12 @@ export function listDeathOptions(deathOptions) {
 export function toggleDeathModal(showModal, id) {
     return {type: 'TOGGLEDEATHMODAL', showModal, id};
 }
-export function handleDeathSlider(name, value) {
-    return {type: 'HANDLEDEATHSLIDER', name, value};
-}
 
 export function selectDeathEvent(id) {
     return {type: 'SELECTDEATHEVENT', id};
+}
+export function changeDeathInput(newValue, operator, subMenu) {
+    return {type: 'HANDLEDEATHINPUT', newValue, operator, subMenu};
 }
 //AUTH
 export function authERR(msg) {

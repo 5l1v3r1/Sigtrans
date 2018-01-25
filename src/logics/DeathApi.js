@@ -2,7 +2,7 @@
  * Created by natal on 05/06/17.
  */
 import {
-    handleDeathSlider,
+    changeDeathInput,
     listDeathEvents,
     listDeathOptions,
     selectDeathEvent,
@@ -48,15 +48,15 @@ export default class DeathApi {
         }
     }
 
-    static handleSlider(name, value) {
-        return dispatch => {
-            return dispatch(handleDeathSlider(name, value));
-        }
-    }
-
     static selectEvent(id) {
         return dispatch => {
             return dispatch(selectDeathEvent(id));
+        }
+    }
+
+    static onChangeInput(newValue, operator, subMenu) {
+        return dispatch => {
+            return dispatch(changeDeathInput(newValue, operator, subMenu));
         }
     }
 

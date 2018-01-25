@@ -5,27 +5,31 @@ import {Col} from 'react-bootstrap';
 
 export default class Factor extends Component {
     render() {
-        let specification = this.props.itemId === "speed" ? [
-            {id: 1, value: 'Excessiva'},
-            {id: 2, value: 'Inadequada'}
-        ] : this.props.itemId === "infrastructure" ? [
-            {id: 1, value: 'Inadequada'},
-            {id: 2, value: 'Inexistente'}
-        ] : undefined;
+        let specification =
+            this.props.itemId === "speed" ? [
+                {id: 1, value: 'Excessiva'},
+                {id: 2, value: 'Inadequada'}]:
+                this.props.itemId === "infrastructure" ? [
+                    {id: 1, value: 'Inadequada'},
+                    {id: 2, value: 'Inexistente'}
+                ] : undefined;
+
         return (
             <div>
                 <Col md={8} style={this.props.style}>
-                    <p>{this.props.factor ? this.props.factor : "Fator/Causa"}</p>
+                    <p>{this.props.factor}</p>
                     <Slider pinned snaps editable
                             min={0} max={this.props.max} step={this.props.step}
-                            value={this.props.sliderValue}
-                            onChange={(newValue) => this.props.handleSlider(this.props.itemId, newValue)}/>
+                            value={this.props.values?this.props.values.weight:0}
+                            onChange={(newValue) => this.props.onChangeInput(newValue, 'weight', this.props.itemId, )}/>
                 </Col>
                 {
                     this.props.responsible ?
                         <Col md={2} style={this.props.style}>
-                            <Select value={0}
+                            <Select value={this.props.values?this.props.values.responsible:0}
                                     options={this.props.options}
+                                    disabled={!this.props.values}
+                                    onChange={(e) => this.props.onChangeInput(e.target.value, 'responsible', this.props.itemId)}
                                     label="Usuário Contributívo"/>
                         </Col>
                         : undefined
@@ -33,8 +37,10 @@ export default class Factor extends Component {
                 {
                     this.props.specification ?
                         <Col md={2} style={this.props.style}>
-                            <Select value={0}
+                            <Select value={this.props.values?this.props.values.specification:0}
+                                    disabled={!this.props.values}
                                     options={specification}
+                                    onChange={(e) => this.props.onChangeInput(e.target.value, 'specification', this.props.itemId)}
                                     label="Especificação"
                             />
                         </Col>
