@@ -4,6 +4,7 @@ function Management() {
 Management.prototype = (() => {
     const urls = {
         carAccidents: 'https://131.255.84.174:5000/api/CarAccidents',
+        // carAccidents: 'https://localhost:3002/api/CarAccidents',
         options: 'https://131.255.84.174:5000/api/Options'
     };
     const _getUrl = (type) => {

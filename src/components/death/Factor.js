@@ -26,9 +26,8 @@ export default class Factor extends Component {
                 {
                     this.props.responsible ?
                         <Col md={2} style={this.props.style}>
-                            <Select value={this.props.values?this.props.values.responsible:0}
-                                    options={this.props.options}
-                                    disabled={!this.props.values}
+                            <Select value={this.props.values?(this.props.values.weight>0?this.props.values.responsible:0):0}
+                                    options={this.props.options} disabled={this.props.values?this.props.values.weight<=0:true}
                                     onChange={(e) => this.props.onChangeInput(e.target.value, 'responsible', this.props.itemId)}
                                     label="Usuário Contributívo"/>
                         </Col>
@@ -37,9 +36,8 @@ export default class Factor extends Component {
                 {
                     this.props.specification ?
                         <Col md={2} style={this.props.style}>
-                            <Select value={this.props.values?this.props.values.specification:0}
-                                    disabled={!this.props.values}
-                                    options={specification}
+                            <Select value={this.props.values?(this.props.values.weight>0?this.props.values.specification:0):0}
+                                    options={specification} disabled={this.props.values?this.props.values.weight<=0:true}
                                     onChange={(e) => this.props.onChangeInput(e.target.value, 'specification', this.props.itemId)}
                                     label="Especificação"
                             />

@@ -29,14 +29,13 @@ class Death extends Component {
 				<PageHeader>Ocorrencias fatais</PageHeader>
 				<div className="content" id="content">
 					<DeathEventsGrid data={this.props.deaths.deathEvents}
-									 deathAnalysis={this.props.deaths.deathAnalysis}
+									 deathAnalysis={this.props.deaths.selectedEvent?this.props.deaths.selectedEvent.deathAnalysis:{}}
 									 options={this.props.deaths.deathOptions}
 									 loading={this.props.deaths.loading}
 									 showModal={this.props.deaths.showModal}
 									 selectedEvent={this.props.deaths.selectedEvent}
 									 selectedEventID={this.props.deaths.selectedEventID}
 									 handleToggleModal={this.props.handleToggleModal}
-									 handleSlider={this.props.handleSlider}
 									 selectEvent={this.props.selectEvent}
                                      onChangeInput={this.props.onChangeInput}
 					/>
@@ -59,7 +58,6 @@ class DeathEventsGrid extends Component {
 
 		const columns = [
 			{
-				style: {textAlign: "center"},
 				Header: 'Data',
 				id: 'date',
                 accessor: d => {
@@ -70,7 +68,6 @@ class DeathEventsGrid extends Component {
 					matchSorter(rows, filter.value, {keys: ["date"]}),
 				filterAll: true
 			}, {
-				style: {textAlign: "center"},
 				Header: 'Rua',
 				id: 'street',
                 accessor: d => d.general.street,
@@ -79,14 +76,12 @@ class DeathEventsGrid extends Component {
 				filterAll: true
 
 			}, {
-				style: {textAlign: "center"},
 				Header: 'Numero/KM',
 				id: 'number',
                 accessor: d => d.general.number,
 				filterMethod: (filter, row) =>
 					row[filter.id].startsWith(filter.value)
 			}, {
-				style: {textAlign: "center"},
 				Header: 'Cruzamento com',
 				id: 'crossRoad',
                 accessor: d => d.general.crossRoad,
@@ -94,7 +89,6 @@ class DeathEventsGrid extends Component {
 					matchSorter(rows, filter.value, {keys: ["crossRoad"]}),
 				filterAll: true
 			}, {
-				style: {textAlign: "center"},
 				Header: 'Bairro',
 				id: 'neighborhood',
                 accessor: d => d.general.neighborhood,
@@ -102,7 +96,6 @@ class DeathEventsGrid extends Component {
 					matchSorter(rows, filter.value, {keys: ["neighborhood"]}),
 				filterAll: true
 			}, {
-				style: {textAlign: "center"},
 				Header: 'Referencia',
 				id: 'reference',
                 accessor: d => d.general.reference,
@@ -110,13 +103,13 @@ class DeathEventsGrid extends Component {
 					matchSorter(rows, filter.value, {keys: ["reference"]}),
 				filterAll: true
 			}, {
-				style: {textAlign: "center"},
-				Header: 'Detalhar',
-				accessor: 'id',
+				Header: 'Situação',
+                id: 'id',
+				accessor: d=>d.deathAnalysis.status,
 				filterable: false,
-				sortable: false,
 				Cell: props => (
-					<Button icon="edit" primary id={props.value} onClick={() => this.buttonToggleModal(props.value)}/>
+					<Button style={{color: 'black'}} icon="edit" primary id={props.original.id}
+							onClick={() => this.buttonToggleModal(props.original.id)}/>
 				)
 			}
 		];
@@ -124,45 +117,51 @@ class DeathEventsGrid extends Component {
             {label: "Fechar", onClick: this.props.handleToggleModal},
             {label: "Salvar", onClick: this.props.handleToggleModal}
         ];
+        let counter = false;
+
 		return (
-			<div>
-				<div className="content" id="content">
-					<ReactTable
-						filterable
-						previousText='Anterior'
-						nextText='Proximo'
-						loadingText='Carregando...'
-						pageText='Pagina'
-						noDataText='Sem dados correspondentes'
-						ofText='de'
-						rowsText='linhas'
-						data={this.props.data}
-						className="-striped -highlight"
-						loading={(this.props.loading === undefined)}
-						columns={columns}
-						defaultPageSize={5}
-						defaultFilterMethod={(filter, row) =>
-							String(row[filter.id]) === filter.value
-						}
-					/>
-					<Dialog active={this.props.showModal === !(undefined)}
-							actions={actions} type='fullscreen'
-							className="custom-modal"
-							onEscKeyDown={this.props.handleToggleModal}
-							onOverlayClick={this.props.handleToggleModal}
-							title='Análise do Óbito'>
-						{
-							this.props.deathAnalysis ?
-								<DeathAnalysis
-									onChangeInput={this.props.onChangeInput}
-									selectedEvent={this.props.selectedEvent}
-									options={this.props.options}
-									deathAnalysis={this.props.deathAnalysis}
-									handleSlider={this.props.handleSlider}
-								/> : undefined
-						}
-					</Dialog>
-				</div>
+			<div className="content" id="content">
+				<ReactTable
+					previousText='Anterior' nextText='Proximo'
+					loadingText='Carregando...' pageText='Pagina'
+					noDataText='Sem dados correspondentes' ofText='de'
+					rowsText='linhas' className="-striped -highlight"
+					data={this.props.data} loading={(this.props.loading === undefined)}
+					columns={columns} defaultPageSize={10} filterable
+					defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
+					getTrProps={(state, rowInfo, column) => {
+                        counter=!counter;
+                        return rowInfo ? {
+                            style: {
+                                backgroundColor: rowInfo.original.deathAnalysis.status >= 1 ? (
+                                    rowInfo.original.deathAnalysis.status <= 1 ?
+										counter%2?'lightgreen': '#43A24B' :
+										counter%2?'#ffffac': 'yellow'
+                                ) : 'inherit',
+                                boxShadow: 'none'
+                            },
+                            onMouseOver: (ref) => ref.target.parentElement.style.boxShadow = 'inset 0 0 0 99999px rgba(0,0,0,0.05)',
+                            onMouseOut: (ref) => ref.target.parentElement.style.boxShadow = 'none',
+                        } : {};
+					}}
+					getTdProps={() => ({style: {textAlign: "center"}})}
+				/>
+				<Dialog active={this.props.showModal === !(undefined)}
+						actions={actions} type='fullscreen'
+						className="custom-modal"
+						onEscKeyDown={this.props.handleToggleModal}
+						onOverlayClick={this.props.handleToggleModal}
+						title='Análise do Óbito'>
+					{
+						this.props.deathAnalysis ?
+							<DeathAnalysis
+								onChangeInput={this.props.onChangeInput}
+								selectedEvent={this.props.selectedEvent}
+								options={this.props.options}
+								deathAnalysis={this.props.deathAnalysis}
+							/> : undefined
+					}
+				</Dialog>
 			</div>
 		);
 	}
@@ -201,13 +200,13 @@ class DeathAnalysis extends Component {
             return (
 				<div key={item.id}>
 					<Col md={3}>
-						<Input value={this.props.deathAnalysis[item.id] ? this.props.deathAnalysis[item.id].amount:''} type="number"
-							   id={item.id} label={item.name}
+						<Input value={this.props.deathAnalysis[item.id] ? this.props.deathAnalysis[item.id].amount:''}
+							   id={item.id} label={item.name} type="number"
 							   onChange={(e)=>this.props.onChangeInput(e.target.value, 'amount', item.id)}
 						/>
 					</Col>
 					<Col md={3} style={(counter++)%2?{borderRight: "thin solid #eeeeee"}:{}}>
-						<Select value={this.props.deathAnalysis[item.id] ? this.props.deathAnalysis[item.id].situation:0}
+						<Select value={this.props.deathAnalysis[item.id]?this.props.deathAnalysis[item.id].situation:0}
 								options={[
                                     {id: 1, value: "Vítima Fatal"},
                                     {id: 2, value: "Vítima Grave"}
@@ -424,13 +423,11 @@ class DeathAnalysis extends Component {
 					</Panel>
 					<Panel>
 						<h4>Informações dos Parceiros</h4>
-
 						<MultiInput type='text' multiline
                                     label='Informações dos Parceiros' name="partnerInfo" id="partnerInfo"
                                     hint='Informações dos parceiros sobre a ocorrência'
 									value={this.props.deathAnalysis.additionalInfos?this.props.deathAnalysis.additionalInfos.partnerInfo:''}
 									onChange={(value)=>this.props.onChangeInput(value, 'partnerInfo', 'additionalInfos')} />
-
                         <MultiInput type='text' multiline
                                     label='Ações' name="actionsToBeTaken" id="actionsToBeTaken"
                                     hint='Ações a serem tomadas, decorrentes da análise'

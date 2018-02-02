@@ -19,7 +19,9 @@ export function events(state = new List(), action) {
     }
 
     if (action.type === 'SELECTOPENEVENT') {
-        const selectedEvent = state.events[action.id - 1];
+        const selectedEvent = state.events.find(item =>{
+            return item.id===action.id;
+        });
         const selectedEventID = selectedEvent.id;
         return Object.assign({}, state, {selectedEvent, selectedEventID});
     }

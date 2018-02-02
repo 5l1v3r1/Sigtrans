@@ -16,8 +16,7 @@ export default class DeathApi {
             fetch('https://ocorrencias-teste-api.herokuapp.com/api/events/open')
                 .then(response => response.json())
                 .then(deathEvents => {
-                    dispatch(listDeathEvents(loading, deathEvents));
-                    return deathEvents;
+                    return dispatch(listDeathEvents(loading, deathEvents));
                 });
         }
     }

@@ -10,32 +10,8 @@ export function death(state = new List(), action) {
 
     if (action.type === 'LISTDEATHEVENTS') {
         const deathEvents = action.deathEvents;
-        const deathAnalysis = {
-            speed: 0,
-            alcohol: 0,
-            infrastructure: 0,
-            vehicle: 0,
-            fatigue: 0,
-            visibility: 0,
-            drugs: 0,
-            cellphone: 0,
-            signalAdvance: 0,
-            noLicence: 0,
-            transitProhibited: 0,
-            transitImproper: 0,
-            laneChange: 0,
-            minimalDistance: 0,
-            conversionPreference: 0,
-            pedestrianPreference: 0,
-            lackOfAttention: 0,
-            securityBelt: 0,
-            crashProtection: 0,
-            preHosp: 0,
-            sideObjects: 0,
-            helmet: 0
-        };
         const loading = !action.loading;
-        return Object.assign({}, state, {deathEvents, loading, deathAnalysis});
+        return Object.assign({}, state, {deathEvents, loading});
     }
 
     if (action.type === 'LISTDEATHOPTIONS') {
@@ -49,18 +25,26 @@ export function death(state = new List(), action) {
     }
 
     if (action.type === 'SELECTDEATHEVENT') {
-        const selectedEvent = state.deathEvents[action.id - 1];
+        const selectedEvent = state.deathEvents.find(item =>{
+            return item.id===action.id;
+        });
         const selectedEventID = selectedEvent.id;
-        const deathAnalysis = {};
-        return Object.assign({}, state, {selectedEvent, selectedEventID, deathAnalysis});
+        return Object.assign({}, state, {selectedEvent, selectedEventID});
     }
 
     if (action.type === 'HANDLEDEATHINPUT') {
-        const deathAnalysis = state.deathAnalysis ? state.deathAnalysis : {};
-        if(!deathAnalysis[action.subMenu])
-            deathAnalysis[action.subMenu]={};
+        const selectedEvent = state.selectedEvent;
+        const deathAnalysis = selectedEvent.deathAnalysis ? selectedEvent.deathAnalysis : {};
+        if(!deathAnalysis[action.subMenu]) {
+            deathAnalysis[action.subMenu] = {};
+        }
+        if(action.operator==="weight" && action.newValue===0) {
+            deathAnalysis[action.subMenu].specification = undefined;
+            deathAnalysis[action.subMenu].responsible = undefined;
+        }
         deathAnalysis[action.subMenu][action.operator]=action.newValue;
-        return Object.assign({}, state, {deathAnalysis});
+        selectedEvent.deathAnalysis=deathAnalysis;
+        return Object.assign({}, state, {selectedEvent});
     }
 
     return state;
