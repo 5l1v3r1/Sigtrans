@@ -121,6 +121,16 @@ class DeathEventsGrid extends Component {
 
 		return (
 			<div className="content" id="content">
+				{/*
+				style: {
+                                backgroundColor: rowInfo.original.deathAnalysis.status >= 1 ? (
+                                    rowInfo.original.deathAnalysis.status <= 1 ?
+										counter%2?'lightgreen': '#43A24B' :
+										counter%2?'#ffffac': 'yellow'
+                                ) : 'inherit',
+                                boxShadow: 'none'
+                            },
+				*/}
 				<ReactTable
 					previousText='Anterior' nextText='Proximo'
 					loadingText='Carregando...' pageText='Pagina'
@@ -134,9 +144,7 @@ class DeathEventsGrid extends Component {
                         return rowInfo ? {
                             style: {
                                 backgroundColor: rowInfo.original.deathAnalysis.status >= 1 ? (
-                                    rowInfo.original.deathAnalysis.status <= 1 ?
-										counter%2?'lightgreen': '#43A24B' :
-										counter%2?'#ffffac': 'yellow'
+                                    rowInfo.original.deathAnalysis.status <= 1 ? 'lightgreen': 'lightyellow'
                                 ) : 'inherit',
                                 boxShadow: 'none'
                             },
@@ -146,6 +154,7 @@ class DeathEventsGrid extends Component {
 					}}
 					getTdProps={() => ({style: {textAlign: "center"}})}
 				/>
+
 				<Dialog active={this.props.showModal === !(undefined)}
 						actions={actions} type='fullscreen'
 						className="custom-modal"
@@ -164,7 +173,9 @@ class DeathEventsGrid extends Component {
 				</Dialog>
 			</div>
 		);
+
 	}
+
 }
 
 //make new js file
@@ -186,6 +197,7 @@ class DeathAnalysis extends Component {
 			paddingLeft: '5px'
 		};
 
+		let counter = 1;
         let victimList = [
             {name: "Motociclista / Garupa", id: "M"},
             {name: "Pedestre", id: "P"},
@@ -195,13 +207,12 @@ class DeathAnalysis extends Component {
             {name: "Cond. / passag. ônibus", id: "O"},
             {name: "Cond. / passag. veículo pesado", id: "V"}
         ];
-        let counter = 1;
         let victimsGroup = victimList.map((item) => {
             return (
 				<div key={item.id}>
 					<Col md={3}>
 						<Input value={this.props.deathAnalysis[item.id] ? this.props.deathAnalysis[item.id].amount:''}
-							   id={item.id} label={item.name} type="number"
+							   id={item.id} label={item.name} type="number" min='0'
 							   onChange={(e)=>this.props.onChangeInput(e.target.value, 'amount', item.id)}
 						/>
 					</Col>
@@ -211,7 +222,7 @@ class DeathAnalysis extends Component {
                                     {id: 1, value: "Vítima Fatal"},
                                     {id: 2, value: "Vítima Grave"}
                                 ]}
-								disabled={!this.props.deathAnalysis[item.id]}
+								disabled={this.props.deathAnalysis[item.id]?this.props.deathAnalysis[item.id].amount<=0:true}
                                 onChange={(e)=>this.props.onChangeInput(e.target.value, 'situation', item.id)}
 								label="Situação"
 						/>
@@ -435,14 +446,14 @@ class DeathAnalysis extends Component {
                                     onChange={(value)=>this.props.onChangeInput(value, 'actionsToBeTaken', 'additionalInfos')} />
 					</Panel>
 				{/*</Row>*/}
-				<Row>
-					<Panel>
-						<pre>
-							{JSON.stringify(this.props.deathAnalysis, null, 4)}
-							{/*{console.log(JSON.stringify(this.props.deathAnalysis, null, 4))}*/}
-						</pre>
-					</Panel>
-				</Row>
+				{/*<Row>*/}
+					{/*<Panel>*/}
+						{/*<pre>*/}
+							{/*{JSON.stringify(this.props.deathAnalysis, null, 4)}*/}
+							{/*/!*{console.log(JSON.stringify(this.props.deathAnalysis, null, 4))}*!/*/}
+						{/*</pre>*/}
+					{/*</Panel>*/}
+				{/*</Row>*/}
 				</Form>
 			</Grid>
 		)
@@ -451,7 +462,7 @@ class DeathAnalysis extends Component {
 
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		deaths: state.death
 	}

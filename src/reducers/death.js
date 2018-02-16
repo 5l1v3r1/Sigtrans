@@ -25,8 +25,8 @@ export function death(state = new List(), action) {
     }
 
     if (action.type === 'SELECTDEATHEVENT') {
-        const selectedEvent = state.deathEvents.find(item =>{
-            return item.id===action.id;
+        const selectedEvent = state.deathEvents.find(item => {
+            return item.id === action.id;
         });
         const selectedEventID = selectedEvent.id;
         return Object.assign({}, state, {selectedEvent, selectedEventID});
@@ -35,15 +35,18 @@ export function death(state = new List(), action) {
     if (action.type === 'HANDLEDEATHINPUT') {
         const selectedEvent = state.selectedEvent;
         const deathAnalysis = selectedEvent.deathAnalysis ? selectedEvent.deathAnalysis : {};
-        if(!deathAnalysis[action.subMenu]) {
+        if (!deathAnalysis[action.subMenu]) {
             deathAnalysis[action.subMenu] = {};
         }
-        if(action.operator==="weight" && action.newValue===0) {
-            deathAnalysis[action.subMenu].specification = undefined;
-            deathAnalysis[action.subMenu].responsible = undefined;
+        deathAnalysis[action.subMenu][action.operator] = action.newValue;
+        if ((!action.newValue || action.newValue <= 0)) {
+            if(action.operator === "weight" || action.operator === "amount")
+                deathAnalysis[action.subMenu] = undefined;
+            if(action.subMenu === "additionalInfos") {
+                deathAnalysis[action.subMenu][action.operator] = undefined;
+            }
         }
-        deathAnalysis[action.subMenu][action.operator]=action.newValue;
-        selectedEvent.deathAnalysis=deathAnalysis;
+        selectedEvent.deathAnalysis = deathAnalysis;
         return Object.assign({}, state, {selectedEvent});
     }
 
