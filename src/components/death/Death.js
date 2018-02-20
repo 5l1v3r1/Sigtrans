@@ -12,7 +12,7 @@ import ReactTable from 'react-table';
 import {connect} from 'react-redux';
 import Input from "../custom/CustomInput";
 import Select from "../custom/CustomSelect";
-import Map from "../maps/Map";
+import Map from "../Map/Map";
 import Factor from "./Factor";
 import matchSorter from 'match-sorter';
 
@@ -56,14 +56,16 @@ class DeathEventsGrid extends Component {
 
 	render() {
 
+        //         	{
+        //             	let date = new Date(d.general.date);
+        //				return date.getFullYear() + '/' + date.getDate() + '/' + date.getMonth()
+        // 			}
+
 		const columns = [
 			{
 				Header: 'Data',
 				id: 'date',
-                accessor: d => {
-                    let date = new Date(d.general.date);
-                    return date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear()
-                },
+                accessor: d => d.general.date,
 				filterMethod: (filter, rows) =>
 					matchSorter(rows, filter.value, {keys: ["date"]}),
 				filterAll: true
@@ -84,21 +86,21 @@ class DeathEventsGrid extends Component {
 			}, {
 				Header: 'Cruzamento com',
 				id: 'crossRoad',
-                accessor: d => d.general.crossRoad,
+                accessor: d => d.general.cross,
 				filterMethod: (filter, rows) =>
 					matchSorter(rows, filter.value, {keys: ["crossRoad"]}),
 				filterAll: true
 			}, {
 				Header: 'Bairro',
 				id: 'neighborhood',
-                accessor: d => d.general.neighborhood,
+                accessor: d => d.general.Neighborhood,
 				filterMethod: (filter, rows) =>
 					matchSorter(rows, filter.value, {keys: ["neighborhood"]}),
 				filterAll: true
 			}, {
 				Header: 'Referencia',
 				id: 'reference',
-                accessor: d => d.general.reference,
+                accessor: d => d.general.Reference,
 				filterMethod: (filter, rows) =>
 					matchSorter(rows, filter.value, {keys: ["reference"]}),
 				filterAll: true
@@ -184,12 +186,13 @@ class DeathAnalysis extends Component {
 	render() {
 
         let mapCenter = this.props.selectedEvent ? {
-            lat: this.props.selectedEvent.general.lat,
-            lng: this.props.selectedEvent.general.lng
+            lat: parseFloat(this.props.selectedEvent.general.lat),
+            lng: parseFloat(this.props.selectedEvent.general.lng)
         } : {
             lat: 0,
             lng: 0
         };
+        let marker=mapCenter.lat!==0?[{position:mapCenter}]:[];
 		let padding = {
 			paddingLeft: '2px'
 		};
@@ -406,7 +409,14 @@ class DeathAnalysis extends Component {
 						{/*Map*/}
 						<Col md={6}>
 							<Row className="mapRow">
-								<Map center={mapCenter}/>
+								<Map center={mapCenter}
+									 markers={marker}
+                                     defaultZoom={15}
+                                     googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzTZTuwTczZL2JedjuYJRiEh2v0BQpgxo"
+                                     loadingElement={<div style={{ height: `100%` }} />}
+                                     containerElement={<div style={{height:'100%'}}/>}
+                                     mapElement={<div style={{height:'100%'}}/>}
+								/>
 							</Row>
 						</Col>
 					</Panel>

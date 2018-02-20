@@ -6,14 +6,14 @@ import ReactDOM from 'react-dom';
 //Components
 import App from './App';
 import EBox from './components/events/Event_old';
-import OpenEvents from './components/events/Event'
+import {Events, OpenEvents} from './components/events/Event'
+// import {EventsForm} from './components/events/EventClasses'
 import Death from './components/death/Death';
 import Home from './components/Home';
 import Login from './components/Login';
 import DeceasedReports from './components/reports/DeceasedReports'
 import Statistic from './components/reports/StatisticReports'
 import DataReceive from './components/datareceive/DataReceive'
-import Test from './components/TestPage'
 //Router
 import {browserHistory, IndexRoute, Route, Router} from 'react-router';
 //React Toolbox Themer (PostCSS Issues)
@@ -40,6 +40,8 @@ import './css/index.css';
 import './css/App.css';
 import './toolbox/theme.css';
 import 'react-table/react-table.css';
+// import Test from './components/TestPage'
+
 // function verifyAuth(nextState, replace) {
 //     // console.log(nextState.location.pathname);
 //     const resultado = matchPattern('/', nextState.location.pathname);
@@ -70,7 +72,7 @@ ReactDOM.render(
                         <IndexRoute component={Home}/>
                         <Route path="/obitos" component={Death}/>
                         <Route path="/abertas" component={OpenEvents}/>
-                        <Route path="/fechadas" component={Test}/>
+                        <Route path="/geral" component={Events}/>
                         <Route path="/dados" component={DataReceive}/>
                         <Route path="/relatorios/obitos" component={DeceasedReports}/>
                         <Route path="/relatorios/estatisticos" component={Statistic}/>

@@ -7,11 +7,6 @@ import {ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
 
 export default class CustomSelect extends Component {
 
-    constructor() {
-        super();
-        this.state = {msgErro: ''};
-    }
-
     render() {
         const selectProps = Object.assign({}, this.props);
         let opts;
@@ -33,16 +28,4 @@ export default class CustomSelect extends Component {
             </FormGroup>
         )
     }
-
-    /*componentDidMount() {
-     PubSub.subscribe("erro-validacao",function(topico,erro){
-     if(erro.field === this.props.name){
-     this.setState({msgErro:erro.defaultMessage});
-     }
-     }.bind(this));
-
-     PubSub.subscribe("limpa-erros",function(topico){
-     this.setState({msgErro:''});
-     }.bind(this));
-     }*/
 }

@@ -131,6 +131,10 @@ export class EventsGrid extends Component {
 
 export class EventsForm extends Component {
 
+    componentWillMount() {
+        console.log(this.props);
+    }
+
     render() {
         // let selectedEvent = this.props.selectedEvent;
         return (

@@ -4,7 +4,7 @@ import {PageHeader} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {EventsGrid} from './EventClasses';
 
-class Event extends Component {
+class OpenEvent extends Component {
 
     componentDidMount() {
         this.props.listEventsOptions();
@@ -15,6 +15,32 @@ class Event extends Component {
         return (
             <div>
                 <PageHeader>Ocorrencias <small>Abertas</small></PageHeader>
+                <EventsGrid data={this.props.events.events} options={this.props.events.options}
+                            loading={this.props.events.loading} showModal={this.props.events.showModal}
+                            selectedEvent={this.props.events.selectedEvent}
+                            selectedEventID={this.props.events.selectedEventID}
+                            handleToggleModal={this.props.handleToggleModal}
+                            selectEvent={this.props.selectEvent} onChangeInput={this.props.onChangeInput}
+                            addVehicle={this.props.addVehicle} removeVehicle={this.props.removeVehicle}
+                            addInvolved={this.props.addInvolved} removeInvolved={this.props.removeInvolved}
+                />
+            </div>
+        );
+    }
+
+}
+
+class Event extends Component {
+
+    componentDidMount() {
+        this.props.listEventsOptions();
+        this.props.listEvents(this.props.events.loading);
+    }
+
+    render() {
+        return (
+            <div>
+                <PageHeader>Ocorrencias <small>Gerais</small></PageHeader>
                 <EventsGrid data={this.props.events.events} options={this.props.events.options}
                             loading={this.props.events.loading} showModal={this.props.events.showModal}
                             selectedEvent={this.props.events.selectedEvent}
@@ -69,6 +95,6 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-const EventContainer = connect(mapStateToProps, mapDispatchToProps)(Event);
+export const OpenEvents = connect(mapStateToProps, mapDispatchToProps)(OpenEvent);
 
-export default EventContainer;
+export const Events = connect(mapStateToProps, mapDispatchToProps)(Event);

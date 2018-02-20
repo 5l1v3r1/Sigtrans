@@ -36,8 +36,8 @@ class App extends Component {
 						to: '/abertas'
 					},
 					{
-						label: 'Fechadas',
-						to: '/fechadas'
+						label: 'Geral',
+						to: '/geral'
 					},
 					{
 						label: 'Criar',

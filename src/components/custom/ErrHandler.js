@@ -1,6 +1,6 @@
 /**
  * Created by natal on 13/03/17.
- */
+
 import PubSub from 'pubsub-js';
 
 export default class ErrHandler {
@@ -10,4 +10,4 @@ export default class ErrHandler {
             PubSub.publish("erro-validacao",erro);
         }
     }
-}
+}*/

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {withGoogleMap, GoogleMap, Marker} from 'react-google-maps'
+import {GoogleMap, Marker, withGoogleMap, withScriptjs} from 'react-google-maps'
 
 class Map extends Component{
 
@@ -7,20 +7,20 @@ class Map extends Component{
 
 		const markers = this.props.markers || [];
 
+		console.log(markers);
+
 		return(
-			<GoogleMap
-			    defaultZoom={8}
-			    defaultCenter={{ lat: -34.397, lng: 150.644 }}
-			  >
-			    {
-			    	markers.map((marker, index) => (
-						<Marker {...marker} />
-					))
-			    }
-			  </GoogleMap>
+			<GoogleMap defaultZoom={this.props.defaultZoom || 13}
+					   defaultCenter={this.props.center || {lat: -24.9578, lng:-53.4595}}>
+				{
+					markers.map((marker, index)=>
+                    	<Marker key={index} position={marker.position}/>
+					)
+				}
+			</GoogleMap>
 		)
 
 	}
 }
 
-export default withGoogleMap(Map)
+export default withScriptjs(withGoogleMap(Map))

@@ -61,10 +61,10 @@ h1 small, h4 small {
     overflow:auto;
 }
 
-:global .imagemdodemonio {
+:global .mapImage {
     height: 80vh;
-    background: url("../images/heatmap.PNG") no-repeat;
-    background-size: 100% 95%;
+    /*background: url("../images/heatmap.PNG") no-repeat;*/
+    /*background-size: 100% 95%;*/
 }
 
 .app-bar {
@@ -79,7 +79,8 @@ h1 small, h4 small {
 .content-interior {
     background: #ffffff;
     padding: 1.8rem;
-    border-radius: 5px
+    border-radius: 5px;
+    height: 100%
 }
 
 :global .login-back {
