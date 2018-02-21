@@ -87,3 +87,9 @@ export function handleDatePicker(value, picker) {
 export function handleFiles(files) {
     return {type: 'HANDLEFILES', files};
 }
+
+//HOME
+
+export function delayedShowMarkers(showMarkers){
+    return {type:"SHOWMARKERS", showMarkers}
+}

@@ -12,7 +12,7 @@ import ReactTable from 'react-table';
 import {connect} from 'react-redux';
 import Input from "../custom/CustomInput";
 import Select from "../custom/CustomSelect";
-import Map from "../Map/Map";
+import Map from "../map/Map";
 import Factor from "./Factor";
 import matchSorter from 'match-sorter';
 

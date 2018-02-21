@@ -74,25 +74,21 @@ class App extends Component {
 			<div id="root">
 				<div className="main">
 					<Layout>
-						<NavDrawer pinned={this.props.menus.drawer} permanentAt='xxxl'>
-							<MetisMenu content={menu} LinkComponent={RouterLink}
-									   className='mainMenu'
-									   reduxStoreName="metisMenuReducer"
-									   useExternalReduxStore={this.context.store}
-									   activeLinkFromLocation
-							/>
+						<NavDrawer pinned={this.props.menus.drawer} permanentAt='lg' scrollY className='leftDrawer'>
+                            <MetisMenu content={menu} LinkComponent={RouterLink}
+                                       reduxStoreName="metisMenuReducer" className='mainMenu'
+                                       useExternalReduxStore={this.context.store}
+                                       activeLinkFromLocation
+                            />
 						</NavDrawer>
 						<Panel>
-							<AppBar className="app-bar" title=''
-									leftIcon={
-									    <FontIcon className="md-24 md-light"
-												  value={this.props.menus.drawer ? 'chevron_left' : 'menu'}
-                                        />
-									}
-									rightIcon={<FontIcon className="md-24 md-light" value='account_circle'/>}
+							<AppBar className="app-bar" title='Sigtrans ' flat scrollHide
+                                    leftIcon={<FontIcon className="md-24 md-dark"
+                                                        value={this.props.menus.drawer ? 'chevron_left' : 'menu'}/>}
+									rightIcon={<FontIcon className="md-24 md-dark" value='account_circle'/>}
 									onLeftIconClick={this.props.toggleDrawer}
-									onRightIconClick={this.props.toggleSidebar}
-							/>
+									onRightIconClick={this.props.toggleSidebar}>
+							</AppBar>
 							<div style={{flex: 1, overflowY: 'auto', padding: '1.8rem'}}>
 								<div className="content-interior">
 									{this.props.children}

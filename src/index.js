@@ -9,7 +9,7 @@ import EBox from './components/events/Event_old';
 import {Events, OpenEvents} from './components/events/Event'
 // import {EventsForm} from './components/events/EventClasses'
 import Death from './components/death/Death';
-import Home from './components/Home';
+import Home from './components/home/Home';
 import Login from './components/Login';
 import DeceasedReports from './components/reports/DeceasedReports'
 import Statistic from './components/reports/StatisticReports'
@@ -25,6 +25,7 @@ import {Provider} from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 // import {matchPattern} from 'react-router/lib/PatternUtils';
 //reducers
+import {home} from './reducers/home';
 import {menus} from './reducers/menus';
 import {death} from './reducers/death';
 import {auth} from './reducers/auth';
@@ -59,7 +60,7 @@ import 'react-table/react-table.css';
 // }
 
 // Create Reducers
-const reducers = combineReducers({metisMenuReducer, death, menus, auth, reports, events, datareceive});
+const reducers = combineReducers({metisMenuReducer, death, menus, auth, reports, events, datareceive, home});
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
