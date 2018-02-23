@@ -90,6 +90,6 @@ export function handleFiles(files) {
 
 //HOME
 
-export function delayedShowMarkers(showMarkers){
-    return {type:"SHOWMARKERS", showMarkers}
+export function delayedShowMarkers(){
+    return {type:"SHOWMARKERS"}
 }

@@ -409,9 +409,7 @@ class DeathAnalysis extends Component {
 						{/*Map*/}
 						<Col md={6}>
 							<Row className="mapRow">
-								<Map center={mapCenter}
-									 markers={marker}
-                                     defaultZoom={15}
+								<Map center={mapCenter} markers={marker} defaultZoom={15} showMarkers={true}
                                      googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzTZTuwTczZL2JedjuYJRiEh2v0BQpgxo"
                                      loadingElement={<div style={{ height: `100%` }} />}
                                      containerElement={<div style={{height:'100%'}}/>}
