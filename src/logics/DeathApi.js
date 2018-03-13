@@ -23,6 +23,10 @@ export default class DeathApi {
 
     static listDeathsOpts() {
         return dispatch => {
+            fetch('http://localhost:3000/api/AccidentTypes')
+                .then(response => response.json())
+                .then(options => console.log(options));
+
             fetch('https://ocorrencias-teste-api.herokuapp.com/api/options')
                 .then(response => {
                     if (response.ok) {

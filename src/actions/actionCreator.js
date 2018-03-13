@@ -51,6 +51,7 @@ export function listDeathEvents(loading, deathEvents) {
 export function listDeathOptions(deathOptions) {
     return {type: 'LISTDEATHOPTIONS', deathOptions};
 }
+
 export function toggleDeathModal(showModal, id) {
     return {type: 'TOGGLEDEATHMODAL', showModal, id};
 }
@@ -91,5 +92,22 @@ export function handleFiles(files) {
 //HOME
 
 export function delayedShowMarkers(){
-    return {type:"SHOWMARKERS"}
+    return {type:"SHOWMARKERS"};
+}
+
+//CRUD AT
+export function listAccidentTypes(loading, accidentTypes){
+    return {type:"LISTACCIDENTTYPES", loading, accidentTypes};
+}
+
+export function onChangeAccidentTypeInput(newValue, input){
+    return {type:"ONCHANGEACCIDENTTYPEINPUT", newValue, input};
+}
+
+export function toggleATModal(showModal, id) {
+    return {type: 'TOGGLEATMODAL', showModal, id};
+}
+
+export function selectAccidentType(id) {
+    return {type: 'SELECTACCIDENTTYPE', id};
 }

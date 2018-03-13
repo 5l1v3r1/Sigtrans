@@ -6,8 +6,8 @@ import ReactDOM from 'react-dom';
 //Components
 import App from './App';
 import EBox from './components/events/Event_old';
-import {Events, OpenEvents} from './components/events/Event'
-// import {EventsForm} from './components/events/EventClasses'
+import {Events, OpenEvents} from './components/events/Event';
+import AccidentType from './components/custom/AccidentTypeCRUD'
 import Death from './components/death/Death';
 import Home from './components/home/Home';
 import Login from './components/Login';
@@ -78,6 +78,7 @@ ReactDOM.render(
                         <Route path="/relatorios/obitos" component={DeceasedReports}/>
                         <Route path="/relatorios/estatisticos" component={Statistic}/>
                         <Route path="/criar" component={EBox}/>
+                        <Route path="/tiposacidentes" component={AccidentType}/>
                     </Route>
                 </Router>
             </Provider>

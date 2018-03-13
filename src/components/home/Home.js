@@ -50,7 +50,7 @@ class Home extends Component {
                                 icon: {url: icons[max - 1]}
                             }
                         }) : undefined}
-                        loadingElement={<div style={{height: '100%'}}/>}
+                        loadingElement={<div style={{height: '50%'}}/>}
                         containerElement={<div style={{height: '100%'}}/>} mapElement={<div style={{height: '78vh'}}/>}
                         showMarkers={this.props.home.showMarkers} defaultZoom={3}
                         center={{lat: 40.056869, lng: -103.343486}}

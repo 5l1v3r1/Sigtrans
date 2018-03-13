@@ -98,3 +98,5 @@ const mapDispatchToProps = dispatch => {
 export const OpenEvents = connect(mapStateToProps, mapDispatchToProps)(OpenEvent);
 
 export const Events = connect(mapStateToProps, mapDispatchToProps)(Event);
+
+

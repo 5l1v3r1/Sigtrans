@@ -2,6 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import AuthApi from "../logics/AuthApi";
 
+// import Auth from './auth0/Auth';
+//
+// const autho = new Auth();
+// autho.login();
+
 class Login extends Component {
 
     requestAuth(e) {
