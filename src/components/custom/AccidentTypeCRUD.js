@@ -26,7 +26,6 @@ class AccidentTypeCRUD extends Component {
     }
 
     render() {
-        // let counter = false;
         const columns = [
             {
                 Header: 'ObjectID',
@@ -35,8 +34,9 @@ class AccidentTypeCRUD extends Component {
                 filterMethod: (filter, rows) =>
                     matchSorter(rows, filter.value, {keys: ["ObjectID"]}),
                 filterAll: true
-            }, {
-                Header: 'Valor',
+            },
+            {
+                Header: 'Tipo',
                 id: 'value',
                 accessor: d => d.value,
                 filterMethod: (filter, rows) =>
@@ -64,11 +64,11 @@ class AccidentTypeCRUD extends Component {
         ];
         const actions = [
             {label: "Fechar", onClick: this.props.handleToggleModal},
-            // {label: "Salvar", onClick: this.props.handleToggleModal}
+            {label: "Salvar", onClick: () => this.props.updateType(this.props.accidentTypes.selectedType._id, this.props.accidentTypes.updateTypeInput)}
         ];
         return(
             <div className="content" id="content">
-                <PageHeader>Tipo de Acidente - <small>CRUD</small></PageHeader>
+                <PageHeader>Tipo de Acidente <small>CRUD</small></PageHeader>
                 <Grid>
                     <Col md={4}>
                         <Row>
@@ -76,8 +76,8 @@ class AccidentTypeCRUD extends Component {
                         </Row>
                         <Row>
                             <Col md={7}>
-                                <Input value={this.props.accidentTypes.input}
-                                       label="Valor" type="text" id="accidentTypeInput"
+                                <Input value={this.props.accidentTypes.input||''}
+                                       label="Tipo" type="text" id="accidentTypeInput"
                                        onChange={(e)=>this.props.onChangeInput(e.target.value, 'input')}
                                 />
                             </Col>
@@ -102,7 +102,7 @@ class AccidentTypeCRUD extends Component {
                     </Col>
                 </Grid>
                 <Dialog active={this.props.accidentTypes.showModal === !(undefined)}
-                        actions={actions} type='fullscreen'
+                        actions={actions} type='small'
                         className="custom-modal"
                         onEscKeyDown={this.props.handleToggleModal}
                         onOverlayClick={this.props.handleToggleModal}
@@ -111,18 +111,19 @@ class AccidentTypeCRUD extends Component {
                         this.props.accidentTypes.selectedType?(
                             <Row>
                                 <Col md={7}>
-                                    <Input value={this.props.accidentTypes.selectedType.value}
-                                           label="Valor" type="text" id="accidentTypeInput"
-                                           onChange={(e)=>this.props.onChangeInput(e.target.value, 'selectedInput')}
+                                    <Input placeholder={this.props.accidentTypes.selectedType.value}
+                                           value={this.props.accidentTypes.updateTypeInput||''}
+                                           label="Tipo" type="text" id="updateTypeInput"
+                                           onChange={(e)=>this.props.onChangeInput(e.target.value, 'updateTypeInput')}
                                     />
                                 </Col>
-                                <Col md={3}>
-                                    <br/>
-                                    <Button style={{color: 'white', backgroundColor:"lightgreen"}} label="Salvar" raised
-                                            onClick={() => this.props.updateType(this.props.accidentTypes.selectedType._id, this.props.accidentTypes.selectedType.value)}/>
-                                </Col>
+                                {/*<Col md={3}>*/}
+                                    {/*<br/>*/}
+                                    {/*<Button style={{color: 'white', backgroundColor:"lightgreen"}} label="Salvar" raised*/}
+                                            {/*onClick={() => this.props.updateType(this.props.accidentTypes.selectedType._id, this.props.accidentTypes.updateTypeInput)}/>*/}
+                                {/*</Col>*/}
                             </Row>
-                        ):{}
+                        ):<div/>
                     }
                 </Dialog>
             </div>
@@ -161,15 +162,6 @@ const mapDispatchToProps = dispatch => {
         updateType:(id, value) => {
             dispatch(HomeApi.updateType(id, value));
         }
-        /*listDeathOptions: () => {
-            dispatch(DeathApi.listDeathsOpts());
-        },
-        handleToggleModal: (showModal, id) => {
-            dispatch(DeathApi.handleDeathModal(showModal, id));
-        },
-        onChangeInput: (newValue, operator, subMenu) => {
-            dispatch(DeathApi.onChangeInput(newValue, operator, subMenu));
-        },*/
     }
 
 };

@@ -1,30 +1,7 @@
-//React
-import React from 'react';
 import ReactDOM from 'react-dom';
-//Cookies
-// import Cookies from 'js-cookie';
-//Components
-import App from './App';
-import EBox from './components/events/Event_old';
-import {Events, OpenEvents} from './components/events/Event';
-import AccidentType from './components/custom/AccidentTypeCRUD'
-import Death from './components/death/Death';
-import Home from './components/home/Home';
-import Login from './components/Login';
-import DeceasedReports from './components/reports/DeceasedReports'
-import Statistic from './components/reports/StatisticReports'
-import DataReceive from './components/datareceive/DataReceive'
-//Router
-import {browserHistory, IndexRoute, Route, Router} from 'react-router';
-//React Toolbox Themer (PostCSS Issues)
-import theme from './toolbox/theme';
-import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
-//Redux
 import {applyMiddleware, combineReducers, createStore} from 'redux';
-import {Provider} from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
-// import {matchPattern} from 'react-router/lib/PatternUtils';
-//reducers
+import {makeMainRoutes} from "./routes";
 import {home} from './reducers/home';
 import {menus} from './reducers/menus';
 import {death} from './reducers/death';
@@ -33,7 +10,6 @@ import {reports} from './reducers/reports';
 import {events} from './reducers/events';
 import {datareceive} from './reducers/datareceive';
 import metisMenuReducer from 'react-metismenu/lib/reducers';
-//CSS
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import './css/font-awesome-4.7.0/css/font-awesome.min.css';
@@ -41,48 +17,13 @@ import './css/index.css';
 import './css/App.css';
 import './toolbox/theme.css';
 import 'react-table/react-table.css';
-// import Test from './components/TestPage'
-
-// function verifyAuth(nextState, replace) {
-//     // console.log(nextState.location.pathname);
-//     const resultado = matchPattern('/', nextState.location.pathname);
-//     const privatePath = resultado.paramValues[0] === undefined;
-//
-//     if (privatePath && !Cookies.get('auth-token')) {
-//         replace('/?msg=Você precisa estar logado');
-//     }
-// }
-//
-// function verifyLogin(nextState, replace) {
-//     if (Cookies.get('auth-token')) {
-//         replace('/home');
-//     }
-// }
 
 // Create Reducers
 const reducers = combineReducers({metisMenuReducer, death, menus, auth, reports, events, datareceive, home});
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));
+const routes = makeMainRoutes(store);
 
 ReactDOM.render(
-    (
-        <ThemeProvider theme={theme}>
-            <Provider store={store}>
-                <Router history={browserHistory}>
-                    <Route path="/login" component={Login}/>{/*onEnter={verifyLogin}*/}
-                    <Route path="/" component={App}>{/*onEnter={verifyAuth}*/}
-                        <IndexRoute component={Home}/>
-                        <Route path="/obitos" component={Death}/>
-                        <Route path="/abertas" component={OpenEvents}/>
-                        <Route path="/geral" component={Events}/>
-                        <Route path="/dados" component={DataReceive}/>
-                        <Route path="/relatorios/obitos" component={DeceasedReports}/>
-                        <Route path="/relatorios/estatisticos" component={Statistic}/>
-                        <Route path="/criar" component={EBox}/>
-                        <Route path="/tiposacidentes" component={AccidentType}/>
-                    </Route>
-                </Router>
-            </Provider>
-        </ThemeProvider>
-    ),
+    routes,
     document.getElementById('root')
 );

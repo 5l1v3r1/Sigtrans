@@ -7,12 +7,8 @@ export function home(state = new List(), action) {
     }
 
     if (action.type === 'ONCHANGEACCIDENTTYPEINPUT') {
-        if(action.input==='selectedInput') {
-            state.selectedType.value=action.newValue;
-            return Object.assign({}, state);
-        }
-        const input = action.newValue;
-        return Object.assign({}, state, {input});
+        const newValue = action.newValue;
+        return Object.assign({}, state, {[action.input]:newValue});
     }
 
     if (action.type === 'TOGGLEATMODAL') {
@@ -23,15 +19,15 @@ export function home(state = new List(), action) {
     if(action.type==='LISTACCIDENTTYPES'){
         const accidentTypes = action.accidentTypes;
         const input = '';
+        const updateTypeInput = '';
         const loading = action.loading;
-        return Object.assign({}, state, {loading, accidentTypes, input});
+        return Object.assign({}, state, {loading, accidentTypes, input, updateTypeInput});
     }
 
     if (action.type === 'SELECTACCIDENTTYPE') {
         const selectedType = state.accidentTypes.find(item => {
             return item._id === action.id;
         });
-        // const selectedTypeID = selectedType.id;
         return Object.assign({}, state, {selectedType});
     }
     return state;
