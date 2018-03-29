@@ -45,7 +45,9 @@ export const makeMainRoutes = (store) => {
                             <Route path="estatisticos" component={Statistic}/>
                         </Route>
                         <Route path="criar" component={EBox}/>
-                        <Route path="tiposacidentes" component={CRUDTest}/>
+                        <Route path="cadastro">
+                            <Route path="alteracoes" component={CRUDTest}/>
+                        </Route>
                         <Route path='404' component={PageNotFound} />
                         <Redirect from='*' to='404' />
                     </Route>

@@ -123,16 +123,6 @@ class DeathEventsGrid extends Component {
 
 		return (
 			<div className="content" id="content">
-				{/*
-				style: {
-                                backgroundColor: rowInfo.original.deathAnalysis.status >= 1 ? (
-                                    rowInfo.original.deathAnalysis.status <= 1 ?
-										counter%2?'lightgreen': '#43A24B' :
-										counter%2?'#ffffac': 'yellow'
-                                ) : 'inherit',
-                                boxShadow: 'none'
-                            },
-				*/}
 				<ReactTable
 					previousText='Anterior' nextText='Proximo'
 					loadingText='Carregando...' pageText='Pagina'
@@ -141,7 +131,7 @@ class DeathEventsGrid extends Component {
 					data={this.props.data} loading={(this.props.loading === undefined)}
 					columns={columns} defaultPageSize={10} filterable
 					defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
-					getTrProps={(state, rowInfo, column) => {
+					getTrProps={(state, rowInfo) => {
                         counter=!counter;
                         return rowInfo ? {
                             style: {
@@ -354,7 +344,7 @@ class DeathAnalysis extends Component {
 		}, this);
 
 		return (
-			<Grid>
+			<Grid fluid>
 				<Form>
 					{/*general*/}
 					<Panel>
@@ -453,15 +443,6 @@ class DeathAnalysis extends Component {
                                     value={this.props.deathAnalysis.additionalInfos?this.props.deathAnalysis.additionalInfos.actionsToBeTaken:''}
                                     onChange={(value)=>this.props.onChangeInput(value, 'actionsToBeTaken', 'additionalInfos')} />
 					</Panel>
-				{/*</Row>*/}
-				{/*<Row>*/}
-					{/*<Panel>*/}
-						{/*<pre>*/}
-							{/*{JSON.stringify(this.props.deathAnalysis, null, 4)}*/}
-							{/*/!*{console.log(JSON.stringify(this.props.deathAnalysis, null, 4))}*!/*/}
-						{/*</pre>*/}
-					{/*</Panel>*/}
-				{/*</Row>*/}
 				</Form>
 			</Grid>
 		)

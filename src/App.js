@@ -69,12 +69,17 @@ class App extends Component {
 				label: 'Dados de Parceiros',
 				to: '/sig/dados'
 			},
+            {
+                icon: 'cog',
+                label: 'Alterações de Cadastros',
+                to: '/sig/cadastro/alteracoes'
+            },
 		];
 		return (
 			<div id="root">
 				<div className="main">
 					<Layout>
-						<NavDrawer pinned={this.props.menus.drawer} permanentAt='lg' scrollY className='leftDrawer'>
+						<NavDrawer pinned={this.props.menus.drawer} permanentAt='xl' scrollY className='leftDrawer'>
                             <MetisMenu content={menu} LinkComponent={RouterLink}
                                        reduxStoreName="metisMenuReducer" className='mainMenu'
                                        useExternalReduxStore={this.context.store}
@@ -82,9 +87,8 @@ class App extends Component {
                             />
 						</NavDrawer>
 						<Panel>
-							<AppBar className="app-bar" title='Sigtrans ' flat scrollHide
-                                    leftIcon={<FontIcon className="md-24 md-dark"
-                                                        value={this.props.menus.drawer ? 'chevron_left' : 'menu'}/>}
+							<AppBar className="app-bar" title='Sigtrans' flat
+                                    leftIcon={<FontIcon className="md-24 md-dark" value={this.props.menus.drawer ? 'chevron_left' : 'menu'}/>}
 									rightIcon={<FontIcon className="md-24 md-dark" value='account_circle'/>}
 									onLeftIconClick={this.props.toggleDrawer}
 									onRightIconClick={this.props.toggleSidebar}>

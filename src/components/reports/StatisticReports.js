@@ -16,44 +16,7 @@ class StatisticReports extends Component {
             <div>
                 <PageHeader>Relatórios Estatísticos</PageHeader>
                 <div className="content" id="content">
-                    Por Ocorrência (abertas, por data, por condutor, por vítima...)
-                    <br/>
-                    Por Bairro
-                    <br/>
-                    Por Rua
-                    <br/>
-                    Por Cruzamento
-                    <br/>
-                    Por Horário
-                    <br/>
-                    Por dia da semana
-                    <br/>
-                    Por Idade
-                    <br/>
-                    Por Severidade
-                    <br/>
-                    Por Sexo
-                    <br/>
-                    Por Tipo de Acidente
-                    <br/>
-                    Por Tipo de Veiculo
-                    <br/>
-                    Pela Placa do Veículo
-                    <br/>
-                    Por Habilitação (não habilitado,cassado...)
-                    <br/>
-                    Por condição de Segurança
-                    <br/>
-                    Por Conduta Provável
-                    {/*<Grid>*/}
-                    {/*<Row>*/}
-                    {/*<Col sm={10}>*/}
-                    {/*<Panel header='Estatísticos'>*/}
-                    {/**/}
-                    {/*</Panel>*/}
-                    {/*</Col>*/}
-                    {/*</Row>*/}
-                    {/*</Grid>*/}
+                    Em construção
                 </div>
             </div>
         );

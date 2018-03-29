@@ -26,7 +26,7 @@ class ManagementReports extends Component {
             <div className='clearfix'>
                 <PageHeader>Relatórios de Óbitos</PageHeader>
                 <div className="content" id="content">
-                    <Grid>
+                    <Grid fluid>
                         <Row style={{height: '80vh'}}>
                             <Col sm={8} style={{height:'100%', borderRight: '1px dotted'}}>
                                 {
