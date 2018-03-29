@@ -96,8 +96,8 @@ export function delayedShowMarkers(){
 }
 
 //CRUD AT
-export function listAccidentTypes(loading, accidentTypes){
-    return {type:"LISTACCIDENTTYPES", loading, accidentTypes};
+export function listAccidentTypes(accidentTypes){
+    return {type:"LISTACCIDENTTYPES", accidentTypes};
 }
 
 export function onChangeAccidentTypeInput(newValue, input){

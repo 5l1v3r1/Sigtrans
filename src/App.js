@@ -25,7 +25,7 @@ class App extends Component {
 			{
 				icon: 'home',
 				label: 'Inicio',
-				to: '/'
+				to: '/sig'
 			},
 			{
 				icon: 'bell',
@@ -33,22 +33,22 @@ class App extends Component {
 				content: [
 					{
 						label: 'Abertas',
-						to: '/abertas'
+						to: '/sig/abertas'
 					},
 					{
 						label: 'Geral',
-						to: '/geral'
+						to: '/sig/geral'
 					},
 					{
 						label: 'Criar',
-						to: '/criar',
+						to: '/sig/criar',
 					}
 				]
 			},
 			{
 				icon: 'ambulance',
 				label: 'Análise de Óbitos',
-				to: '/obitos'
+				to: '/sig/obitos'
 			},
 			{
 				icon: 'area-chart',
@@ -56,18 +56,18 @@ class App extends Component {
 				content: [
 					{
 						label: 'Estatisticos',
-						to: '/relatorios/estatisticos'
+						to: '/sig/relatorios/estatisticos'
 					},
 					{
 						label: 'Óbitos',
-						to: '/relatorios/obitos'
+						to: '/sig/relatorios/obitos'
 					},
 				]
 			},
 			{
 				icon: 'upload',
 				label: 'Dados de Parceiros',
-				to: '/dados'
+				to: '/sig/dados'
 			},
 		];
 		return (

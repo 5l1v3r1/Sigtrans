@@ -61,13 +61,19 @@ export default class CrudApi {
         }
     }
 
-    static listTypes(loading) {
+    static listTypes() {
         return dispatch => {
+            dispatch(this.onChangeInput(true, 'loading'));
             fetch('http://localhost:3000/api/AccidentTypes')
                 .then(response => response.json())
                 .then(accidentTypes => {
-                    return dispatch(listAccidentTypes(loading, accidentTypes));
+                    dispatch(listAccidentTypes(accidentTypes));
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
+            dispatch(this.onChangeInput(false, 'loading'));
+
         }
     }
 

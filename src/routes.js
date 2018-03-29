@@ -15,12 +15,13 @@ import DeceasedReports from './components/reports/DeceasedReports'
 import Statistic from './components/reports/StatisticReports'
 import DataReceive from './components/datareceive/DataReceive'
 //Router
-import {browserHistory, IndexRoute, Route, Router} from 'react-router';
+import {browserHistory, IndexRoute, Redirect, Route, Router} from 'react-router';
 //React Toolbox Themer (PostCSS Issues)
 import theme from './toolbox/theme';
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
 //Redux
 import {Provider} from 'react-redux';
+import PageNotFound from "./components/custom/PageNotFound";
 
 // import Auth from "./components/auth0/Auth";
 // const auth = new Auth();
@@ -30,18 +31,25 @@ export const makeMainRoutes = (store) => {
         <ThemeProvider theme={theme}>
             <Provider store={store}>
                 <Router history={browserHistory}>
-                    <Route path="/login" component={Login}/>{/*onEnter={verifyLogin}*/}
-                    <Route path="/" component={App}>{/*onEnter={verifyAuth}*/}
+                    <Route path="/" component={Login}/>
+                    <Route path='pagenotfound' component={PageNotFound}/>
+                    <Route path="sig" component={App}>{/*onEnter={verifyAuth}*/}
                         <IndexRoute component={Home}/>
-                        <Route path="/obitos" component={Death}/>
-                        <Route path="/abertas" component={OpenEvents}/>
-                        <Route path="/geral" component={Events}/>
-                        <Route path="/dados" component={DataReceive}/>
-                        <Route path="/relatorios/obitos" component={DeceasedReports}/>
-                        <Route path="/relatorios/estatisticos" component={Statistic}/>
-                        <Route path="/criar" component={EBox}/>
-                        <Route path="/tiposacidentes" component={CRUDTest}/>
+                        <Route path="obitos" component={Death}/>
+                        <Route path="abertas" component={OpenEvents}/>
+                        <Route path="geral" component={Events}/>
+                        <Route path="dados" component={DataReceive}/>
+                        <Redirect from='relatorios' to='/sig/relatorios/obitos' />
+                        <Route path="relatorios">
+                            <Route path="obitos" component={DeceasedReports}/>
+                            <Route path="estatisticos" component={Statistic}/>
+                        </Route>
+                        <Route path="criar" component={EBox}/>
+                        <Route path="tiposacidentes" component={CRUDTest}/>
+                        <Route path='404' component={PageNotFound} />
+                        <Redirect from='*' to='404' />
                     </Route>
+                    <Redirect from='*' to='/pagenotfound' />
                 </Router>
             </Provider>
         </ThemeProvider>
