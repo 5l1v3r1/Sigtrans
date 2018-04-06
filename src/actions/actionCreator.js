@@ -96,18 +96,18 @@ export function delayedShowMarkers(){
 }
 
 //CRUD AT
-export function listAccidentTypes(accidentTypes){
-    return {type:"LISTACCIDENTTYPES", accidentTypes};
+export function listGenericType(data, selectedType){
+    return {type:"LISTACCIDENTTYPES", data, selectedType};
 }
 
 export function onChangeAccidentTypeInput(newValue, input){
-    return {type:"ONCHANGEACCIDENTTYPEINPUT", newValue, input};
+    return {type:"ONCHANGETYPEINPUT", newValue, input};
 }
 
-export function toggleATModal(showModal, id) {
-    return {type: 'TOGGLEATMODAL', showModal, id};
+export function toggleATModal() {
+    return {type: 'TOGGLEATMODAL'};
 }
 
-export function selectAccidentType(id) {
-    return {type: 'SELECTACCIDENTTYPE', id};
-}
+// export function selectAccidentType(id) {
+//     return {type: 'SELECTACCIDENTTYPE', id};
+// }

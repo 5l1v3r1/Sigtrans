@@ -1,9 +1,4 @@
-import {
-    listAccidentTypes,
-    onChangeAccidentTypeInput,
-    selectAccidentType,
-    toggleATModal
-} from "../actions/actionCreator";
+import {listGenericType, onChangeAccidentTypeInput, toggleATModal} from "../actions/actionCreator";
 
 export default class CrudApi {
 
@@ -13,10 +8,13 @@ export default class CrudApi {
         }
     }
 
-    static addType(value) {
+    //arrumar o metodo para ser generico
+    static addType(value, selectedType, pageSize, page) {
         return dispatch => {
-            let data = {value};
-            fetch('http://localhost:3000/api/AccidentTypes', {
+            let data = {
+                nome: value
+            };
+            fetch('http://10.81.81.108:8080/sigtrans-api/' + selectedType, {
                 method: 'POST',
                 headers: new Headers({'content-type': 'application/json'}),
                 body: JSON.stringify(data),
@@ -24,56 +22,58 @@ export default class CrudApi {
                 .then(response => response.json())
                 .then(responseData => {
                     console.log(responseData);
-                    dispatch(this.listTypes(false));
+                    dispatch(this.listTypes(selectedType, pageSize, page))
                 });
         }
     }
 
-    static removeType(id) {
+    static removeType(id, selectedType, pageSize, page) {
         return dispatch => {
-            console.log('http://localhost:3000/api/AccidentTypes/'+id);
-            fetch('http://localhost:3000/api/AccidentTypes/'+id, {
+            fetch('http://10.81.81.108:8080/sigtrans-api/' + selectedType + '/' + id, {
                 method: 'DELETE',
                 headers: new Headers({'content-type': 'application/json'}),
             })
                 .then(response => response.json())
                 .then(responseData => {
                     console.log(responseData);
-                    dispatch(this.listTypes(false));
+                    dispatch(this.listTypes(selectedType, pageSize, page))
                 });
         }
     }
 
-    static updateType(id, value) {
+    static updateType(id, value, objToChange, selectedType, pageSize, page) {
         return dispatch => {
-            let data = {value};
-            fetch('http://localhost:3000/api/AccidentTypes/'+id, {
+            objToChange.nome=value;
+            console.log(objToChange);
+            fetch('http://10.81.81.108:8080/sigtrans-api/' + selectedType + '/' + id, {
                 method: 'PUT',
                 headers: new Headers({'content-type': 'application/json'}),
-                body: JSON.stringify(data),
+                body: JSON.stringify(objToChange),
             })
                 .then(response => response.json())
-                .then(responseData => {
-                    console.log(responseData);
-                    dispatch(this.listTypes(false));
-                    dispatch(this.handleModal(true));
+                .then(resData => {
+                    console.log(resData);
+                    dispatch(this.listTypes(selectedType, pageSize, page))
                 });
         }
     }
 
-    static listTypes() {
+    static listTypes(selectedType, pageSize, page) {
+        console.log('loading....');
         return dispatch => {
             dispatch(this.onChangeInput(true, 'loading'));
-            fetch('http://localhost:3000/api/AccidentTypes')
+            fetch('http://10.81.81.108:8080/sigtrans-api/' + selectedType + (pageSize !== undefined && page !== undefined ? '?pageSize=' + pageSize + '&start=' + page * pageSize : '/'))
                 .then(response => response.json())
-                .then(accidentTypes => {
-                    dispatch(listAccidentTypes(accidentTypes));
+                .then(responseData => {
+                    dispatch(this.onChangeInput(pageSize,'pageSize'));
+                    dispatch(this.onChangeInput(page,'page'));
+                    dispatch(listGenericType(responseData, selectedType));
+                    dispatch(this.onChangeInput(false, 'loading'));
+                    console.log('loaded');
                 })
                 .catch((err) => {
                     console.log(err);
                 });
-            dispatch(this.onChangeInput(false, 'loading'));
-
         }
     }
 
@@ -82,13 +82,6 @@ export default class CrudApi {
             return dispatch(toggleATModal());
         }
     }
-
-    static selectAccidentType(id) {
-        return dispatch => {
-            return dispatch(selectAccidentType(id));
-        }
-    }
-
 }
 
 

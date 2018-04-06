@@ -15,10 +15,6 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 class App extends Component {
-
-	// componentDidMount() {
-	//     this.props.toggleDrawer();
-	// }
 	render() {
 
 		const menu = [
@@ -110,7 +106,6 @@ class App extends Component {
 			</div>
 		);
 	}
-
 }
 
 App.contextTypes = {

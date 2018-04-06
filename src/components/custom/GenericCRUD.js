@@ -10,14 +10,16 @@ import matchSorter from "match-sorter";
 
 class GenericCRUD extends Component {
 
-    onSelect (type){
-        this.props.onChangeInput(type.name, 'typeName');
-        this.props.onChangeInput(type, 'type');
-        this.props.listTypes();
+    onSelect (selectedType){
+        this.props.onChangeInput(selectedType, 'type');
+        this.props.listTypes(selectedType.id, this.props.genericProps.pageSize||10, this.props.genericProps.page||0);
+    }
+
+    fetchData(state, instance){
+        this.props.listTypes(this.props.genericProps.type.id, state.pageSize, state.page);
     }
 
     render() {
-
         const tooltip = (
             <Tooltip id="tooltip">
                 <strong>Clique para Editar!</strong>
@@ -25,21 +27,21 @@ class GenericCRUD extends Component {
         );
         const typeList = [
             {
-                id:'classificacaoAcidente',
+                id:'classificacaoacidente',
                 name:'Classificação do acidente',
                 fields: [{
                     id:'nome',
                     name:'Classificação do acidente'
                 }]
             },{
-                id:'condicoesClimaticas',
+                id:'condicoesclimaticas',
                 name:'Condições Climáticas',
                 fields: [{
                     id:'nome',
                     name:'Condições Climáticas'
                 }]
             },{
-                id:'condicaoVia',
+                id:'condicaovia',
                 name:'Condição da Via',
                 fields: [{
                     id:'nome',
@@ -60,28 +62,28 @@ class GenericCRUD extends Component {
                     name:'Visibilidade'
                 }]
             },{
-                id:'perfilPista',
+                id:'perfilpista',
                 name:'Perfil da Pista',
                 fields: [{
                     id:'nome',
                     name:'Perfil da Pista'
                 }]
             },{
-                id:'conservaçãoVia',
+                id:'conservacaovia',
                 name:'Conservação da via',
                 fields: [{
                     id:'nome',
                     name:'Conservação da via'
                 }]
             },{
-                id:'sentidoVia',
+                id:'sentidovia',
                 name:'Sentido da Via',
                 fields: [{
                     id:'nome',
                     name:'Sentido da Via'
                 }]
             },{
-                id:' tipoAcidente',
+                id:'tipoacidente',
                 name:'Tipo de Acidente',
                 fields: [{
                     id:'nome',
@@ -102,12 +104,12 @@ class GenericCRUD extends Component {
                     }
                 ]
             },{
-                id:'municipio',
-                name:'Municipio',
+                id:'cidade',
+                name:'Cidade',
                 fields: [
                     {
                         id:'nome',
-                        name:'Municipio'
+                        name:'Cidade'
                     },
                     {
                         id:'estado',
@@ -124,8 +126,8 @@ class GenericCRUD extends Component {
                         name:'Bairro'
                     },
                     {
-                        id:'municipio',
-                        name:'Municipio'
+                        id:'cidade',
+                        name:'Cidade'
                     }
                 ]
             },{
@@ -151,7 +153,7 @@ class GenericCRUD extends Component {
                 {
                     Header: field.name,
                     id: field.id,
-                    accessor: d => d.id,
+                    accessor: d => d.id ,
                     Cell: props => {
                         return (
                             <div>
@@ -161,35 +163,34 @@ class GenericCRUD extends Component {
                                         contentEditable
                                         suppressContentEditableWarning
                                         onBlur={e => {
-                                            if (this.props.genericProps['accidentTypes'][props.index][props.column.id] !== e.target.innerHTML)
-                                                this.props.updateType(props.original._id, e.target.innerHTML);
+                                            if (this.props.genericProps[this.props.genericProps.type.id][props.index][props.column.id] !== e.target.innerHTML)
+                                                this.props.updateType(props.original.id, e.target.innerHTML, this.props.genericProps[this.props.genericProps.type.id][props.index], this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page);
                                         }}
                                         dangerouslySetInnerHTML={{
-                                            __html: this.props.genericProps['accidentTypes'][props.index][props.column.id]
+                                            __html: this.props.genericProps[this.props.genericProps.type.id][props.index][props.column.id]
                                         }}
                                     />
                                 </OverlayTrigger>
                             </div>
                         )
                     },
-                    filterAll: true
                 }
             )
         }):[];
         columns.push({
                 Header: 'Remover',
                 id: 'remove',
-                accessor: d => d._id,
+                accessor: d => d.id,
                 filterable: false,
                 Cell: props => (
-                    <Button style={{color: 'red'}} icon="remove" primary id={props.original._id}
-                            onClick={() => this.props.removeType(props.original._id)}/>
+                    <Button style={{color: 'red'}} icon="remove" primary id={props.original.id}
+                            onClick={() => this.props.removeType(props.original.id, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page)}/>
                 )
         });
 
         return (
             <div className="content" id="content">
-                <PageHeader>Alterar - <small>{this.props.genericProps.typeName}</small></PageHeader>
+                <PageHeader>Alterar - {this.props.genericProps.type?(<small>{this.props.genericProps.type.name}</small>):''}</PageHeader>
                 <Grid fluid>
                     <Col>
                         <Row>
@@ -206,16 +207,17 @@ class GenericCRUD extends Component {
                         <Row>
                             <br/>
                             {
-                                this.props.genericProps.type? (
-                                    <div>
+                                this.props.genericProps.type? (<div>
                                     <Col md={8}>
                                         <ReactTable
-                                            previousText='Anterior' nextText='Proximo'
+                                            previousText='Anterior' nextText='Proximo' manual
                                             loadingText='Carregando...' pageText='Pagina'
                                             noDataText='Sem dados a exibir' ofText='de'
                                             rowsText='linhas' className="-highlight"
-                                            data={this.props.genericProps['accidentTypes']}
+                                            data={this.props.genericProps[this.props.genericProps.type.id]||[]}
                                             loading={this.props.genericProps.loading}
+                                            pages={this.props.genericProps.pages}
+                                            onFetchData={this.fetchData.bind(this)}
                                             columns={columns} defaultPageSize={10} filterable
                                             defaultFilterMethod={(filter, rows) => matchSorter(rows, filter.value, {keys: [filter.id]})}
                                             getTdProps={() => ({style: {textAlign: "center"}})}
@@ -237,14 +239,19 @@ class GenericCRUD extends Component {
                                             <Col mdOffset={7} md={3}>
                                                 <Button style={{color: 'white', backgroundColor: "lightgreen"}}
                                                         icon="add" raised
-                                                        onClick={() => this.props.addType(this.props.genericProps.input)}>Adicionar</Button>
+                                                        onClick={() => this.props.addType(this.props.genericProps.input, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page)}>Adicionar</Button>
                                             </Col>
                                         </Row>
                                     </Col>
                                     </div>):<div/>
                             }
+
                         </Row>
                     </Col>
+                    <br/>
+                    {/*<pre>*/}
+                        {/*{JSON.stringify(this.props.genericProps, null, 4)}*/}
+                    {/*</pre>*/}
                 </Grid>
             </div>
         )
@@ -259,26 +266,23 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        listTypes: () => {
-            dispatch(CrudApi.listTypes());
+        listTypes: (selectedType, pageSize, page) => {
+            dispatch(CrudApi.listTypes(selectedType, pageSize, page));
         },
         onChangeInput: (newValue, selectedInput) => {
             dispatch(CrudApi.onChangeInput(newValue, selectedInput));
         },
-        addType: (value) => {
-            dispatch(CrudApi.addType(value));
+        addType: (value, selectedType, pageSize, page) => {
+            dispatch(CrudApi.addType(value, selectedType, pageSize, page));
         },
-        removeType: (id) => {
-            dispatch(CrudApi.removeType(id));
+        removeType: (id, selectedType, pageSize, page) => {
+            dispatch(CrudApi.removeType(id, selectedType, pageSize, page));
         },
         handleToggleModal: () => {
             dispatch(CrudApi.handleModal());
         },
-        selectAccidentType: (id) => {
-            dispatch(CrudApi.selectAccidentType(id));
-        },
-        updateType: (id, value) => {
-            dispatch(CrudApi.updateType(id, value));
+        updateType: (id, value, objToChange, selectedType, pageSize, page) => {
+            dispatch(CrudApi.updateType(id, value, objToChange, selectedType, pageSize, page));
         }
     }
 };

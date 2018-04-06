@@ -1,7 +1,7 @@
 import {List} from 'immutable';
 
 export function genericCrud(state = new List(), action) {
-    if (action.type === 'ONCHANGEACCIDENTTYPEINPUT') {
+    if (action.type === 'ONCHANGETYPEINPUT') {
         const newValue = action.newValue;
         return Object.assign({}, state, {[action.input]: newValue});
     }
@@ -12,10 +12,15 @@ export function genericCrud(state = new List(), action) {
     }
 
     if (action.type === 'LISTACCIDENTTYPES') {
-        const accidentTypes = action.accidentTypes;
         const input = '';
         const updateTypeInput = '';
-        return Object.assign({}, state, {accidentTypes, input, updateTypeInput});
+        const pages = Math.ceil(action.data.count / action.data.pageSize);
+        return Object.assign({}, state, {
+            [action.selectedType]: action.data.values,
+            input,
+            updateTypeInput,
+            pages
+        });
     }
 
     if (action.type === 'SELECTACCIDENTTYPE') {
