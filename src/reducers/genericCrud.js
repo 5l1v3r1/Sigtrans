@@ -1,9 +1,32 @@
 import {List} from 'immutable';
 
 export function genericCrud(state = new List(), action) {
-    if (action.type === 'ONCHANGETYPEINPUT') {
-        const newValue = action.newValue;
-        return Object.assign({}, state, {[action.input]: newValue});
+
+    if (action.type === 'ONCHANGECRUDINPUT') {
+        if (action.value === undefined) {
+            const newState = delete(state[action.input]);
+            return Object.assign({}, newState);
+        }
+        const value = action.value;
+        return Object.assign({}, state, {[action.input]: value});
+    }
+
+    if (action.type === 'ONCHANGECRUDFORMINPUT') {
+        const value = action.value;
+        let form = Object.assign({}, state.form);
+        if(!value){
+            delete(form[action.input]);
+            return Object.assign({}, state, form);
+        }
+        if(action.input.toString()!=="nome"){
+            if(!form[action.input])
+                form[action.input]={};
+            form[action.input].nome = value;
+            return Object.assign({}, state, {form});
+        } else {
+            form[action.input] = value;
+            return Object.assign({}, state, {form});
+        }
     }
 
     if (action.type === 'TOGGLEATMODAL') {
@@ -13,12 +36,10 @@ export function genericCrud(state = new List(), action) {
 
     if (action.type === 'LISTACCIDENTTYPES') {
         const input = '';
-        const updateTypeInput = '';
         const pages = Math.ceil(action.data.count / action.data.pageSize);
         return Object.assign({}, state, {
             [action.selectedType]: action.data.values,
             input,
-            updateTypeInput,
             pages
         });
     }

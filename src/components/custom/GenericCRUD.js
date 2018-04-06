@@ -11,12 +11,17 @@ import matchSorter from "match-sorter";
 class GenericCRUD extends Component {
 
     onSelect (selectedType){
+        if(this.props.genericProps.type!==undefined) {
+            this.props.onChangeInput(undefined, this.props.genericProps[this.props.genericProps.type.id]);
+        }
+        this.props.onChangeInput({}, 'form');
         this.props.onChangeInput(selectedType, 'type');
         this.props.listTypes(selectedType.id, this.props.genericProps.pageSize||10, this.props.genericProps.page||0);
     }
 
     fetchData(state, instance){
         this.props.listTypes(this.props.genericProps.type.id, state.pageSize, state.page);
+        // console.log('fetche');
     }
 
     render() {
@@ -163,8 +168,15 @@ class GenericCRUD extends Component {
                                         contentEditable
                                         suppressContentEditableWarning
                                         onBlur={e => {
-                                            if (this.props.genericProps[this.props.genericProps.type.id][props.index][props.column.id] !== e.target.innerHTML)
-                                                this.props.updateType(props.original.id, e.target.innerHTML, this.props.genericProps[this.props.genericProps.type.id][props.index], this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page);
+                                            if (this.props.genericProps[this.props.genericProps.type.id][props.index][props.column.id] !== e.target.innerHTML) {
+                                                this.props.updateType(
+                                                    props.original.id,
+                                                    e.target.innerHTML,
+                                                    this.props.genericProps[this.props.genericProps.type.id][props.index],
+                                                    props.column.id,
+                                                    this.props.genericProps.type.id, this.props.genericProps.pageSize,
+                                                    this.props.genericProps.page);
+                                            }
                                         }}
                                         dangerouslySetInnerHTML={{
                                             __html: this.props.genericProps[this.props.genericProps.type.id][props.index][props.column.id]
@@ -187,6 +199,19 @@ class GenericCRUD extends Component {
                             onClick={() => this.props.removeType(props.original.id, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page)}/>
                 )
         });
+       const form = this.props.genericProps.type?this.props.genericProps.type.fields.map(field => {
+            return(
+                <Row key={field.id}>
+                    <Col>
+                        <Input
+                            value={field.id === 'nome' ? this.props.genericProps.form[field.id] || '' : this.props.genericProps.form[field.id] ? this.props.genericProps.form[field.id]['nome'] : ''}
+                            label={field.name} type="text" id={field.id}
+                            onChange={(e) => this.props.onChangeFormInput(e.target.value, [field.id])}
+                        />
+                    </Col>
+                </Row>
+            );
+        }):[];
 
         return (
             <div className="content" id="content">
@@ -207,7 +232,7 @@ class GenericCRUD extends Component {
                         <Row>
                             <br/>
                             {
-                                this.props.genericProps.type? (<div>
+                                this.props.genericProps.type? (<div style={{flex:'1'}}>
                                     <Col md={8}>
                                         <ReactTable
                                             previousText='Anterior' nextText='Proximo' manual
@@ -227,19 +252,14 @@ class GenericCRUD extends Component {
                                         <Row>
                                             <h4>Adicionar {this.props.genericProps.type.name}</h4>
                                         </Row>
+                                        {form}
                                         <Row>
-                                            <Col >
-                                                <Input value={this.props.genericProps.input || ''}
-                                                       label="Valor" type="text" id="accidentTypeInput"
-                                                       onChange={(e) => this.props.onChangeInput(e.target.value, 'input')}
-                                                />
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col mdOffset={7} md={3}>
+                                            <Col xsOffset={7} xs={3}>
                                                 <Button style={{color: 'white', backgroundColor: "lightgreen"}}
                                                         icon="add" raised
-                                                        onClick={() => this.props.addType(this.props.genericProps.input, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page)}>Adicionar</Button>
+                                                        onClick={() => this.props.addType(this.props.genericProps.form, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page)}>
+                                                    {window.innerWidth>768?'Adicionar':""}
+                                                </Button>
                                             </Col>
                                         </Row>
                                     </Col>
@@ -249,9 +269,9 @@ class GenericCRUD extends Component {
                         </Row>
                     </Col>
                     <br/>
-                    {/*<pre>*/}
-                        {/*{JSON.stringify(this.props.genericProps, null, 4)}*/}
-                    {/*</pre>*/}
+                    <pre>
+                        {JSON.stringify(this.props.genericProps, null, 4)}
+                    </pre>
                 </Grid>
             </div>
         )
@@ -272,8 +292,11 @@ const mapDispatchToProps = dispatch => {
         onChangeInput: (newValue, selectedInput) => {
             dispatch(CrudApi.onChangeInput(newValue, selectedInput));
         },
-        addType: (value, selectedType, pageSize, page) => {
-            dispatch(CrudApi.addType(value, selectedType, pageSize, page));
+        onChangeFormInput:(value, selectedInput)=>{
+            dispatch(CrudApi.onChangeCrudFormInput(value, selectedInput));
+        },
+        addType: (form, selectedType, pageSize, page) => {
+            dispatch(CrudApi.addType(form, selectedType, pageSize, page));
         },
         removeType: (id, selectedType, pageSize, page) => {
             dispatch(CrudApi.removeType(id, selectedType, pageSize, page));
@@ -281,8 +304,8 @@ const mapDispatchToProps = dispatch => {
         handleToggleModal: () => {
             dispatch(CrudApi.handleModal());
         },
-        updateType: (id, value, objToChange, selectedType, pageSize, page) => {
-            dispatch(CrudApi.updateType(id, value, objToChange, selectedType, pageSize, page));
+        updateType: (id, value, objToChange, propToChange, selectedType, pageSize, page) => {
+            dispatch(CrudApi.updateType(id, value, objToChange, propToChange, selectedType, pageSize, page));
         }
     }
 };

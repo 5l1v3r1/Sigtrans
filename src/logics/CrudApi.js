@@ -1,23 +1,25 @@
-import {listGenericType, onChangeAccidentTypeInput, toggleATModal} from "../actions/actionCreator";
+import {listGenericType, onChangeCrudFormInput, onChangeCrudInput, toggleATModal} from "../actions/actionCreator";
 
 export default class CrudApi {
 
     static onChangeInput(newValue, input) {
         return dispatch => {
-            dispatch(onChangeAccidentTypeInput(newValue, input))
+            dispatch(onChangeCrudInput(newValue, input))
         }
     }
 
-    //arrumar o metodo para ser generico
-    static addType(value, selectedType, pageSize, page) {
+    static onChangeCrudFormInput(value, input) {
         return dispatch => {
-            let data = {
-                nome: value
-            };
+            dispatch(onChangeCrudFormInput(value, input))
+        }
+    }
+
+    static addType(form, selectedType, pageSize, page) {
+        return dispatch => {
             fetch('http://10.81.81.108:8080/sigtrans-api/' + selectedType, {
                 method: 'POST',
                 headers: new Headers({'content-type': 'application/json'}),
-                body: JSON.stringify(data),
+                body: JSON.stringify(form),
             })
                 .then(response => response.json())
                 .then(responseData => {
@@ -41,10 +43,10 @@ export default class CrudApi {
         }
     }
 
-    static updateType(id, value, objToChange, selectedType, pageSize, page) {
+    static updateType(id, value, objToChange, propToChange, selectedType, pageSize, page) {
         return dispatch => {
-            objToChange.nome=value;
-            console.log(objToChange);
+            console.log(propToChange);
+            objToChange[propToChange]=value;
             fetch('http://10.81.81.108:8080/sigtrans-api/' + selectedType + '/' + id, {
                 method: 'PUT',
                 headers: new Headers({'content-type': 'application/json'}),
@@ -59,7 +61,7 @@ export default class CrudApi {
     }
 
     static listTypes(selectedType, pageSize, page) {
-        console.log('loading....');
+        // console.log('loading....');
         return dispatch => {
             dispatch(this.onChangeInput(true, 'loading'));
             fetch('http://10.81.81.108:8080/sigtrans-api/' + selectedType + (pageSize !== undefined && page !== undefined ? '?pageSize=' + pageSize + '&start=' + page * pageSize : '/'))
@@ -69,7 +71,7 @@ export default class CrudApi {
                     dispatch(this.onChangeInput(page,'page'));
                     dispatch(listGenericType(responseData, selectedType));
                     dispatch(this.onChangeInput(false, 'loading'));
-                    console.log('loaded');
+                    // console.log('loaded');
                 })
                 .catch((err) => {
                     console.log(err);

@@ -100,14 +100,14 @@ export function listGenericType(data, selectedType){
     return {type:"LISTACCIDENTTYPES", data, selectedType};
 }
 
-export function onChangeAccidentTypeInput(newValue, input){
-    return {type:"ONCHANGETYPEINPUT", newValue, input};
+export function onChangeCrudInput(value, input){
+    return {type:"ONCHANGECRUDINPUT", value, input};
+}
+
+export function onChangeCrudFormInput(value, input){
+    return {type:"ONCHANGECRUDFORMINPUT", value, input};
 }
 
 export function toggleATModal() {
     return {type: 'TOGGLEATMODAL'};
 }
-
-// export function selectAccidentType(id) {
-//     return {type: 'SELECTACCIDENTTYPE', id};
-// }
