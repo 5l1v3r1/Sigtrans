@@ -14,19 +14,19 @@ export function genericCrud(state = new List(), action) {
     if (action.type === 'ONCHANGECRUDFORMINPUT') {
         const value = action.value;
         let form = Object.assign({}, state.form);
-        if(!value){
-            delete(form[action.input]);
-            return Object.assign({}, state, form);
-        }
-        if(action.input.toString()!=="nome"){
-            if(!form[action.input])
-                form[action.input]={};
-            form[action.input].nome = value;
-            return Object.assign({}, state, {form});
+        if ((value === '')||(!value)) {
+            delete form[action.input];
         } else {
-            form[action.input] = value;
-            return Object.assign({}, state, {form});
+            if (action.input !== "nome") {
+                if (!form[action.input]) {
+                    form[action.input] = {};
+                }
+                form[action.input].nome = value;
+            } else {
+                form[action.input] = value;
+            }
         }
+        return Object.assign({}, state, {form});
     }
 
     if (action.type === 'TOGGLEATMODAL') {
@@ -35,11 +35,9 @@ export function genericCrud(state = new List(), action) {
     }
 
     if (action.type === 'LISTACCIDENTTYPES') {
-        const input = '';
         const pages = Math.ceil(action.data.count / action.data.pageSize);
         return Object.assign({}, state, {
             [action.selectedType]: action.data.values,
-            input,
             pages
         });
     }
