@@ -21,15 +21,9 @@ class GenericCRUD extends Component {
 
     fetchData(state, instance) {
         this.props.listTypes(this.props.genericProps.type.id, state.pageSize, state.page);
-        // console.log('fetche');
     }
 
     render() {
-        const tooltip = (
-            <Tooltip id="tooltip">
-                <strong>Clique para Editar!</strong>
-            </Tooltip>
-        );
         const typeList = [
             {
                 id: 'classificacaoacidente',
@@ -212,8 +206,8 @@ class GenericCRUD extends Component {
                     }
                 ]
             }
-        ];
-        const typeMenuItems = typeList.sort().map((type) => {
+        ].sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0));
+        const typeMenuItems = typeList.map((type) => {
             return (<MenuItem key={type.id} onSelect={(e) => this.onSelect(type, e)}>{type.name}</MenuItem>)
         });
         let columns = this.props.genericProps.type ? this.props.genericProps.type.fields.map((field) => {
@@ -275,11 +269,18 @@ class GenericCRUD extends Component {
                 </Row>
             );
         }) : [];
+        const tooltip = () => {
+            return (
+                <Tooltip id="tooltip">
+                    <strong>Clique para Editar!</strong>
+                </Tooltip>
+            )
+        };
 
         return (
             <div className="content" id="content">
-                <PageHeader>Alterar - {this.props.genericProps.type ? (
-                    <small>{this.props.genericProps.type.name}</small>) : ''}</PageHeader>
+                <PageHeader>Cadastro {this.props.genericProps.type ? (
+                    <small>- {this.props.genericProps.type.name}</small>) : ''}</PageHeader>
                 <Grid fluid>
                     <Col>
                         <Row>
@@ -335,13 +336,14 @@ class GenericCRUD extends Component {
                         </Row>
                     </Col>
                     <br/>
-                    <pre>
-                        {JSON.stringify(this.props.genericProps, null, 4)}
-                    </pre>
+                    {/*<pre>*/}
+                        {/*{JSON.stringify(this.props.genericProps, null, 4)}*/}
+                    {/*</pre>*/}
                 </Grid>
             </div>
         )
     }
+
 }
 
 const mapStateToProps = state => {

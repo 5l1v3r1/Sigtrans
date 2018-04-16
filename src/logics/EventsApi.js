@@ -23,7 +23,7 @@ export default class EventsApi {
                     if (response.ok)
                         response.json()
                             .then(events => {
-                                let treatedEvents = events.map(function (event) {
+                                /*let treatedEvents = events.map(function (event) {
                                     let vehicles = event.vehicles.map(function (vehicle) {
                                         return ({
                                             id: vehicle.id,
@@ -106,8 +106,8 @@ export default class EventsApi {
                                         vehicles: vehicles,
                                         involved: involveds
                                     })
-                                });
-                                return dispatch(listOpenEvents(loading, treatedEvents));
+                                });*/
+                                return dispatch(listOpenEvents(loading, events));
                             });
                     else {
                         console.log('Falha ao receber dados: ' + response.status);

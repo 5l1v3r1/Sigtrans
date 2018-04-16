@@ -3,8 +3,8 @@ function Management() {
 
 Management.prototype = (() => {
     const urls = {
-        carAccidents: 'https://131.255.84.174:5000/api/CarAccidents',
-        // carAccidents: 'https://localhost:3002/api/CarAccidents',
+        carAccidents: 'http://localhost:3002/api/events/open',
+        // carAccidents: 'http://ocorrencias-teste-api.herokuapp.com/api/events/open',
         // options: 'https://131.255.84.174:5000/api/Options',
         options: 'https://ocorrencias-teste-api.herokuapp.com/api/options'
     };

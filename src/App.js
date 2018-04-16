@@ -67,7 +67,7 @@ class App extends Component {
 			},
             {
                 icon: 'cog',
-                label: 'Alterações de Cadastros',
+                label: 'Cadastros',
                 to: '/sig/cadastro/alteracoes'
             },
 		];

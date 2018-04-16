@@ -6,6 +6,7 @@ import matchSorter from 'match-sorter';
 import Button from 'react-toolbox/lib/button/Button';
 import Dialog from "react-toolbox/lib/dialog/Dialog";
 import ReactTable from 'react-table';
+import Map from "../map/Map";
 
 //make new js file for both grids
 export class EventsGrid extends Component {
@@ -16,86 +17,6 @@ export class EventsGrid extends Component {
     };
 
     render() {
-        
-        const alignCenter = {
-            textAlign:"center"
-        };
-        const columns = [
-            {
-                style: alignCenter,
-                Header: 'Data',
-                id: 'date',
-                accessor: d => {
-                    let date = new Date(d.general.date);
-                    return date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear()
-                },
-                filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, {keys: ["date"]}),
-                filterAll: true
-            }, {
-                style: alignCenter,
-                Header: 'Cidade',
-                id: 'city',
-                accessor: d => d.general.city,
-                filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, {keys: ["city"]}),
-                filterAll: true
-            }, {
-                style: alignCenter,
-                Header: 'Rua',
-                id: 'street',
-                accessor: d => d.general.street,
-                filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, {keys: ["street"]}),
-                filterAll: true
-
-            }, {
-                style: alignCenter,
-                Header: 'Numero/KM',
-                id: 'number',
-                accessor: d => d.general.number,
-                filterMethod: (filter, row) =>
-                    row[filter.id].startsWith(filter.value)
-            }, {
-                style: alignCenter,
-                Header: 'Cruzamento com',
-                id: 'crossRoad',
-                accessor: d => d.general.crossRoad,
-                filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, {keys: ["crossRoad"]}),
-                filterAll: true
-            }, {
-                style: alignCenter,
-                Header: 'Bairro',
-                id: 'neighborhood',
-                accessor: d => d.general.neighborhood,
-                filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, {keys: ["neighborhood"]}),
-                filterAll: true
-            }, {
-                style: alignCenter,
-                Header: 'Referencia',
-                id: 'reference',
-                accessor: d => d.general.reference,
-                filterMethod: (filter, rows) =>
-                    matchSorter(rows, filter.value, {keys: ["reference"]}),
-                filterAll: true
-            }, {
-                style: alignCenter,
-                Header: 'Detalhar',
-                accessor: 'id',
-                filterable: false,
-                sortable: false,
-                Cell: props => (
-                    <Button icon="edit" primary id={props.value} onClick={() => this.buttonToggleModal(props.value)}/>
-                )
-            }
-        ];
-        const actions = [
-            {label: "Fechar", onClick: this.props.handleToggleModal},
-            {label: "Salvar", onClick: this.props.handleToggleModal}
-        ];
-
         return (
             <div>
                 <div className="content" id="content">
@@ -103,19 +24,87 @@ export class EventsGrid extends Component {
                                 rowsText='linhas' pageText='Pagina' loadingText='Carregando...'
                                 noDataText='Opa, Algo deu errado!' className="-striped -highlight"
                                 data={this.props.data} loading={(this.props.loading === undefined)}
-                                columns={columns} defaultPageSize={10} filterable
+                                defaultPageSize={10} filterable
                                 defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
+                                getTdProps={() => ({style: {textAlign: "center"}})}
+                                columns={[
+                                    {
+                                        Header: 'Data',
+                                        id: 'data',
+                                        accessor: d => {
+                                            return new Date(d.general.data).toLocaleDateString();
+                                        },
+                                        filterMethod: (filter, rows) =>
+                                            matchSorter(rows, filter.value, {keys: ["data"]}),
+                                        filterAll: true
+                                    }, {
+                                        Header: 'Cidade',
+                                        id: 'municipio',
+                                        accessor: d => d.general.municipio,
+                                        filterMethod: (filter, rows) =>
+                                            matchSorter(rows, filter.value, {keys: ["municipio"]}),
+                                        filterAll: true
+                                    }, {
+                                        Header: 'Rua',
+                                        id: 'rua',
+                                        accessor: d => d.general.rua,
+                                        filterMethod: (filter, rows) =>
+                                            matchSorter(rows, filter.value, {keys: ["rua"]}),
+                                        filterAll: true
+
+                                    }, {
+                                        Header: 'Numero/KM',
+                                        id: 'numero',
+                                        accessor: d => d.general.numero,
+                                        filterMethod: (filter, row) =>
+                                            row[filter.id].startsWith(filter.value)
+                                    }, {
+                                        Header: 'Cruzamento com',
+                                        id: 'cruzamento',
+                                        accessor: d => d.general.cruzamento,
+                                        filterMethod: (filter, rows) =>
+                                            matchSorter(rows, filter.value, {keys: ["cruzamento"]}),
+                                        filterAll: true
+                                    }, {
+                                        Header: 'Bairro',
+                                        id: 'bairro',
+                                        accessor: d => d.general.bairro,
+                                        filterMethod: (filter, rows) =>
+                                            matchSorter(rows, filter.value, {keys: ["bairro"]}),
+                                        filterAll: true
+                                    }, {
+                                        Header: 'Referencia',
+                                        id: 'referencia',
+                                        accessor: d => d.general.referencia,
+                                        filterMethod: (filter, rows) =>
+                                            matchSorter(rows, filter.value, {keys: ["referencia"]}),
+                                        filterAll: true
+                                    }, {
+                                        Header: 'Detalhar',
+                                        accessor: 'id',
+                                        filterable: false,
+                                        sortable: false,
+                                        Cell: props => (
+                                            <Button icon="edit" primary id={props.value}
+                                                    onClick={() => this.buttonToggleModal(props.value)}/>
+                                        )
+                                    }
+                                ]}
                     />
                     <div className="modal-container">
                         <Dialog active={this.props.showModal === !(undefined)}
-                                actions={actions} type='fullscreen'
-                                className="custom-modal"
+                                actions={[
+                                    {label: "Fechar", onClick: this.props.handleToggleModal},
+                                    {label: "Salvar", onClick: this.props.handleToggleModal}
+                                ]}
+                                className="custom-modal" type='fullscreen'
                                 onEscKeyDown={this.props.handleToggleModal}
                                 onOverlayClick={this.props.handleToggleModal}
                                 title='Ocorrência'
                         >
-                            <EventsForm selectedEvent={this.props.selectedEvent} options={this.props.options}
+                            <EventsForm selectedEvent={this.props.selectedEvent}
                                         selectedEventID={this.props.selectedEventID}
+                                        options={this.props.options}
                                         onChangeInput={this.props.onChangeInput}
                                         addVehicle={this.props.addVehicle} removeVehicle={this.props.removeVehicle}
                                         addInvolved={this.props.addInvolved} removeInvolved={this.props.removeInvolved}
@@ -132,20 +121,21 @@ export class EventsGrid extends Component {
 export class EventsForm extends Component {
 
     componentWillMount() {
-        console.log(this.props);
+        // console.log(this.props);
     }
 
     render() {
-        // let selectedEvent = this.props.selectedEvent;
         return (
             <div className='clearfix'>
                 <Grid>
+                    {/*style={{textAlign:'center'}}*/}
                     <Col>
                         <Form id="eventForm">
                             <Tabs defaultActiveKey={1} id="event-form-tabs">
                                 <Tab eventKey={1} title="Geral">
                                     <General
                                         data={this.props.selectedEvent.general}
+                                        options={this.props.options}
                                         onChangeInput={this.props.onChangeInput}
                                         subMenu='general'
                                     />
@@ -181,6 +171,10 @@ export class EventsForm extends Component {
                             </Tabs>
                         </Form>
                     </Col>
+                    <Col>
+                        <p>Ultima edição por: {this.props.selectedEvent.parceiro}</p>
+                        <p>Adicionado em: {this.props.selectedEvent.dataSigtrans} as {this.props.selectedEvent.horaSigtrans}</p>
+                    </Col>
                 </Grid>
             </div>
         )
@@ -190,45 +184,86 @@ export class EventsForm extends Component {
 
 class General extends Component {
     render() {
+        let mapCenter = this.props.data.geolocation ? {
+            lat: parseFloat(this.props.data.geolocation.lat),
+            lng: parseFloat(this.props.data.geolocation.lng)
+        } : {
+            lat: 0,
+            lng: 0
+        };
+        let marker=mapCenter.lat!==0?[{position:mapCenter}]:[];
         return (
             <Row className="form-group">
                 <br/>
-                <Col sm={6}>
-                    <Input value={this.props.data.street}
-                           type="text" id="street" required="required"
+                <Col md={2}>
+                    <Input value={this.props.data.data} type="date"
+                           id="data" required="required"
+                           onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                           label="Data"/>
+                </Col>
+                <Col md={2}>
+                    <Input value={this.props.data.hora} type="time-local"
+                           id="hora" required="required"
+                           onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                           label="Hora"/>
+                </Col>
+                <Col md={2}>
+                    <Select value={this.props.data.estado}
+                            id="estado" name="estado"
+                            onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                            options={this.props.options.estado?this.props.options.estado:[{id:1, value:'Paraná'}]}
+                            label="Estado"/>
+                </Col>
+                <Col md={2}>
+                    <Select value={this.props.data.municipio}
+                            id="municipio" name="municipio"
+                            onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                            options={this.props.options.municipio?this.props.options.municipio:[{id:1, value:'Cascavel'}]}
+                            label="Municipio"/>
+                </Col>
+                <Col md={2}>
+                    <Select value={this.props.data.bairro}
+                            id="bairro" name="bairro"
+                            onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                            options={this.props.options.bairro?this.props.options.bairro:[{id:1, value:'Centro'}]}
+                            label="Bairro"/>
+                </Col>
+                <Col md={2}>
+                    <Input value={this.props.data.numero} type="text"
+                           id="numero" required="required"
+                           onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                           label="Número"/>
+                </Col>
+                <Col md={4}>
+                    <Input value={this.props.data.rua} type="text"
+                           id="rua" required="required"
                            onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
                            label="Rua"/>
                 </Col>
-                <Col sm={2}>
-                    <Input value={this.props.data.number ? this.props.data.number : 0}
-                           type="text" id="number" required="required"
-                           onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                           label="Numero"/>
-                </Col>
-                <Col sm={4}>
-                    <Input value={this.props.data.date ? this.props.data.date : Date.now()} type="datetime-local"
-                           id="date" required="required"
-                           onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                           label="Data/Hora"/>
-                </Col>
-                <Col sm={6}>
-                    <Input value={this.props.data.crossRoad ? this.props.data.crossRoad : ''} type="text"
-                           id="crossRoad" required="required"
+                <Col md={4}>
+                    <Input value={this.props.data.cruzamento} type="text"
+                           id="cruzamento" required="required"
                            onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
                            label="Cruzamento"/>
                 </Col>
-                <Col sm={3}>
-                    <Input value={this.props.data.geolocation.lat}
-                           type="number" id="lat" required="required"
+                <Col md={4}>
+                    <Input value={this.props.data.referencia} type="text"
+                           id="referencia" required="required"
                            onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                           label="Latitude"/>
+                           label="Ponto de Ref."/>
                 </Col>
-                <Col sm={3}>
-                    <Input value={this.props.data.geolocation.lng}
-                           type="number" id="lng" required="required"
-                           onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                           label="Longitude"/>
-                </Col>
+                {this.props.data.geolocation ? (
+                    <Col md={12}>
+                        <Row className="mapRow">
+                            <Map center={mapCenter} markers={marker} defaultZoom={15} showMarkers={true}
+                                 googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzTZTuwTczZL2JedjuYJRiEh2v0BQpgxo"
+                                 loadingElement={<div style={{height: `100%`}}/>}
+                                 containerElement={<div style={{height: '100%'}}/>}
+                                 mapElement={<div style={{height: '100%'}}/>}
+                            />
+                        </Row>
+                    </Col>
+                ) : <div/>}
             </Row>
         )
     }
@@ -241,93 +276,87 @@ class StatisticData extends Component {
             <Row className="form-group">
                 <br/>
                 <Row>
-                    <Col sm={4}>
-                        <Select value={this.props.data.accidentType}
-                                id="accidentType" name="accidentType"
+                    <Col md={4}>
+                        <Select value={this.props.data.zona}
+                                id="zona" name="zona"
                                 onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.AccidentTypes}
-                                label="Tipo de Acidente"/>
-                    </Col>
-                    <Col sm={4}>
-                        <Select value={this.props.data.accidentClassification}
-                                id="accidentClassification" name="accidentClassification"
-                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.AccidentClassification}
-                                label="Classificação do acidente"/>
-                    </Col>
-                    <Col sm={4}>
-                        <Select value={this.props.data.pavementType}
-                                id="pavementType" name="pavementType"
-                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.PavementTypes}
-                                label="Tipo de Pavimento"/>
-                    </Col>
-                    <Col sm={4}>
-                        <Select value={this.props.data.roadSurface}
-                                id="roadSurface" name="roadSurface"
-                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.RoadSurfaces}
-                                label="Superficie"/>
-                    </Col>
-                    <Col sm={4}>
-                        <Select value={this.props.data.roadCondition}
-                                id="roadCondition" name="roadCondition"
-                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.RoadConditions}
-                                label="Condição da pista"/>
-                    </Col>
-                    <Col sm={4}>
-                        <Select value={this.props.data.roadProfile}
-                                id="roadProfile" name="roadProfile"
-                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.RoadProfiles}
-                                label="Perfil da pista"/>
-                    </Col>
-                    <Col sm={4}>
-                        <Select value={this.props.data.climaticCondition}
-                                id="climaticCondition" name="climaticCondition"
-                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.ClimaticConditions}
-                                label="Condição climática"/>
-                    </Col>
-                    <Col sm={4}>
-                        <Select value={this.props.data.trafficSignCondition}
-                                id="trafficSignCondition" name="trafficSignCondition"
-                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.Conditions}
-                                label="Sinalização vertical"/>
-                    </Col>
-                    <Col sm={4}>
-                        <Select value={this.props.data.trafficPaintCondition}
-                                id="trafficPaintCondition" name="trafficPaintCondition"
-                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.Conditions}
-                                label="Sinalização horizontal"/>
-                    </Col>
-                    <Col sm={4}>
-                        <Select value={this.props.data.roadDirection}
-                                id="roadDirection" name="roadDirection"
-                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.RoadDirections}
-                                label="Direção"/>
-                    </Col>
-                    <Col sm={4}>
-                        <Select value={this.props.data.visibility}
-                                id="visibility" name="visibility"
-                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.Visibilities}
-                                label="Direção"/>
-                    </Col>
-                    <Col sm={4}>
-                        <Select value={this.props.data.zone}
-                                id="zone" name="zone"
-                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                                options={this.props.options.Zones}
+                                options={this.props.options.zona}
                                 label="Zona"/>
                     </Col>
-                    <Col sm={12}>
-                        <Input value={this.props.data.otherInformation} type="text"
-                               id="otherInformation" required="required"
+                    <Col md={4}>
+                        <Select value={this.props.data.acidenteTrabalho}
+                                id="acidenteTrabalho" name="acidenteTrabalho"
+                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                                options={this.props.options.acidenteTrabalho}
+                                label="Acidente de Trabalho"/>
+                    </Col>
+                    <Col md={4}>
+                        <Select value={this.props.data.tipoAcidente}
+                                id="tipoAcidente" name="tipoAcidente"
+                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                                options={this.props.options.tipoAcidente}
+                                label="Tipo de Acidente"/>
+                    </Col>
+                    <Col md={4}>
+                        <Select value={this.props.data.classificacaoAcidente}
+                                id="classificacaoAcidente" name="classificacaoAcidente"
+                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                                options={this.props.options.classificacaoAcidente}
+                                label="Classificação do acidente"/>
+                    </Col>
+                    <Col md={4}>
+                        <Select value={this.props.data.condicaoClimatica}
+                                id="condicaoClimatica" name="condicaoClimatica"
+                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                                options={this.props.options.condicaoClimatica}
+                                label="Condições Climáticas"/>
+                    </Col>
+                    <Col md={4}>
+                        <Select value={this.props.data.sentidoVia}
+                                id="sentidoVia" name="sentidoVia"
+                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                                options={this.props.options.sentidoVia}
+                                label="Sentido da Via"/>
+                    </Col>
+                    <Col md={4}>
+                        <Select value={this.props.data.condicaoVia}
+                                id="condicaoVia" name="condicaoVia"
+                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                                options={this.props.options.condicaoVia}
+                                label="Condição da Via"/>
+                    </Col>
+                    <Col md={4}>
+                        <Select value={this.props.data.perfilPista}
+                                id="perfilPista" name="perfilPista"
+                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                                options={this.props.options.perfilPista}
+                                label="Perfil da Pista"/>
+                    </Col>
+                    <Col md={4}>
+                        <Select value={this.props.data.sinalizacao}
+                                id="sinalizacao" name="sinalizacao"
+                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                                options={this.props.options.sinalizacao}
+                                label="Sinalização"/>
+                    </Col>
+                    <Col md={4}>
+                        <Input value={this.props.data.velocidadeMaxima} type="number" min="0"
+                               id="velocidadeMaxima" required="required"
+                               onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                               label="Velocidade Máxima Permitida"/>
+                    </Col>
+                    <Col md={4}>
+                        <Select value={this.props.data.visibilidade}
+                                id="visibilidade" name="visibilidade"
+                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
+                                options={this.props.options.visibilidade}
+                                label="Visibilidade"/>
+                    </Col>
+
+                    <Col md={12}>
+                        <Input value={this.props.data.informacoesAdicionais}
+                               componentClass='textarea'
+                               id="informacoesAdicionais" required="required"
                                onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
                                label="Informações adicionais"/>
                     </Col>
@@ -341,146 +370,158 @@ class StatisticData extends Component {
 class Vehicles extends Component {
 
     render() {
-
-        let vehicles = this.props.data ?
-            this.props.data.map(function (vehicle) {
-                return (
-                    <Panel
-                        header={"Veiculo " + vehicle.id + ": " + this.props.options.VehicleType[vehicle.vehicleType].value}
-                        eventKey={vehicle.id} key={vehicle.id} collapsible>
-                        <Row>
-                            <Col sm={10}>
-                                <Row>
-                                    <Col sm={2}>
-                                        <Input value={vehicle.licensePlate} type="text"
-                                               id="licensePlate" required="required"
-                                               label="Placa"
-                                               onChange={(e) => {
-                                                   this.props.onChangeInput(
-                                                       e.target.value,
-                                                       e.target.id,
-                                                       this.props.subMenu
-                                                   )
-                                               }}
-                                        />
-                                    </Col>
-                                    <Col sm={3}>
-                                        <Input value={vehicle.brand} type="text"
-                                               id="brand" required="required"
-                                               label="Marca"
-                                               onChange={(e) => {
-                                                   this.props.onChangeInput(
-                                                       e.target.value,
-                                                       e.target.id,
-                                                       this.props.subMenu
-                                                   )
-                                               }}
-                                        />
-                                    </Col>
-                                    <Col sm={5}>
-                                        <Input value={vehicle.model} type="text"
-                                               id="model" required="required"
-                                               label="Modelo"
-                                               onChange={(e) => {
-                                                   this.props.onChangeInput(
-                                                       e.target.value,
-                                                       e.target.id,
-                                                       this.props.subMenu
-                                                   )
-                                               }}
-                                        />
-                                    </Col>
-                                    <Col sm={4}>
-                                        <Select value={vehicle.vehicleType} id="vehicleType"
-                                                name="vehicleType" required='required'
-                                                label="Tipo de veículo"
-                                                options={this.props.options.VehicleType}
-                                                onChange={(e) => {
-                                                    this.props.onChangeInput(
-                                                        e.target.value,
-                                                        e.target.id,
-                                                        this.props.subMenu
-                                                    )
-                                                }}
-                                        />
-                                    </Col>
-                                    <Col sm={5}>
-                                        <Select value={vehicle.degreeOfDamage} id="degreeOfDamage"
-                                                name="degreeOfDamage" required='required'
-                                                label="Grau de avaria"
-                                                options={this.props.options.DegreesOfDamage}
-                                                onChange={(e) => {
-                                                    this.props.onChangeInput(
-                                                        e.target.value,
-                                                        e.target.id,
-                                                        this.props.subMenu
-                                                    )
-                                                }}
-                                        />
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col sm={12}>
-                                        <h5>Quanto ao condutor</h5>
-                                    </Col>
-                                    <Col sm={3}>
-                                        <Select value={vehicle.licenseLevel ? vehicle.licenseLevel : ''}
-                                                id="licenseLevel" name="licenseLevel" required="required"
-                                                label="Habilitação"
-                                                options={this.props.options.LicenseLevels}
-                                                onChange={(e) => {
-                                                    this.props.onChangeInput(
-                                                        e.target.value,
-                                                        e.target.id,
-                                                        this.props.subMenu
-                                                    )
-                                                }}
-                                        />
-                                    </Col>
-                                    <Col sm={3}>
-                                        <Input value={vehicle.firstLicense ? vehicle.firstLicense : ''}
-                                               type="date" id="firstLicense" required="required"
-                                               label="Primeira habilitação"
-                                               onChange={(e) => {
-                                                   this.props.onChangeInput(
-                                                       e.target.value,
-                                                       e.target.id,
-                                                       this.props.subMenu
-                                                   )
-                                               }}
-                                        />
-                                    </Col>
-                                    <Col sm={4}>
-                                        <Input value={vehicle.expireDate ? vehicle.expireDate : ''}
-                                               type="date" id="expireDate" required="required"
-                                               label="Vencimento da habilitação"
-                                               onChange={(e) => {
-                                                   this.props.onChangeInput(
-                                                       e.target.value,
-                                                       e.target.id,
-                                                       this.props.subMenu
-                                                   )
-                                               }}
-                                        />
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col sm={2}>
-                                <Button icon='close'
-                                        onClick={() => this.props.remove(vehicle)}>Remover</Button>
-                            </Col>
-                        </Row>
-                    </Panel>
-                );
-            }, this) : undefined;
-
         return (
             <Row className="form-group">
                 <br/>
-                <Col sm={10}>
-                    {vehicles}
+                <Col md={10}>
+                    {
+                        this.props.data ? this.props.data.map(vehicle => {
+                            let header = (vehicle.modelo+' '+vehicle.placa)||'';
+                            return (
+                                <Panel
+                                    header={"Veiculo: " + header}
+                                    eventKey={vehicle.id} key={vehicle.id} collapsible>
+                                    <Row>
+                                        <Col md={10}>
+                                            <Row>
+                                                <Col md={2}>
+                                                    <Input value={vehicle.placa} type="text"
+                                                           id="placa" required="required" label="Placa"
+                                                           onChange={(e) => {
+                                                               this.props.onChangeInput(
+                                                                   e.target.value,
+                                                                   e.target.id,
+                                                                   this.props.subMenu
+                                                               )
+                                                           }}
+                                                    />
+                                                </Col>
+                                                <Col md={4}>
+                                                    <Select value={vehicle.marca}
+                                                            id="marca" name="marca"
+                                                            required='required' label="Marca"
+                                                            options={this.props.options.marca}
+                                                            onChange={(e) => {
+                                                                this.props.onChangeInput(
+                                                                    e.target.value,
+                                                                    e.target.id,
+                                                                    this.props.subMenu
+                                                                )
+                                                            }}
+                                                    />
+                                                </Col>
+                                                <Col md={4}>
+                                                    <Select value={vehicle.modelo}
+                                                            id="modelo" name="modelo"
+                                                            required='required' label="Modelo"
+                                                            options={this.props.options.modelo}
+                                                            onChange={(e) => {
+                                                                this.props.onChangeInput(
+                                                                    e.target.value,
+                                                                    e.target.id,
+                                                                    this.props.subMenu
+                                                                )
+                                                            }}
+                                                    />
+                                                </Col>
+                                                <Col md={4}>
+                                                    <Select value={vehicle.tipoVeiculo}
+                                                            id="tipoVeiculo" name="tipoVeiculo"
+                                                            required='required' label="Tipo de veículo"
+                                                            options={this.props.options.tipoVeiculo}
+                                                            onChange={(e) => {
+                                                                this.props.onChangeInput(
+                                                                    e.target.value,
+                                                                    e.target.id,
+                                                                    this.props.subMenu
+                                                                )
+                                                            }}
+                                                    />
+                                                </Col>
+                                                <Col md={2}>
+                                                    <Input value={vehicle.numeroOcupantes} type="number" min="0"
+                                                           id="numeroOcupantes" required="required"
+                                                           label="Ocupantes"
+                                                           onChange={(e) => {
+                                                               this.props.onChangeInput(
+                                                                   e.target.value,
+                                                                   e.target.id,
+                                                                   this.props.subMenu
+                                                               )
+                                                           }}
+                                                    />
+                                                </Col>
+                                                <Col md={2}>
+                                                    <Input value={vehicle.numeroFeridos} type="number" min="0"
+                                                           id="numeroFeridos" required="required"
+                                                           label="Qtd. de Feridos"
+                                                           onChange={(e) => {
+                                                               this.props.onChangeInput(
+                                                                   e.target.value,
+                                                                   e.target.id,
+                                                                   this.props.subMenu
+                                                               )
+                                                           }}
+                                                    />
+                                                </Col>
+                                                <Col md={2}>
+                                                    <Input value={vehicle.numeroObitos} type="number" min="0"
+                                                           id="numeroObitos" required="required"
+                                                           label="Qtd. de Obitos"
+                                                           onChange={(e) => {
+                                                               this.props.onChangeInput(
+                                                                   e.target.value,
+                                                                   e.target.id,
+                                                                   this.props.subMenu
+                                                               )
+                                                           }}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col md={12}>
+                                                    <h5>Quanto ao condutor</h5>
+                                                </Col>
+                                                <Col md={3}>
+                                                    <Select value={vehicle.cnh}
+                                                            id="cnh" name="cnh" required="required"
+                                                            label="Habilitação"
+                                                            options={this.props.options.cnh}
+                                                            onChange={(e) => {
+                                                                this.props.onChangeInput(
+                                                                    e.target.value,
+                                                                    e.target.id,
+                                                                    this.props.subMenu
+                                                                )
+                                                            }}
+                                                    />
+                                                </Col>
+                                                <Col md={4}>
+                                                    <Input value={vehicle.validadeCNH}
+                                                           type="date" id="validadeCNH" required="required"
+                                                           label="Validade da CNH"
+                                                           onChange={(e) => {
+                                                               this.props.onChangeInput(
+                                                                   e.target.value,
+                                                                   e.target.id,
+                                                                   this.props.subMenu
+                                                               )
+                                                           }}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                        <Col md={2}>
+                                            <Button icon='close'
+                                                    onClick={() => this.props.remove(vehicle)}>Remover</Button>
+                                        </Col>
+                                    </Row>
+                                </Panel>
+                            );
+                        }):<div/>
+                }
                 </Col>
-                <Col sm={2}>
+                <Col md={2}>
                     <Button icon='add'
                             label='Adicionar veiculo'
                             onClick={() => this.props.add()}
@@ -499,8 +540,8 @@ class Involved extends Component {
             this.props.data.map((involved) => {
                 return (
                     <Panel header={"Envolvido: " + involved.name} eventKey={involved.id} key={involved.id} collapsible>
-                        <Col sm={10}>
-                            <Col sm={4}>
+                        <Col md={10}>
+                            <Col md={4}>
                                 <Input value={involved.name} type="text"
                                        id="name" required="required"
                                        onChange={(e) => {
@@ -512,7 +553,7 @@ class Involved extends Component {
                                        }}
                                        label="Nome"/>
                             </ Col>
-                            <Col sm={2}>
+                            <Col md={2}>
                                 <Input value={involved.age} type="number"
                                        id="age" required="required"
                                        onChange={(e) => {
@@ -524,7 +565,7 @@ class Involved extends Component {
                                        }}
                                        label="Idade"/>
                             </ Col>
-                            <Col sm={2}>
+                            <Col md={2}>
                                 <Select value={involved.sex} required="required"
                                         id="sex" name="involvedSex"
                                         options={this.props.options.Sexes}
@@ -537,7 +578,7 @@ class Involved extends Component {
                                         }}
                                         label="Sexo"/>
                             </ Col>
-                            <Col sm={4}>
+                            <Col md={4}>
                                 <Input value={involved.street} type="text"
                                        id="street" required="required"
                                        label="Rua"
@@ -551,7 +592,7 @@ class Involved extends Component {
                                        }}
                                 />
                             </Col>
-                            <Col sm={4}>
+                            <Col md={4}>
                                 <Input value={involved.number} type="text"
                                        id="number" required="required"
                                        label="Numero"
@@ -565,7 +606,7 @@ class Involved extends Component {
                                        }}
                                 />
                             </Col>
-                            <Col sm={4}>
+                            <Col md={4}>
                                 <Input value={involved.crossRoad} type="text"
                                        id="crossRoad" required="required"
                                        label="Esquina"
@@ -578,7 +619,7 @@ class Involved extends Component {
                                        }}
                                 />
                             </Col>
-                            <Col sm={4}>
+                            <Col md={4}>
                                 <Input value={involved.reference} type="text"
                                        id="reference" required="required"
                                        label="Referência"
@@ -591,7 +632,7 @@ class Involved extends Component {
                                        }}
                                 />
                             </Col>
-                            <Col sm={4}>
+                            <Col md={4}>
                                 <Input value={involved.mothersName} type="text"
                                        id="mothersName" required="required"
                                        label="Nome da mãe"
@@ -604,7 +645,7 @@ class Involved extends Component {
                                        }}
                                 />
                             </Col>
-                            <Col sm={4}>
+                            <Col md={4}>
                                 <Select value={involved.situation} required="required"
                                         id="involvedSituation" name="involvedSituation"
                                         label="Situação"
@@ -618,7 +659,7 @@ class Involved extends Component {
                                         }}
                                 />
                             </Col>
-                            <Col sm={4}>
+                            <Col md={4}>
                                 <Select value={involved.vehicleType}
                                         id="vehicleType" name="vehicleType"
                                         label="Tipo de veiculo" required="required"
@@ -632,7 +673,7 @@ class Involved extends Component {
                                         }}
                                 />
                             </Col>
-                            <Col sm={4}>
+                            <Col md={4}>
                                 <Select value={involved.positionOnTheVehicle}
                                         id="positionOnTheVehicle" name="positionOnTheVehicle"
                                         label="Posição no Veículo" required="required"
@@ -646,7 +687,7 @@ class Involved extends Component {
                                         }}
                                 />
                             </Col>
-                            <Col sm={4}>
+                            <Col md={4}>
                                 <Select value={involved.securityCondition}
                                         id="securityCondition" name="securityCondition"
                                         label="Condição de segurança" required="required"
@@ -660,7 +701,7 @@ class Involved extends Component {
                                         }}
                                 />
                             </Col>
-                            <Col sm={4}>
+                            <Col md={4}>
                                 <Select value={involved.injuryLevel}
                                         id="injuryLevel" name="injuryLevel"
                                         label="Gravidade da lesão" required="required"
@@ -674,7 +715,7 @@ class Involved extends Component {
                                         }}
                                 />
                             </Col>
-                            <Col sm={12}>
+                            <Col md={12}>
                                 <Input value={involved.evolutions} type="text"
                                        id="involvedEvolution" required="required"
                                        label="Evolução"
@@ -688,7 +729,7 @@ class Involved extends Component {
                                 />
                             </Col>
                         </Col>
-                        <Col sm={2}>
+                        <Col md={2}>
                             <Button icon='close'
                                     onClick={() => this.props.remove(involved)}>Remover</Button>
                         </Col>
@@ -699,10 +740,10 @@ class Involved extends Component {
         return (
             <Row className="form-group">
                 <br/>
-                <Col sm={10}>
+                <Col md={10}>
                     {involved}
                 </Col>
-                <Col sm={2}>
+                <Col md={2}>
                     <Button icon='add'
                             label='Adicionar envolvido'
                             onClick={() => this.props.add()}

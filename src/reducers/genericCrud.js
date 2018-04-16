@@ -48,5 +48,7 @@ export function genericCrud(state = new List(), action) {
         });
         return Object.assign({}, state, {selectedType});
     }
+
     return state;
+
 }
