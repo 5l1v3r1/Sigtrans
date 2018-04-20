@@ -52,8 +52,8 @@ class Home extends Component {
                         }) : undefined}
                         loadingElement={<div style={{height: '50%'}}/>}
                         containerElement={<div style={{height: '100%'}}/>} mapElement={<div style={{height: '78vh'}}/>}
-                        showMarkers={this.props.home.showMarkers} defaultZoom={3}
-                        center={{lat: 40.056869, lng: -103.343486}}
+                        showMarkers={this.props.home.showMarkers} defaultZoom={13}
+                        center={{lat: -24.9578, lng:-53.4595}}
                     />
                 </div>
             </div>

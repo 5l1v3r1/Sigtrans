@@ -1,4 +1,11 @@
-import {listGenericType, onChangeCrudFormInput, onChangeCrudInput, toggleATModal} from "../actions/actionCreator";
+import {
+    cleanForm,
+    listGenericType,
+    onChangeCrudFormInput,
+    onChangeCrudInput,
+    toggleATModal
+} from "../actions/actionCreator";
+import {getUrl} from '../management/Management';
 
 export default class CrudApi {
 
@@ -16,7 +23,7 @@ export default class CrudApi {
 
     static addType(form, selectedType, pageSize, page) {
         return dispatch => {
-            fetch('http://10.81.81.108:8080/sigtrans-api/' + selectedType, {
+            fetch(getUrl('api') + selectedType, {
                 method: 'POST',
                 headers: new Headers({'content-type': 'application/json'}),
                 body: JSON.stringify(form),
@@ -24,14 +31,15 @@ export default class CrudApi {
                 .then(response => response.json())
                 .then(responseData => {
                     console.log(responseData);
-                    dispatch(this.listTypes(selectedType, pageSize, page))
+                    dispatch(this.listTypes(selectedType, pageSize, page));
+                    dispatch(cleanForm());
                 });
         }
     }
 
     static removeType(id, selectedType, pageSize, page) {
         return dispatch => {
-            fetch('http://10.81.81.108:8080/sigtrans-api/' + selectedType + '/' + id, {
+            fetch(getUrl('api') + selectedType + '/' + id, {
                 method: 'DELETE',
                 headers: new Headers({'content-type': 'application/json'}),
             })
@@ -47,7 +55,7 @@ export default class CrudApi {
         return dispatch => {
             console.log(propToChange);
             objToChange[propToChange]=value;
-            fetch('http://10.81.81.108:8080/sigtrans-api/' + selectedType + '/' + id, {
+            fetch(getUrl('api') + selectedType + '/' + id, {
                 method: 'PUT',
                 headers: new Headers({'content-type': 'application/json'}),
                 body: JSON.stringify(objToChange),
@@ -55,7 +63,7 @@ export default class CrudApi {
                 .then(response => response.json())
                 .then(resData => {
                     console.log(resData);
-                    dispatch(this.listTypes(selectedType, pageSize, page))
+                    dispatch(this.listTypes(selectedType, pageSize, page));
                 });
         }
     }
@@ -64,7 +72,7 @@ export default class CrudApi {
         // console.log('loading....');
         return dispatch => {
             dispatch(this.onChangeInput(true, 'loading'));
-            fetch('http://10.81.81.108:8080/sigtrans-api/' + selectedType + (pageSize !== undefined && page !== undefined ? '?pageSize=' + pageSize + '&start=' + page * pageSize : '/'))
+            fetch(getUrl('api') + selectedType + (pageSize !== undefined && page !== undefined ? '?pageSize=' + pageSize + '&start=' + page * pageSize : '/'))
                 .then(response => response.json())
                 .then(responseData => {
                     dispatch(this.onChangeInput(pageSize,'pageSize'));

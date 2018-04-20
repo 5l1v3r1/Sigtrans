@@ -53,37 +53,43 @@ export function events(state = new List(), action) {
     }
 
     if (action.type === 'ADDINVOLVED') {
-        const selectedEvent = update(state.selectedEvent, {
+        /*const selectedEvent = update(state.selectedEvent, {
             involved: {
                 $push: [{
                     id: parseInt(state.selectedEvent.involved[state.selectedEvent.involved.length - 1].id, 10) + 1,
                     Name: ''
                 }]
             }
-        });
+        });*/
+        let selectedEvent = state.selectedEvent;
+        selectedEvent.involved.push({});
         return Object.assign({}, state, {selectedEvent});
     }
 
     if (action.type === 'ADDVEHICLE') {
-        const selectedEvent = update(state.selectedEvent, {
+        /*const selectedEvent = update(state.selectedEvent, {
             vehicles: {
                 $push: [{
                     id: parseInt(state.selectedEvent.vehicles[state.selectedEvent.vehicles.length - 1].id, 10) + 1
                 }]
             }
-        });
+        });*/
+        let selectedEvent = state.selectedEvent;
+        selectedEvent.vehicles.push({});
         return Object.assign({}, state, {selectedEvent});
     }
 
     if (action.type === 'REMOVEINVOLVED') {
+        let selectedEvent = state.selectedEvent;
         const id = state.selectedEvent.involved.indexOf(action.involved);
-        const selectedEvent = update(state.selectedEvent, {involved: {$splice: [[id, 1]]}});
+        selectedEvent.involved.splice(id, 1);
         return Object.assign({}, state, {selectedEvent});
     }
 
     if (action.type === 'REMOVEVEHICLE') {
-        const id = state.selectedEvent.vehicles.indexOf(action.vehicle);
-        const selectedEvent = update(state.selectedEvent, {vehicles: {$splice: [[id, 1]]}});
+        let selectedEvent = state.selectedEvent;
+        const id = selectedEvent.vehicles.indexOf(action.vehicle);
+        selectedEvent.vehicles.splice(id, 1);
         return Object.assign({}, state, {selectedEvent});
     }
 

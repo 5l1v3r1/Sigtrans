@@ -17,14 +17,7 @@ export function genericCrud(state = new List(), action) {
         if ((value === '')||(!value)) {
             delete form[action.input];
         } else {
-            if (action.input !== "nome") {
-                if (!form[action.input]) {
-                    form[action.input] = {};
-                }
-                form[action.input].nome = value;
-            } else {
-                form[action.input] = value;
-            }
+            form[action.input] = value;
         }
         return Object.assign({}, state, {form});
     }
@@ -47,6 +40,10 @@ export function genericCrud(state = new List(), action) {
             return item._id === action.id;
         });
         return Object.assign({}, state, {selectedType});
+    }
+    if (action.type === 'CLEANFORM') {
+        const form = Object.keys(state.form).map(item=>state.form[item]=undefined);
+        return Object.assign({}, state, form);
     }
 
     return state;

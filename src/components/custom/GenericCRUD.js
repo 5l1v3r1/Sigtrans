@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import Input from './CustomInput';
 import Button from 'react-toolbox/lib/button/Button';
-import {Col, Grid, MenuItem, OverlayTrigger, PageHeader, Panel, Row, Tooltip} from 'react-bootstrap';
+import {Button as Submit, Col, Grid, MenuItem, OverlayTrigger, PageHeader, Panel, Row, Tooltip} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import {connect} from 'react-redux';
 import FontIcon from "react-toolbox/lib/font_icon";
-import CrudApi from "../../logics/CrudApi";
-import matchSorter from "match-sorter";
+import CrudApi from '../../logics/CrudApi';
+import matchSorter from 'match-sorter';
 
 class GenericCRUD extends Component {
 
@@ -21,6 +21,11 @@ class GenericCRUD extends Component {
 
     fetchData(state, instance) {
         this.props.listTypes(this.props.genericProps.type.id, state.pageSize, state.page);
+    }
+
+    add(e){
+        e.preventDefault();
+        this.props.addType(this.props.genericProps.form, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page)
     }
 
     render() {
@@ -94,10 +99,12 @@ class GenericCRUD extends Component {
                 name: 'Estado',
                 fields: [
                     {
+                        id: 'idParceiro',
+                        name: 'ID Parceiro'
+                    },{
                         id: 'nome',
                         name: 'Estado'
-                    },
-                    {
+                    },{
                         id: 'sigla',
                         name: 'Sigla'
                     }
@@ -207,9 +214,11 @@ class GenericCRUD extends Component {
                 ]
             }
         ].sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0));
+
         const typeMenuItems = typeList.map((type) => {
             return (<MenuItem key={type.id} onSelect={(e) => this.onSelect(type, e)}>{type.name}</MenuItem>)
         });
+
         let columns = this.props.genericProps.type ? this.props.genericProps.type.fields.map((field) => {
             return (
                 {
@@ -246,6 +255,7 @@ class GenericCRUD extends Component {
                 }
             )
         }) : [];
+
         columns.push({
             Header: 'Remover',
             id: 'remove',
@@ -256,6 +266,7 @@ class GenericCRUD extends Component {
                         onClick={() => this.props.removeType(props.original.id, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page)}/>
             )
         });
+
         const form = this.props.genericProps.type ? this.props.genericProps.type.fields.map(field => {
             return (
                 <Row key={field.id}>
@@ -269,13 +280,12 @@ class GenericCRUD extends Component {
                 </Row>
             );
         }) : [];
-        const tooltip = () => {
-            return (
-                <Tooltip id="tooltip">
-                    <strong>Clique para Editar!</strong>
-                </Tooltip>
-            )
-        };
+
+        const tooltip = (
+            <Tooltip id="tooltip">
+                <strong>Clique para Editar!</strong>
+            </Tooltip>
+        );
 
         return (
             <div className="content" id="content">
@@ -285,10 +295,14 @@ class GenericCRUD extends Component {
                     <Col>
                         <Row>
                             <Col>
-                                <Panel
-                                    header={<div><FontIcon className="md-18 md-dark" value='chevron_right'/>Selecione um
-                                        Cadastro</div>}
-                                    collapsible defaultExpanded
+                                <Panel collapsible defaultExpanded
+                                       header={
+                                           <div>
+                                               <FontIcon className="md-18 md-dark" value='chevron_right'/>
+                                               Selecione um Cadastro
+                                           </div>
+                                       }
+
                                 >
                                     <ul className="dropdown-menu2">
                                         {typeMenuItems}
@@ -299,37 +313,40 @@ class GenericCRUD extends Component {
                         <Row>
                             <br/>
                             {
-                                this.props.genericProps.type ? (<div style={{flex: '1'}}>
-                                    <Col md={8}>
-                                        <ReactTable
-                                            previousText='Anterior' nextText='Proximo' manual
-                                            loadingText='Carregando...' pageText='Pagina'
-                                            noDataText='Sem dados a exibir' ofText='de'
-                                            rowsText='linhas' className="-highlight"
-                                            data={this.props.genericProps[this.props.genericProps.type.id] || []}
-                                            loading={this.props.genericProps.loading}
-                                            pages={this.props.genericProps.pages}
-                                            onFetchData={this.fetchData.bind(this)}
-                                            columns={columns} defaultPageSize={10} filterable
-                                            defaultFilterMethod={(filter, rows) => matchSorter(rows, filter.value, {keys: [filter.id]})}
-                                            getTdProps={() => ({style: {textAlign: "center"}})}
-                                        />
-                                    </Col>
-                                    <Col md={4}>
-                                        <Row>
-                                            <h4>Adicionar {this.props.genericProps.type.name}</h4>
-                                        </Row>
-                                        {form}
-                                        <Row>
-                                            <Col xsOffset={7} xs={3}>
-                                                <Button style={{color: 'white', backgroundColor: "lightgreen"}}
-                                                        icon="add" raised
-                                                        onClick={() => this.props.addType(this.props.genericProps.form, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page)}>
-                                                    {window.innerWidth > 768 ? 'Adicionar' : ""}
-                                                </Button>
-                                            </Col>
-                                        </Row>
-                                    </Col>
+                                this.props.genericProps.type ? (
+                                    <div style={{flex: '1'}}>
+                                        <form>
+                                        <Col md={8}>
+                                            <ReactTable
+                                                previousText='Anterior' nextText='Proximo' manual
+                                                loadingText='Carregando...' pageText='Pagina'
+                                                noDataText='Sem dados a exibir' ofText='de'
+                                                rowsText='linhas' className="-highlight"
+                                                data={this.props.genericProps[this.props.genericProps.type.id] || []}
+                                                loading={this.props.genericProps.loading}
+                                                pages={this.props.genericProps.pages}
+                                                onFetchData={this.fetchData.bind(this)}
+                                                columns={columns} defaultPageSize={10} filterable
+                                                defaultFilterMethod={(filter, rows) => matchSorter(rows, filter.value, {keys: [filter.id]})}
+                                                getTdProps={() => ({style: {textAlign: "center"}})}
+                                            />
+                                        </Col>
+                                        <Col md={4}>
+                                            <Row>
+                                                <h4>Adicionar {this.props.genericProps.type.name}</h4>
+                                            </Row>
+                                            {form}
+                                            <Row className="pull-right">
+                                                <Col xs={3}>
+                                                    <Submit bsStyle="primary" type="submit"
+                                                            onClick={(e) => this.add(e)}
+                                                    >
+                                                        Adicionar
+                                                    </Submit>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                        </form>
                                 </div>) : <div/>
                             }
 

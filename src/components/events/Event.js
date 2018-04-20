@@ -6,7 +6,7 @@ import {EventsGrid} from './EventClasses';
 
 class OpenEvent extends Component {
 
-    componentDidMount() {
+    componentWillMount() {
         this.props.listEventsOptions();
         this.props.listEvents(this.props.events.loading);
     }

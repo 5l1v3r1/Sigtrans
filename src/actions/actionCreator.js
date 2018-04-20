@@ -111,3 +111,7 @@ export function onChangeCrudFormInput(value, input){
 export function toggleATModal() {
     return {type: 'TOGGLEATMODAL'};
 }
+
+export function cleanForm() {
+    return {type: 'CLEANFORM'};
+}
