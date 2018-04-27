@@ -52,6 +52,16 @@ export function events(state = new List(), action) {
         return Object.assign({}, state, {selectedEvent});
     }
 
+    if (action.type === 'NESTEDINPUTCHANGE') {
+        let selectedEvent = state.selectedEvent;
+        let item = selectedEvent[action.subMenu][action.operator].find(item => {
+            return item.id === action.id;
+        });
+        item[action.input]=action.value;
+        selectedEvent[action.subMenu][action.operator][item]=item;
+        return Object.assign({}, state, {selectedEvent});
+    }
+
     if (action.type === 'ADDINVOLVED') {
         /*const selectedEvent = update(state.selectedEvent, {
             involved: {

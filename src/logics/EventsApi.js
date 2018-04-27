@@ -8,6 +8,7 @@ import {
     changeInput,
     listEventsOptions,
     listOpenEvents,
+    nestedInputChange,
     removeInvolved,
     removeVehicle,
     selectOpenEvent,
@@ -157,6 +158,12 @@ export default class EventsApi {
 	static onChangeInput(newValue, operator, subMenu) {
 		return dispatch => {
 			return dispatch(changeInput(newValue, operator, subMenu));
+		}
+	}
+
+	static onNestedInputChange(subMenu, operator, input, id, value){
+		return dispatch => {
+			return dispatch(nestedInputChange(subMenu, operator, input, id, value));
 		}
 	}
 

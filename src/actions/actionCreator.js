@@ -18,7 +18,11 @@ export function selectOpenEvent(id) {
     return {type: 'SELECTOPENEVENT', id};
 }
 export function changeInput(newValue, operator, subMenu) {
-    return {type: 'ONCHANGEINPUT', newValue, operator, subMenu};
+    return {type: 'ONCHANGE', newValue, operator, subMenu};
+}
+
+export function nestedInputChange(subMenu, operator, input, id, value){
+    return {type:'NESTEDINPUTCHANGE', subMenu, operator, input, id, value}
 }
 
 export function addVehicle(vehicle) {

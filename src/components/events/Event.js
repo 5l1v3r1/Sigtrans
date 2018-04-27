@@ -20,6 +20,7 @@ class OpenEvent extends Component {
                             selectedEvent={this.props.events.selectedEvent}
                             selectedEventID={this.props.events.selectedEventID}
                             handleToggleModal={this.props.handleToggleModal}
+                            onNestedInputChange={this.props.onNestedInputChange}
                             selectEvent={this.props.selectEvent} onChangeInput={this.props.onChangeInput}
                             addVehicle={this.props.addVehicle} removeVehicle={this.props.removeVehicle}
                             addInvolved={this.props.addInvolved} removeInvolved={this.props.removeInvolved}
@@ -45,6 +46,7 @@ class Event extends Component {
                             loading={this.props.events.loading} showModal={this.props.events.showModal}
                             selectedEvent={this.props.events.selectedEvent}
                             selectedEventID={this.props.events.selectedEventID}
+                            onNestedInputChange={this.props.onNestedInputChange}
                             handleToggleModal={this.props.handleToggleModal}
                             selectEvent={this.props.selectEvent} onChangeInput={this.props.onChangeInput}
                             addVehicle={this.props.addVehicle} removeVehicle={this.props.removeVehicle}
@@ -91,6 +93,9 @@ const mapDispatchToProps = dispatch => {
         removeInvolved: (involved) => {
             dispatch(EventsApi.removeInvolved(involved));
         },
+        onNestedInputChange:(subMenu, operator, input, id, value)=>{
+            dispatch(EventsApi.onNestedInputChange(subMenu, operator, input, id, value));
+        }
 
     }
 };
