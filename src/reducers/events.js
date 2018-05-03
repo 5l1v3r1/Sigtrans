@@ -54,11 +54,21 @@ export function events(state = new List(), action) {
 
     if (action.type === 'NESTEDINPUTCHANGE') {
         let selectedEvent = state.selectedEvent;
-        let item = selectedEvent[action.subMenu][action.operator].find(item => {
-            return item.id === action.id;
-        });
-        item[action.input]=action.value;
-        selectedEvent[action.subMenu][action.operator][item]=item;
+        let item;
+        if(action.operator){
+            item = selectedEvent[action.subMenu][action.operator].find(item => {
+                return item.id === action.id;
+            });
+            item[action.input]=action.value;
+            selectedEvent[action.subMenu][action.operator][item]=item;
+        }
+        else {
+            item = selectedEvent[action.subMenu].find(item => {
+                return item.id === action.id;
+            });
+            item[action.input]=action.value;
+            selectedEvent[action.subMenu][item]=item;
+        }
         return Object.assign({}, state, {selectedEvent});
     }
 

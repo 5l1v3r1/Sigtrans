@@ -64,6 +64,7 @@ h1 small, h4 small {
 }
 
 .custom-modal {
+    min-height: 88vh;
     overflow:auto;
 }
 
@@ -215,4 +216,41 @@ h1 small, h4 small {
 }
 .open > .dropdown-menu2 {
     display: block;
+}
+
+
+.react-sanfona {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 30px;
+}
+
+.react-sanfona-item-title{
+    background-color: #fafafa;
+    border-top: 1px solid #ccc;
+    color: var(--main-color-light);
+    padding: 12px;
+    font-size: large;
+    /*text-transform: uppercase;*/
+    transition: background-color .3s;
+}
+
+.react-sanfona-item:first-child .react-sanfona-item-title{
+    border-top:none;
+}
+
+.react-sanfona-item-expanded .react-sanfona-item-title{
+    background-color:var(--main-color-light);
+    color: var( --main-text-color);
+}
+
+
+.react-sanfona-item-body-wrapper{
+    color: #666;
+    padding: 20px;
+    position: relative;
+}
+
+.react-sanfona-item-body-wrapper:hover .tooltip{
+    opacity: 1;
 }

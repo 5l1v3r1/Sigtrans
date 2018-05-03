@@ -45,11 +45,11 @@ class GenericCRUD extends Component {
                     name: 'Condições Climáticas'
                 }]
             }, {
-                id: 'condicaovia',
-                name: 'Condição da Via',
+                id: 'condicaotecnica',
+                name: 'Condições Técnicas',
                 fields: [{
                     id: 'nome',
-                    name: 'Condição da Via'
+                    name: 'Condição Técnica'
                 }]
             }, {
                 id: 'sinalizacao',
@@ -210,6 +210,87 @@ class GenericCRUD extends Component {
                     {
                         id: 'nome',
                         name: 'Local'
+                    }
+                ]
+            }, {
+                id: 'acidentetrabalho',
+                name: 'Acidente de Trabalho',
+                fields: [
+                    {
+                        id: 'nome',
+                        name: 'Acidente'
+                    }
+                ]
+            }, {
+                id: 'acostamento',
+                name: 'Acostamento',
+                fields: [
+                    {
+                        id: 'nome',
+                        name: 'Acostamento'
+                    }
+                ]
+            }, {
+                id: 'equipamentocontroletrafego',
+                name: 'Equipamento de Controle de Tráfego',
+                fields: [
+                    {
+                        id: 'nome',
+                        name: 'Equipamento'
+                    }
+                ]
+            }, {
+                id: 'pavimentacao',
+                name: 'Pavimentação',
+                fields: [
+                    {
+                        id: 'nome',
+                        name: 'Pavimentação'
+                    }
+                ]
+            }, {
+                id: 'semaforo',
+                name: 'Semáforo',
+                fields: [
+                    {
+                        id: 'nome',
+                        name: 'Semaforo'
+                    }
+                ]
+            }, {
+                id: 'separacaopista',
+                name: 'Separação da Pista',
+                fields: [
+                    {
+                        id: 'nome',
+                        name: 'Tipo'
+                    }
+                ]
+            }, {
+                id: 'sinaispneus',
+                name: 'Sinais de Pneus na Pista',
+                fields: [
+                    {
+                        id: 'nome',
+                        name: 'Sinal'
+                    }
+                ]
+            }, {
+                id: 'superficie',
+                name: 'Superficie',
+                fields: [
+                    {
+                        id: 'nome',
+                        name: 'Superficie'
+                    }
+                ]
+            }, {
+                id: 'tipovia',
+                name: 'Tipo da Via',
+                fields: [
+                    {
+                        id: 'nome',
+                        name: 'Tipo'
                     }
                 ]
             }
