@@ -1,14 +1,32 @@
 import React, {Component} from "react";
 import Input from './CustomInput';
 import Button from 'react-toolbox/lib/button/Button';
-import {Button as Submit, Col, Grid, MenuItem, OverlayTrigger, PageHeader, Panel, Row, Tooltip} from 'react-bootstrap';
+import {
+    Button as Submit,
+    Col,
+    Grid,
+    MenuItem,
+    Navbar,
+    NavDropdown,
+    OverlayTrigger,
+    Row,
+    Tooltip
+} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import {connect} from 'react-redux';
-import FontIcon from "react-toolbox/lib/font_icon";
 import CrudApi from '../../logics/CrudApi';
 import matchSorter from 'match-sorter';
+import Nav from "react-bootstrap/es/Nav";
+import {Typeahead} from 'react-bootstrap-typeahead';
+import EventsApi from "../../logics/EventsApi";
 
 class GenericCRUD extends Component {
+
+    componentWillMount() {
+        if(!this.props.events.options)
+            this.props.loadOptions();
+        console.log(this.props.events.options)
+    }
 
     onSelect(selectedType) {
         if (this.props.genericProps.type !== undefined) {
@@ -29,8 +47,7 @@ class GenericCRUD extends Component {
     }
 
     render() {
-
-        const types = {
+        const listaCadastros = {
             dadosGerais:[
                 {
                     id: 'estado',
@@ -326,20 +343,46 @@ class GenericCRUD extends Component {
                         }
                     ]
                 }
-            ]
-
+            ],
+            parceiro:[{
+                id: 'parceiro',
+                name: 'Parceiro',
+                fields: [
+                    {
+                        id: 'nome',
+                        name: 'Parceiro'
+                    },{
+                        id: 'estado',
+                        name: 'Estado',
+                        options:true
+                    },{
+                        id: 'municipio',
+                        name: 'Municipio',
+                        options:true
+                    },{
+                        id: 'nomeContato',
+                        name: 'Contato'
+                    },{
+                        id: 'telefone',
+                        name: 'Telefone'
+                    },{
+                        id: 'email',
+                        name: 'Email'
+                    }
+                ]
+            }]
         };
-
-        // const typeList = [
-        //
-        // ].sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0));
-
-        const typeMenuItems = types.map((type) => {
-            return (
-                <MenuItem key={type.id} onSelect={(e) => this.onSelect(type, e)}>{type.name}</MenuItem>
-            )
+        let menuItems={};
+        Object.keys(listaCadastros).forEach((prop, i)=> {
+            listaCadastros[prop].forEach((type, k)=>{
+                if(!menuItems[prop])
+                    menuItems[prop]=[];
+                menuItems[prop].push(
+                    <MenuItem eventKey={i+"."+k} key={type.id} onSelect={(e) => this.onSelect(type, e)}>{type.name}</MenuItem>
+                )
+            })
         });
-
+        // console.log(menuItems);
         let columns = this.props.genericProps.type ? this.props.genericProps.type.fields.map((field) => {
             return (
                 {
@@ -376,7 +419,6 @@ class GenericCRUD extends Component {
                 }
             )
         }) : [];
-
         columns.push({
             Header: 'Remover',
             id: 'remove',
@@ -387,21 +429,26 @@ class GenericCRUD extends Component {
                         onClick={() => this.props.removeType(props.original.id, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page)}/>
             )
         });
-
         const form = this.props.genericProps.type ? this.props.genericProps.type.fields.map(field => {
             return (
                 <Row key={field.id}>
                     <Col>
-                        <Input
-                            value={field.id === 'nome' ? this.props.genericProps.form[field.id] || '' : this.props.genericProps.form[field.id] ? this.props.genericProps.form[field.id]['nome'] : ''}
-                            label={field.name} type="text" id={field.id}
-                            onChange={(e) => this.props.onChangeFormInput(e.target.value, field.id)}
-                        />
+                        {
+                            this.props.genericProps.type.options?
+                                <Input value={field.id === 'nome' ? this.props.genericProps.form[field.id] || '' : this.props.genericProps.form[field.id] ? this.props.genericProps.form[field.id]['nome'] : ''}
+                                       label={field.name} type="text" id={field.id}
+                                       onChange={(e) => this.props.onChangeFormInput(e.target.value, field.id)}
+                                /> :
+                                <Typeahead labelKey={option => `${option.nome}`} id={field.id}
+                                           onChange={(e)=>this.handleTypeahead(e, field.id)}
+                                           options={this.props.eventProps.options[field.id]}
+                                />
+                        }
+
                     </Col>
                 </Row>
             );
         }) : [];
-
         const tooltip = (
             <Tooltip id="tooltip">
                 <strong>Clique para Editar!</strong>
@@ -410,29 +457,42 @@ class GenericCRUD extends Component {
 
         return (
             <div className="content" id="content">
-                <PageHeader>Cadastro {this.props.genericProps.type ? (
-                    <small>- {this.props.genericProps.type.name}</small>) : ''}</PageHeader>
-                <Grid fluid>
+                {/*<PageHeader>Cadastro {this.props.genericProps.type ? (*/}
+                    {/*<small>- {this.props.genericProps.type.name}</small>) : ''}</PageHeader>*/}
+                <Grid fluid style={{minHeight:"80vh"}}>
                     <Col>
                         <Row>
-                            <Col>
-                                <Panel collapsible defaultExpanded
-                                       header={
-                                           <div>
-                                               <FontIcon className="md-18 md-dark" value='chevron_right'/>
-                                               Selecione um Cadastro
-                                           </div>
-                                       }
-
-                                >
-                                    <ul className="dropdown-menu2">
-                                        {typeMenuItems}
-                                    </ul>
-                                </Panel>
+                            <Col md={12}>
+                                <Navbar fluid>
+                                    <Navbar.Header>
+                                        <Navbar.Brand>
+                                            <a href="#Cadastro">Cadastros</a>
+                                        </Navbar.Brand>
+                                    </Navbar.Header>
+                                    <Nav>
+                                        <NavDropdown eventKey={1} title="Dados Gerais" id="basic-nav-dropdown" style={{overflow:1}}>
+                                            {menuItems.dadosGerais}
+                                        </NavDropdown>
+                                        <NavDropdown eventKey={2} title="Dados Estatisticos" id="basic-nav-dropdown" style={{overflow:1}}>
+                                            {menuItems.dadosEstatisticos}
+                                        </NavDropdown>
+                                        <NavDropdown eventKey={3} title="Vias" id="basic-nav-dropdown" style={{overflow:1}}>
+                                            {menuItems.vias}
+                                        </NavDropdown>
+                                        <NavDropdown eventKey={4} title="Veiculos" id="basic-nav-dropdown" style={{overflow:1}}>
+                                            {menuItems.veiculo}
+                                        </NavDropdown>
+                                        <NavDropdown eventKey={5} title="Envolvidos" id="basic-nav-dropdown" style={{overflow:1}}>
+                                            {menuItems.envolvido}
+                                        </NavDropdown>
+                                        {menuItems.parceiro}
+                                    </Nav>
+                                </Navbar>
                             </Col>
                         </Row>
                         <Row>
                             <br/>
+                            <Col md={12}>
                             {
                                 this.props.genericProps.type ? (
                                     <div style={{flex: '1'}}>
@@ -459,18 +519,16 @@ class GenericCRUD extends Component {
                                             {form}
                                             <Row className="pull-right">
                                                 <Col xs={3}>
-                                                    <Submit bsStyle="primary" type="submit"
-                                                            onClick={(e) => this.add(e)}
-                                                    >
+                                                    <Submit bsStyle="primary" type="submit" onClick={(e) => this.add(e)}>
                                                         Adicionar
                                                     </Submit>
                                                 </Col>
                                             </Row>
                                         </Col>
                                         </form>
-                                </div>) : <div/>
+                                    </div>) : <div style={{textAlign:'center'}}><h4>Selecione um cadastro</h4></div>
                             }
-
+                            </Col>
                         </Row>
                     </Col>
                     <br/>
@@ -486,7 +544,8 @@ class GenericCRUD extends Component {
 
 const mapStateToProps = state => {
     return {
-        genericProps: state.genericCrud
+        genericProps: state.genericCrud,
+        events: state.events
     }
 };
 
@@ -512,6 +571,9 @@ const mapDispatchToProps = dispatch => {
         },
         updateType: (id, value, objToChange, propToChange, selectedType, pageSize, page) => {
             dispatch(CrudApi.updateType(id, value, objToChange, propToChange, selectedType, pageSize, page));
+        },
+        loadOptions:() => {
+            dispatch(EventsApi.listEventsOpts());
         }
     }
 };
