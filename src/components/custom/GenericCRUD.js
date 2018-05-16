@@ -4,6 +4,7 @@ import Button from 'react-toolbox/lib/button/Button';
 import {
     Button as Submit,
     Col,
+    ControlLabel,
     Grid,
     MenuItem,
     Navbar,
@@ -22,10 +23,9 @@ import EventsApi from "../../logics/EventsApi";
 
 class GenericCRUD extends Component {
 
-    componentWillMount() {
+    componentDidMount() {
         if(!this.props.events.options)
             this.props.loadOptions();
-        console.log(this.props.events.options)
     }
 
     onSelect(selectedType) {
@@ -434,14 +434,17 @@ class GenericCRUD extends Component {
                 <Row key={field.id}>
                     <Col>
                         {
-                            this.props.genericProps.type.options?
+                            field.options?
+                                <div>
+                                    <ControlLabel>{field.name}</ControlLabel>
+                                    <Typeahead labelKey={option => `${option.nome}`} id={field.id}
+                                               onChange={(e)=>this.handleTypeahead(e, field.id)}
+                                               options={this.props.events.options[field.id]}
+                                    />
+                                </div>:
                                 <Input value={field.id === 'nome' ? this.props.genericProps.form[field.id] || '' : this.props.genericProps.form[field.id] ? this.props.genericProps.form[field.id]['nome'] : ''}
                                        label={field.name} type="text" id={field.id}
                                        onChange={(e) => this.props.onChangeFormInput(e.target.value, field.id)}
-                                /> :
-                                <Typeahead labelKey={option => `${option.nome}`} id={field.id}
-                                           onChange={(e)=>this.handleTypeahead(e, field.id)}
-                                           options={this.props.eventProps.options[field.id]}
                                 />
                         }
 
