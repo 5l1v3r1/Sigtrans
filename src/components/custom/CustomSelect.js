@@ -12,7 +12,7 @@ export default class CustomSelect extends Component {
         let opts;
         if (selectProps.options) {
             opts = selectProps.options.map(function (type) {
-                return <option key={type.id} value={type.id}>{type.value}</option>;
+                return <option key={type.id} value={type.id}>{type.nome}</option>;
             });
         }
         delete selectProps.options;

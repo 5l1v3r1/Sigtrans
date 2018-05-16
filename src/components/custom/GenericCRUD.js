@@ -29,275 +29,315 @@ class GenericCRUD extends Component {
     }
 
     render() {
-        const typeList = [
-            {
-                id: 'classificacaoacidente',
-                name: 'Classificação do acidente',
-                fields: [{
-                    id: 'nome',
-                    name: 'Classificação do acidente'
-                }]
-            }, {
-                id: 'condicoesclimaticas',
-                name: 'Condições Climáticas',
-                fields: [{
-                    id: 'nome',
-                    name: 'Condições Climáticas'
-                }]
-            }, {
-                id: 'condicaotecnica',
-                name: 'Condições Técnicas',
-                fields: [{
-                    id: 'nome',
-                    name: 'Condição Técnica'
-                }]
-            }, {
-                id: 'sinalizacao',
-                name: 'Sinalização',
-                fields: [{
-                    id: 'nome',
-                    name: 'Sinalização'
-                }]
-            }, {
-                id: 'visibilidade',
-                name: 'Visibilidade',
-                fields: [{
-                    id: 'nome',
-                    name: 'Visibilidade'
-                }]
-            }, {
-                id: 'perfilpista',
-                name: 'Perfil da Pista',
-                fields: [{
-                    id: 'nome',
-                    name: 'Perfil da Pista'
-                }]
-            }, {
-                id: 'conservacaovia',
-                name: 'Conservação da via',
-                fields: [{
-                    id: 'nome',
-                    name: 'Conservação da via'
-                }]
-            }, {
-                id: 'sentidovia',
-                name: 'Sentido da Via',
-                fields: [{
-                    id: 'nome',
-                    name: 'Sentido da Via'
-                }]
-            }, {
-                id: 'tipoacidente',
-                name: 'Tipo de Acidente',
-                fields: [{
-                    id: 'nome',
-                    name: 'Tipo de Acidente'
-                }]
 
-            }, {
-                id: 'estado',
-                name: 'Estado',
-                fields: [
-                    {
-                        id: 'idParceiro',
-                        name: 'ID Parceiro'
-                    },{
-                        id: 'nome',
-                        name: 'Estado'
-                    },{
-                        id: 'sigla',
-                        name: 'Sigla'
-                    }
-                ]
-            }, {
-                id: 'municipio',
-                name: 'Municipio',
-                fields: [
-                    {
-                        id: 'nome',
-                        name: 'Municipio'
-                    },
-                    {
-                        id: 'estado',
-                        name: 'Estado'
-                    }
-                ]
+        const types = {
+            dadosGerais:[
+                {
+                    id: 'estado',
+                    name: 'Estado',
+                    fields: [
+                        {
+                            id: 'idParceiro',
+                            name: 'ID Parceiro'
+                        },{
+                            id: 'nome',
+                            name: 'Estado'
+                        },{
+                            id: 'sigla',
+                            name: 'Sigla'
+                        }
+                    ]
+                }, {
+                    id: 'municipio',
+                    name: 'Municipio',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Municipio'
+                        },
+                        {
+                            id: 'estado',
+                            name: 'Estado'
+                        }
+                    ]
 
-            }, {
-                id: 'bairro',
-                name: 'Bairro',
-                fields: [
-                    {
+                }, {
+                    id: 'bairro',
+                    name: 'Bairro',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Bairro'
+                        },
+                        {
+                            id: 'municipio',
+                            name: 'Municipio'
+                        }
+                    ]
+                }, {
+                    id: 'rua',
+                    name: 'Rua',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Rua'
+                        },
+                        {
+                            id: 'bairro',
+                            name: 'Bairro'
+                        }
+                    ]
+                },
+            ],
+            dadosEstatisticos:[
+                {
+                    id: 'classificacaoacidente',
+                    name: 'Classificação do acidente',
+                    fields: [{
                         id: 'nome',
-                        name: 'Bairro'
-                    },
-                    {
-                        id: 'municipio',
-                        name: 'Municipio'
-                    }
-                ]
-            }, {
-                id: 'rua',
-                name: 'Rua',
-                fields: [
-                    {
+                        name: 'Classificação do acidente'
+                    }]
+                },{
+                    id: 'acidentetrabalho',
+                    name: 'Acidente de Trabalho',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Acidente'
+                        }
+                    ]
+                }
+            ],
+            vias:[
+                {
+                    id: 'semaforo',
+                    name: 'Semáforo',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Semaforo'
+                        }
+                    ]
+                }, {
+                    id: 'perfilpista',
+                    name: 'Perfil da Pista',
+                    fields: [{
                         id: 'nome',
-                        name: 'Rua'
-                    },
-                    {
-                        id: 'bairro',
-                        name: 'Bairro'
-                    }
-                ]
-            }, {
-                id: 'marcaveiculo',
-                name: 'Marca do Veículo',
-                fields: [
-                    {
+                        name: 'Perfil da Pista'
+                    }]
+                },{
+                    id: 'superficie',
+                    name: 'Superficie',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Superficie'
+                        }
+                    ]
+                },{
+                    id: 'condicoesclimaticas',
+                    name: 'Condições Climáticas',
+                    fields: [{
                         id: 'nome',
-                        name: 'Marca'
-                    }
-                ]
-            }, {
-                id: 'modeloveiculo',
-                name: 'Modelo do Veículo',
-                fields: [
-                    {
+                        name: 'Condições Climáticas'
+                    }]
+                },{
+                    id: 'equipamentocontroletrafego',
+                    name: 'Equipamento de Controle de Tráfego',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Equipamento'
+                        }
+                    ]
+                }, {
+                    id: 'separacaopista',
+                    name: 'Separação da Pista',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Tipo'
+                        }
+                    ]
+                },{
+                    id: 'visibilidade',
+                    name: 'Visibilidade',
+                    fields: [{
                         id: 'nome',
-                        name: 'Modelo'
-                    }
-                ]
-            }, {
-                id: 'categoriaveiculo',
-                name: 'Categoria do Veículo',
-                fields: [
-                    {
+                        name: 'Visibilidade'
+                    }]
+                }, {
+                    id: 'condicaotecnica',
+                    name: 'Condições Técnicas',
+                    fields: [{
                         id: 'nome',
-                        name: 'Categoria'
-                    }
-                ]
-            }, {
-                id: 'posicaoveiculo',
-                name: 'Posição no Veículo',
-                fields: [
-                    {
+                        name: 'Condição Técnica'
+                    }]
+                }, {
+                    id: 'acostamento',
+                    name: 'Acostamento',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Acostamento'
+                        }
+                    ]
+                }, {
+                    id: 'sinalizacao',
+                    name: 'Sinalização',
+                    fields: [{
                         id: 'nome',
-                        name: 'Posição'
-                    }
-                ]
-            }, {
-                id: 'condicaoseguranca',
-                name: 'Condição de segurança',
-                fields: [
-                    {
+                        name: 'Sinalização'
+                    }]
+                },{
+                    id: 'sentidovia',
+                    name: 'Sentido da Via',
+                    fields: [{
                         id: 'nome',
-                        name: 'Condição'
-                    }
-                ]
-            }, {
-                id: 'lesoes',
-                name: 'Lesões',
-                fields: [
-                    {
+                        name: 'Sentido da Via'
+                    }]
+                },{
+                    id: 'conservacaovia',
+                    name: 'Conservação da via',
+                    fields: [{
                         id: 'nome',
-                        name: 'Lesão'
-                    }
-                ]
-            }, {
-                id: 'localencaminhado',
-                name: 'Local de encaminhamento',
-                fields: [
-                    {
+                        name: 'Conservação da via'
+                    }]
+                },{
+                    id: 'tipovia',
+                    name: 'Tipo da Via',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Tipo'
+                        }
+                    ]
+                },{
+                    id: 'pavimentacao',
+                    name: 'Pavimentação',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Pavimentação'
+                        }
+                    ]
+                },{
+                    id: 'sinaispneus',
+                    name: 'Sinais de Pneus na Pista',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Sinal'
+                        }
+                    ]
+                },{
+                    id: 'tipoacidente',
+                    name: 'Tipo de Acidente',
+                    fields: [{
                         id: 'nome',
-                        name: 'Local'
-                    }
-                ]
-            }, {
-                id: 'acidentetrabalho',
-                name: 'Acidente de Trabalho',
-                fields: [
-                    {
-                        id: 'nome',
-                        name: 'Acidente'
-                    }
-                ]
-            }, {
-                id: 'acostamento',
-                name: 'Acostamento',
-                fields: [
-                    {
-                        id: 'nome',
-                        name: 'Acostamento'
-                    }
-                ]
-            }, {
-                id: 'equipamentocontroletrafego',
-                name: 'Equipamento de Controle de Tráfego',
-                fields: [
-                    {
-                        id: 'nome',
-                        name: 'Equipamento'
-                    }
-                ]
-            }, {
-                id: 'pavimentacao',
-                name: 'Pavimentação',
-                fields: [
-                    {
-                        id: 'nome',
-                        name: 'Pavimentação'
-                    }
-                ]
-            }, {
-                id: 'semaforo',
-                name: 'Semáforo',
-                fields: [
-                    {
-                        id: 'nome',
-                        name: 'Semaforo'
-                    }
-                ]
-            }, {
-                id: 'separacaopista',
-                name: 'Separação da Pista',
-                fields: [
-                    {
-                        id: 'nome',
-                        name: 'Tipo'
-                    }
-                ]
-            }, {
-                id: 'sinaispneus',
-                name: 'Sinais de Pneus na Pista',
-                fields: [
-                    {
-                        id: 'nome',
-                        name: 'Sinal'
-                    }
-                ]
-            }, {
-                id: 'superficie',
-                name: 'Superficie',
-                fields: [
-                    {
-                        id: 'nome',
-                        name: 'Superficie'
-                    }
-                ]
-            }, {
-                id: 'tipovia',
-                name: 'Tipo da Via',
-                fields: [
-                    {
-                        id: 'nome',
-                        name: 'Tipo'
-                    }
-                ]
-            }
-        ].sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0));
+                        name: 'Tipo de Acidente'
+                    }]
 
-        const typeMenuItems = typeList.map((type) => {
-            return (<MenuItem key={type.id} onSelect={(e) => this.onSelect(type, e)}>{type.name}</MenuItem>)
+                }
+            ],
+            veiculo:[
+                {
+                    id: 'marcaveiculo',
+                    name: 'Marca do Veículo',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Marca'
+                        }
+                    ]
+                }, {
+                    id: 'modeloveiculo',
+                    name: 'Modelo do Veículo',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Modelo'
+                        }
+                    ]
+                }, {
+                    id: 'categoriaveiculo',
+                    name: 'Categoria do Veículo',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Categoria'
+                        }
+                    ]
+                },
+            ],
+            envolvido:[
+                {
+                    id: 'posicaoveiculo',
+                    name: 'Posição no Veículo',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Posição'
+                        }
+                    ]
+                }, {
+                    id: 'condicaoseguranca',
+                    name: 'Condição de segurança',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Condição'
+                        }
+                    ]
+                }, {
+                    id:'grauinstrucao',
+                    name:'Grau de Instrucao',
+                    fields:[
+                        {
+                            id:'nome',
+                            name:"Grau"
+                        }
+                    ]
+                }, {
+                    id: 'lesoes',
+                    name: 'Lesões',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Lesão'
+                        }
+                    ]
+                }, {
+                    id: 'localencaminhado',
+                    name: 'Local de encaminhamento',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Local'
+                        }
+                    ]
+                },{
+                    id: 'profissao',
+                    name: 'Profissão',
+                    fields: [
+                        {
+                            id: 'nome',
+                            name: 'Profissão'
+                        }
+                    ]
+                }
+            ]
+
+        };
+
+        // const typeList = [
+        //
+        // ].sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0));
+
+        const typeMenuItems = types.map((type) => {
+            return (
+                <MenuItem key={type.id} onSelect={(e) => this.onSelect(type, e)}>{type.name}</MenuItem>
+            )
         });
 
         let columns = this.props.genericProps.type ? this.props.genericProps.type.fields.map((field) => {

@@ -18,6 +18,7 @@ import './css/index.css';
 import './css/App.css';
 import './toolbox/theme.css';
 import 'react-table/react-table.css';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 // Create Reducers
 const reducers = combineReducers({metisMenuReducer, death, menus, auth, reports, events, datareceive, home, genericCrud});

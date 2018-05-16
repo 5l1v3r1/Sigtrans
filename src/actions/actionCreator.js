@@ -21,8 +21,12 @@ export function changeInput(newValue, operator, subMenu) {
     return {type: 'ONCHANGE', newValue, operator, subMenu};
 }
 
-export function nestedInputChange(subMenu, operator, input, id, value){
-    return {type:'NESTEDINPUTCHANGE', subMenu, operator, input, id, value}
+export function changeDropdown(newValue, operator, subMenu) {
+    return {type: 'ONCHANGEDROPDOWN', newValue, operator, subMenu};
+}
+
+export function nestedInputChange(subMenu, operator, input, id, value, dropdown){
+    return {type:'NESTEDINPUTCHANGE', subMenu, operator, input, id, value, dropdown}
 }
 
 export function addVehicle(vehicle) {

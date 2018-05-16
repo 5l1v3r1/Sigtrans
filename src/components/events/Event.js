@@ -19,6 +19,7 @@ class OpenEvent extends Component {
                             loading={this.props.events.loading} showModal={this.props.events.showModal}
                             selectedEvent={this.props.events.selectedEvent}
                             selectedEventID={this.props.events.selectedEventID}
+                            onChangeDropdown={this.props.onChangeDropdown}
                             handleToggleModal={this.props.handleToggleModal}
                             onNestedInputChange={this.props.onNestedInputChange}
                             selectEvent={this.props.selectEvent} onChangeInput={this.props.onChangeInput}
@@ -46,6 +47,7 @@ class Event extends Component {
                             loading={this.props.events.loading} showModal={this.props.events.showModal}
                             selectedEvent={this.props.events.selectedEvent}
                             selectedEventID={this.props.events.selectedEventID}
+                            onChangeDropdown={this.props.onChangeDropdown}
                             onNestedInputChange={this.props.onNestedInputChange}
                             handleToggleModal={this.props.handleToggleModal}
                             selectEvent={this.props.selectEvent} onChangeInput={this.props.onChangeInput}
@@ -93,9 +95,12 @@ const mapDispatchToProps = dispatch => {
         removeInvolved: (involved) => {
             dispatch(EventsApi.removeInvolved(involved));
         },
-        onNestedInputChange:(subMenu, operator, input, id, value)=>{
-            dispatch(EventsApi.onNestedInputChange(subMenu, operator, input, id, value));
-        }
+        onNestedInputChange:(subMenu, operator, input, id, value, dropdown)=>{
+            dispatch(EventsApi.onNestedInputChange(subMenu, operator, input, id, value, dropdown));
+        },
+        onChangeDropdown:(newValue, operator, subMenu) => {
+            dispatch(EventsApi.onChangeDropdown(newValue, operator, subMenu));
+        },
 
     }
 };
