@@ -47,7 +47,6 @@ export default class EventsApi {
                     if (response.ok) {
                         response.json()
                             .then(options => {
-                                console.log('ok');
                                 return dispatch(listEventsOptions(options));
                             })
                     }

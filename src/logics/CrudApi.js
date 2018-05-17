@@ -15,9 +15,9 @@ export default class CrudApi {
         }
     }
 
-    static onChangeCrudFormInput(value, input) {
+    static onChangeCrudFormInput(value, input, option) {
         return dispatch => {
-            dispatch(onChangeCrudFormInput(value, input))
+            dispatch(onChangeCrudFormInput(value, input, option))
         }
     }
 
@@ -51,25 +51,25 @@ export default class CrudApi {
         }
     }
 
-    static updateType(id, value, objToChange, propToChange, selectedType, pageSize, page) {
+    static updateType(id, form, selectedType, pageSize, page) {
         return dispatch => {
-            console.log(propToChange);
-            objToChange[propToChange]=value;
+            form.id=id;
             fetch(getUrl('api') + selectedType + '/' + id, {
                 method: 'PUT',
                 headers: new Headers({'content-type': 'application/json'}),
-                body: JSON.stringify(objToChange),
+                body: JSON.stringify(form),
             })
                 .then(response => response.json())
                 .then(resData => {
                     console.log(resData);
                     dispatch(this.listTypes(selectedType, pageSize, page));
+                }).catch((err) => {
+                    console.log(err);
                 });
         }
     }
 
     static listTypes(selectedType, pageSize, page) {
-        // console.log('loading....');
         return dispatch => {
             dispatch(this.onChangeInput(true, 'loading'));
             fetch(getUrl('api') + selectedType + (pageSize !== undefined && page !== undefined ? '?pageSize=' + pageSize + '&start=' + page * pageSize : '/'))
@@ -78,17 +78,17 @@ export default class CrudApi {
                     dispatch(this.onChangeInput(pageSize,'pageSize'));
                     dispatch(this.onChangeInput(page,'page'));
                     dispatch(listGenericType(responseData, selectedType));
-                    dispatch(this.onChangeInput(false, 'loading'));
-                    // console.log('loaded');
                 })
                 .catch((err) => {
                     console.log(err);
                 });
+            dispatch(this.onChangeInput(false, 'loading'));
         }
     }
 
     static handleModal() {
         return dispatch => {
+            dispatch(this.onChangeInput({},'form'));
             return dispatch(toggleATModal());
         }
     }

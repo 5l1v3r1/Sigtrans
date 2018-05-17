@@ -1,17 +1,18 @@
 import React, {Component} from "react";
 import Input from './CustomInput';
 import Button from 'react-toolbox/lib/button/Button';
+import Dialog from 'react-toolbox/lib/dialog/Dialog';
 import {
     Button as Submit,
     Col,
     ControlLabel,
+    Form,
     Grid,
     MenuItem,
     Navbar,
     NavDropdown,
-    OverlayTrigger,
-    Row,
-    Tooltip
+    NavItem,
+    Row
 } from 'react-bootstrap';
 import ReactTable from 'react-table';
 import {connect} from 'react-redux';
@@ -21,11 +22,28 @@ import Nav from "react-bootstrap/es/Nav";
 import {Typeahead} from 'react-bootstrap-typeahead';
 import EventsApi from "../../logics/EventsApi";
 
+// OverlayTrigger, Tooltip
+
 class GenericCRUD extends Component {
 
     componentDidMount() {
         if(!this.props.events.options)
             this.props.loadOptions();
+    }
+
+    handleTypeahead (e, input){
+        this.props.onChangeFormInput( e[0] ? e[0].id:"", input, true);
+    };
+
+    updateType(){
+        this.props.updateType(this.props.genericProps.selected.id, this.props.genericProps.form, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page);
+        this.props.handleToggleModal();
+        this.props.loadOptions();
+    }
+
+    handleEdit(selected){
+        this.props.onChangeInput(selected, 'selected');
+        this.props.handleToggleModal();
     }
 
     onSelect(selectedType) {
@@ -43,7 +61,8 @@ class GenericCRUD extends Component {
 
     add(e){
         e.preventDefault();
-        this.props.addType(this.props.genericProps.form, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page)
+        this.props.addType(this.props.genericProps.form, this.props.genericProps.type.id, this.props.genericProps.pageSize, this.props.genericProps.page);
+        this.props.loadOptions();
     }
 
     render() {
@@ -74,7 +93,8 @@ class GenericCRUD extends Component {
                         },
                         {
                             id: 'estado',
-                            name: 'Estado'
+                            name: 'Estado',
+                            options: true
                         }
                     ]
 
@@ -88,7 +108,8 @@ class GenericCRUD extends Component {
                         },
                         {
                             id: 'municipio',
-                            name: 'Municipio'
+                            name: 'Municipio',
+                            options: true
                         }
                     ]
                 }, {
@@ -100,8 +121,9 @@ class GenericCRUD extends Component {
                             name: 'Rua'
                         },
                         {
-                            id: 'bairro',
-                            name: 'Bairro'
+                            id: 'municipio',
+                            name: 'Municipio',
+                            options: true
                         }
                     ]
                 },
@@ -382,7 +404,6 @@ class GenericCRUD extends Component {
                 )
             })
         });
-        // console.log(menuItems);
         let columns = this.props.genericProps.type ? this.props.genericProps.type.fields.map((field) => {
             return (
                 {
@@ -390,36 +411,26 @@ class GenericCRUD extends Component {
                     id: field.id,
                     accessor: d => d.id,
                     Cell: props => {
+                        let value = this.props.genericProps[this.props.genericProps.type.id][props.index][props.column.id].nome ||
+                                    this.props.genericProps[this.props.genericProps.type.id][props.index][props.column.id].value ||
+                                    this.props.genericProps[this.props.genericProps.type.id][props.index][props.column.id];
                         return (
-                            <div>
-                                <OverlayTrigger placement="right" overlay={tooltip}>
-                                    <div
-                                        style={{backgroundColor: "whitesmoke"}}
-                                        contentEditable
-                                        suppressContentEditableWarning
-                                        onBlur={e => {
-                                            if (this.props.genericProps[this.props.genericProps.type.id][props.index][props.column.id] !== e.target.innerHTML) {
-                                                this.props.updateType(
-                                                    props.original.id,
-                                                    e.target.innerHTML,
-                                                    this.props.genericProps[this.props.genericProps.type.id][props.index],
-                                                    props.column.id,
-                                                    this.props.genericProps.type.id, this.props.genericProps.pageSize,
-                                                    this.props.genericProps.page);
-                                            }
-                                        }}
-                                        dangerouslySetInnerHTML={{
-                                            __html: this.props.genericProps[this.props.genericProps.type.id][props.index][props.column.id]
-                                        }}
-                                    />
-                                </OverlayTrigger>
-                            </div>
+                            <div>{value}</div>
                         )
                     },
                 }
             )
         }) : [];
         columns.push({
+            Header: 'Editar',
+            id: 'edit',
+            accessor: d => d.id,
+            filterable: false,
+            Cell: props => (
+                <Button style={{color: 'blue'}} icon="edit" primary id={props.original.id}
+                        onClick={() => this.handleEdit(props.original)}/>
+            )
+        },{
             Header: 'Remover',
             id: 'remove',
             accessor: d => d.id,
@@ -432,36 +443,28 @@ class GenericCRUD extends Component {
         const form = this.props.genericProps.type ? this.props.genericProps.type.fields.map(field => {
             return (
                 <Row key={field.id}>
-                    <Col>
-                        {
-                            field.options?
-                                <div>
-                                    <ControlLabel>{field.name}</ControlLabel>
-                                    <Typeahead labelKey={option => `${option.nome}`} id={field.id}
-                                               onChange={(e)=>this.handleTypeahead(e, field.id)}
-                                               options={this.props.events.options[field.id]}
-                                    />
-                                </div>:
-                                <Input value={field.id === 'nome' ? this.props.genericProps.form[field.id] || '' : this.props.genericProps.form[field.id] ? this.props.genericProps.form[field.id]['nome'] : ''}
+                    {
+                        field.options?
+                            <Col>
+                                <ControlLabel>{field.name}</ControlLabel>
+                                <Typeahead labelKey={option => `${option.nome}`} id={field.id}
+                                           onChange={(e)=>this.handleTypeahead(e, field.id)}
+                                           className='form-group'
+                                           options={this.props.events.options[field.id]}
+                                />
+                            </Col>:
+                            <Col>
+                                <Input value={this.props.genericProps.form[field.id]||''}
                                        label={field.name} type="text" id={field.id}
                                        onChange={(e) => this.props.onChangeFormInput(e.target.value, field.id)}
                                 />
-                        }
-
-                    </Col>
+                            </Col>
+                    }
                 </Row>
             );
-        }) : [];
-        const tooltip = (
-            <Tooltip id="tooltip">
-                <strong>Clique para Editar!</strong>
-            </Tooltip>
-        );
-
+        }) : undefined;
         return (
             <div className="content" id="content">
-                {/*<PageHeader>Cadastro {this.props.genericProps.type ? (*/}
-                    {/*<small>- {this.props.genericProps.type.name}</small>) : ''}</PageHeader>*/}
                 <Grid fluid style={{minHeight:"80vh"}}>
                     <Col>
                         <Row>
@@ -473,22 +476,26 @@ class GenericCRUD extends Component {
                                         </Navbar.Brand>
                                     </Navbar.Header>
                                     <Nav>
-                                        <NavDropdown eventKey={1} title="Dados Gerais" id="basic-nav-dropdown" style={{overflow:1}}>
+                                        <NavDropdown eventKey={1} title="Dados Gerais" id="dadosGeraisDropdown" style={{overflow:1}}>
                                             {menuItems.dadosGerais}
                                         </NavDropdown>
-                                        <NavDropdown eventKey={2} title="Dados Estatisticos" id="basic-nav-dropdown" style={{overflow:1}}>
+                                        <NavDropdown eventKey={2} title="Dados Estatisticos" id="dadosEstatisticosDropdown" style={{overflow:1}}>
                                             {menuItems.dadosEstatisticos}
                                         </NavDropdown>
-                                        <NavDropdown eventKey={3} title="Vias" id="basic-nav-dropdown" style={{overflow:1}}>
+                                        <NavDropdown eventKey={3} title="Vias" id="viasDropdown" style={{overflow:1}}>
                                             {menuItems.vias}
                                         </NavDropdown>
-                                        <NavDropdown eventKey={4} title="Veiculos" id="basic-nav-dropdown" style={{overflow:1}}>
+                                        <NavDropdown eventKey={4} title="Veiculos" id="veiculosDropdown" style={{overflow:1}}>
                                             {menuItems.veiculo}
                                         </NavDropdown>
-                                        <NavDropdown eventKey={5} title="Envolvidos" id="basic-nav-dropdown" style={{overflow:1}}>
+                                        <NavDropdown eventKey={5} title="Envolvidos" id="envolvidoDropdown" style={{overflow:1}}>
                                             {menuItems.envolvido}
                                         </NavDropdown>
-                                        {menuItems.parceiro}
+                                    </Nav>
+                                    <Nav onSelect={(e)=>this.onSelect(listaCadastros.parceiro[0],e)}>
+                                        <NavItem eventKey={6} title="Parceiro">
+                                            Parceiro
+                                        </NavItem>
                                     </Nav>
                                 </Navbar>
                             </Col>
@@ -498,9 +505,9 @@ class GenericCRUD extends Component {
                             <Col md={12}>
                             {
                                 this.props.genericProps.type ? (
-                                    <div style={{flex: '1'}}>
-                                        <form>
-                                        <Col md={8}>
+                                    <div>
+                                        <Form>
+                                        <Col md={9}>
                                             <ReactTable
                                                 previousText='Anterior' nextText='Proximo' manual
                                                 loadingText='Carregando...' pageText='Pagina'
@@ -514,8 +521,55 @@ class GenericCRUD extends Component {
                                                 defaultFilterMethod={(filter, rows) => matchSorter(rows, filter.value, {keys: [filter.id]})}
                                                 getTdProps={() => ({style: {textAlign: "center"}})}
                                             />
+                                            <Dialog active={this.props.genericProps.showModal === !(undefined)}
+                                                    actions={[
+                                                        {label: "Fechar", onClick: this.props.handleToggleModal},
+                                                        {label: "Salvar", onClick: this.updateType.bind(this)}
+                                                    ]}
+                                                    className="custom-modal" type='fullscreen'
+                                                    onEscKeyDown={this.props.handleToggleModal}
+                                                    onOverlayClick={this.props.handleToggleModal}
+                                                    title='Ocorrência'
+                                            >
+                                                <Grid fluid>
+                                                    <Col md = {12}>
+                                                        <Row>
+                                                            {
+                                                                this.props.genericProps.type && this.props.genericProps.selected ? this.props.genericProps.type.fields.map(field => {
+                                                                    let placeholder = this.props.genericProps.selected[field.id].nome ||
+                                                                                      this.props.genericProps.selected[field.id].value||
+                                                                                      this.props.genericProps.selected[field.id]      ||  '';
+                                                                    return (
+                                                                        field.options?
+                                                                            <Col md={4} key={field.id}>
+                                                                                <ControlLabel>{field.name}</ControlLabel>
+                                                                                <Typeahead labelKey={option => `${option.nome}`} id={field.id}
+                                                                                           placeholder={placeholder} className='form-group'
+                                                                                           onChange={(e)=>this.handleTypeahead(e, field.id)}
+                                                                                           options={this.props.events.options[field.id]}
+                                                                                />
+                                                                            </Col>:
+                                                                            <Col md={4} key={field.id}>
+                                                                                <Input value={this.props.genericProps.form[field.id]||''}
+                                                                                       placeholder={placeholder}
+                                                                                       label={field.name} type="text" id={field.id}
+                                                                                       onChange={(e) => this.props.onChangeFormInput(e.target.value, field.id)}
+                                                                                />
+                                                                            </Col>
+                                                                    );
+                                                                }) : undefined
+                                                            }
+                                                        </Row>
+                                                        {/*<Row>*/}
+                                                            {/*<pre>*/}
+                                                                {/*{JSON.stringify(this.props.genericProps.form, null, 4)}*/}
+                                                            {/*</pre>*/}
+                                                        {/*</Row>*/}
+                                                    </Col>
+                                                </Grid>
+                                            </Dialog>
                                         </Col>
-                                        <Col md={4}>
+                                        <Col md={3}>
                                             <Row>
                                                 <h4>Adicionar {this.props.genericProps.type.name}</h4>
                                             </Row>
@@ -528,7 +582,7 @@ class GenericCRUD extends Component {
                                                 </Col>
                                             </Row>
                                         </Col>
-                                        </form>
+                                        </Form>
                                     </div>) : <div style={{textAlign:'center'}}><h4>Selecione um cadastro</h4></div>
                             }
                             </Col>
@@ -560,8 +614,8 @@ const mapDispatchToProps = dispatch => {
         onChangeInput: (newValue, selectedInput) => {
             dispatch(CrudApi.onChangeInput(newValue, selectedInput));
         },
-        onChangeFormInput: (value, selectedInput) => {
-            dispatch(CrudApi.onChangeCrudFormInput(value, selectedInput));
+        onChangeFormInput: (value, selectedInput, option) => {
+            dispatch(CrudApi.onChangeCrudFormInput(value, selectedInput, option));
         },
         addType: (form, selectedType, pageSize, page) => {
             dispatch(CrudApi.addType(form, selectedType, pageSize, page));
@@ -572,8 +626,8 @@ const mapDispatchToProps = dispatch => {
         handleToggleModal: () => {
             dispatch(CrudApi.handleModal());
         },
-        updateType: (id, value, objToChange, propToChange, selectedType, pageSize, page) => {
-            dispatch(CrudApi.updateType(id, value, objToChange, propToChange, selectedType, pageSize, page));
+        updateType: (id, form, selectedType, pageSize, page) => {
+            dispatch(CrudApi.updateType(id, form, selectedType, pageSize, page));
         },
         loadOptions:() => {
             dispatch(EventsApi.listEventsOpts());

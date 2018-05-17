@@ -112,8 +112,8 @@ export function onChangeCrudInput(value, input){
     return {type:"ONCHANGECRUDINPUT", value, input};
 }
 
-export function onChangeCrudFormInput(value, input){
-    return {type:"ONCHANGECRUDFORMINPUT", value, input};
+export function onChangeCrudFormInput(value, input, option){
+    return {type:"ONCHANGECRUDFORMINPUT", value, input, option};
 }
 
 export function toggleATModal() {
