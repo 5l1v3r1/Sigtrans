@@ -7,7 +7,8 @@ import React from 'react';
 import App from './App';
 import EBox from './components/events/Event_old';
 import {Events, OpenEvents} from './components/events/Event';
-import CRUDTest from './components/custom/GenericCRUD'
+import GenericCRUD from './components/custom/GenericCRUD';
+import TestPage from './components/TestPage'
 import Death from './components/death/Death';
 import Home from './components/home/Home';
 import Login from './components/Login';
@@ -38,6 +39,7 @@ export const makeMainRoutes = (store) => {
                         <Route path="obitos" component={Death}/>
                         <Route path="abertas" component={OpenEvents}/>
                         <Route path="geral" component={Events}/>
+                        <Route path="test" component={TestPage}/>
                         <Route path="dados" component={DataReceive}/>
                         <Redirect from='relatorios' to='/sig/relatorios/obitos' />
                         <Route path="relatorios">
@@ -46,7 +48,7 @@ export const makeMainRoutes = (store) => {
                         </Route>
                         <Route path="criar" component={EBox}/>
                         <Route path="cadastro">
-                            <Route path="alteracoes" component={CRUDTest}/>
+                            <Route path="alteracoes" component={GenericCRUD}/>
                         </Route>
                         <Route path='404' component={PageNotFound} />
                         <Redirect from='*' to='404' />

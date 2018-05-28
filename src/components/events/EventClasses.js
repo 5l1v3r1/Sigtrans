@@ -49,7 +49,7 @@ export class EventsGrid extends Component {
                                     }, {
                                         Header: 'Rua',
                                         id: 'rua',
-                                        accessor: d => d.dadosGerais.rua,
+                                        accessor: d => d.dadosGerais.rua?d.dadosGerais.rua.nome:'',
                                         filterMethod: (filter, rows) =>
                                             matchSorter(rows, filter.value, {keys: ["rua"]}),
                                         filterAll: true
@@ -63,7 +63,7 @@ export class EventsGrid extends Component {
                                     }, {
                                         Header: 'Cruzamento com',
                                         id: 'cruzamento',
-                                        accessor: d => d.dadosGerais.cruzamento,
+                                        accessor: d => d.dadosGerais.cruzamento?d.dadosGerais.cruzamento.nome:'',
                                         filterMethod: (filter, rows) =>
                                             matchSorter(rows, filter.value, {keys: ["cruzamento"]}),
                                         filterAll: true
@@ -77,7 +77,7 @@ export class EventsGrid extends Component {
                                     }, {
                                         Header: 'Referencia',
                                         id: 'referencia',
-                                        accessor: d => d.dadosGerais.referencia,
+                                        accessor: d => d.dadosGerais.pontoReferencia,
                                         filterMethod: (filter, rows) =>
                                             matchSorter(rows, filter.value, {keys: ["referencia"]}),
                                         filterAll: true
@@ -191,7 +191,7 @@ export class EventsForm extends Component {
                             </Tabs>
                         </Form>
                     </Col>
-                    {/*<Col md={12}><pre>{JSON.stringify(this.props.selectedEvent, null, 4)}</pre></Col>*/}
+                    <Col md={12}><pre>{JSON.stringify(this.props.selectedEvent, null, 4)}</pre></Col>
                     <Col md={12}>
                         <Row>
                             <Col md={8}>Adicionado em: {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleDateString()} as {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleTimeString()}</Col>
@@ -211,7 +211,9 @@ export class EventsForm extends Component {
 class General extends Component {
 
     handleTypeahead (e, type){
-        this.props.onChangeInput( e[0] ? e[0].nome:"", type, this.props.subMenu );
+        let value = '';
+        if(e[0]) value = this.props.options.rua.find(item=>item.id=e[0].id);
+        this.props.onChangeInput(value, type, this.props.subMenu );
     };
 
     render() {
@@ -247,7 +249,7 @@ class General extends Component {
                             label="Municipio"/>
                 </Col>
                 <Col md={4}>
-                    <Input value={this.props.data.referencia||''} type="text"
+                    <Input value={this.props.data.pontoReferencia||''} type="text"
                            id="referencia"
                            onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
                            label="Ponto de Ref."/>
@@ -256,6 +258,7 @@ class General extends Component {
                     <ControlLabel>Rua</ControlLabel>
                     <Typeahead labelKey={option => `${option.nome}`}
                                id='rua' placeholder="Escolha uma Rua"
+                               defaultSelected={this.props.data.rua?[this.props.data.rua]:undefined}
                                onChange={(e)=>this.handleTypeahead(e, 'rua')}
                                options={this.props.options.rua}
                     />
@@ -276,7 +279,8 @@ class General extends Component {
                 <Col md={4}>
                     <ControlLabel>Cruzamento</ControlLabel>
                     <Typeahead labelKey={option => `${option.nome}`}
-                               id='rua' placeholder="Escolha uma Rua"
+                               defaultSelected={this.props.data.cruzamento?[this.props.data.cruzamento]:undefined}
+                               id='cruzamento' placeholder="Escolha uma Rua"
                                onChange={(e)=>this.handleTypeahead(e, 'cruzamento')}
                                options={this.props.options.rua}
                     />
@@ -343,7 +347,7 @@ class StatisticData extends Component {
                         {
                             this.props.data.vias?this.props.data.vias.map((via)=>{
                                 return(
-                                    <div>
+                                    <div key = {via.id}>
                                         <h4 style={{borderBottom:'1px solid whitesmoke'}}>Quanto às Vias</h4>
                                         <Col md={12} key={via.id}>
                                             <Row style={{borderBottom:'1px solid whitesmoke'}}>
@@ -495,7 +499,7 @@ class Vehicles extends Component {
                     <Accordion allowMultiple>
                     {
                         this.props.data ? this.props.data.map(vehicle => {
-                            let header = (vehicle.modelo+' '+vehicle.placa)||'';
+                            let header = vehicle.placa?vehicle.placa:'';
                             return (
                                 <AccordionItem title={`Veiculo: ${header}`} eventKey={vehicle.id} key={vehicle.id} collapsible>
                                     <Row>
@@ -601,6 +605,7 @@ class Vehicles extends Component {
 class Involved extends Component {
 
     render() {
+        let i=1;
         return (
             <Row className="form-group">
                 <br/>
@@ -614,8 +619,10 @@ class Involved extends Component {
                     <Accordion allowMultiple>
                     {
                         this.props.data ? this.props.data.map((involved) => {
+                            let header = involved.nome?involved.nome:'';
+                            let eventKey = involved.id?involved.id:i++;
                                 return (
-                                    <AccordionItem title={`Envolvido: ${involved.nome}`} eventKey={involved.id} key={involved.id} collapsible>
+                                    <AccordionItem title={`Envolvido: ${header}`} eventKey={involved.id} key={eventKey} collapsible>
                                         <Row>
                                             <Col md={10}>
                                                 <Row>
@@ -700,6 +707,14 @@ class Involved extends Component {
                                                 </Row>
                                                 <Row>
                                                     <Col md={4}>
+                                                        <Select value={involved.grauInstrucao?involved.grauInstrucao.id:""}
+                                                                id="grauInstrucao" name="grauInstrucao"
+                                                                label="Grau de Instrução"
+                                                                options={this.props.options.grauInstrucao}
+                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                        />
+                                                    </Col>
+                                                    <Col md={4}>
                                                         <Select value={involved.profissao?involved.profissao.id:''}
                                                                 id="profissao" name="profissao" label="Profissão"
                                                                 options={this.props.options.profissao}
@@ -744,6 +759,12 @@ class Involved extends Component {
                                                                 label="Condição de segurança"
                                                                 options={this.props.options.condicaoSeguranca}
                                                                 onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                        />
+                                                    </Col>
+                                                    <Col md={4}>
+                                                        <Input value={involved.etilometria} type="number" step="0.01" min="0"
+                                                               id="etilometria" label="Etilometria"
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
                                                         />
                                                     </Col>
                                                 </Row>

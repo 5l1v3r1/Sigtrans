@@ -88,6 +88,10 @@ class GenericCRUD extends Component {
                     name: 'Municipio',
                     fields: [
                         {
+                            id:'idParceiro',
+                            name:'ID Parceiro'
+                        },
+                        {
                             id: 'nome',
                             name: 'Municipio'
                         },

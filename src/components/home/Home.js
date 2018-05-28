@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import Map from '../map/Map'
 import DeathApi from "../../logics/DeathApi";
 import HomeApi from "../../logics/HomeApi";
+import EventsApi from "../../logics/EventsApi";
 
 // import {PageHeader} from "react-bootstrap";
 
@@ -12,11 +13,9 @@ class Home extends Component {
         setTimeout(() => this.props.delayedShowMarkers(), 2000)
     };
 
-    componentDidMount() {
-        if (!this.props.homeDeath.deathEvents) {
-            this.props.listDeathEvents(this.props.homeDeath.loading);
-            this.props.listDeathOptions();
-        }
+    componentWillMount() {
+        this.props.listEvents(this.props.events.loading);
+        // this.props.listDeathEvents(this.props.events.loading);
         this.delayedShowMarker();
     };
 
@@ -38,16 +37,18 @@ class Home extends Component {
                 <div className="content" id="content">
                     <Map
                         googleMapURL="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyAzTZTuwTczZL2JedjuYJRiEh2v0BQpgxo"
-                        markers={this.props.homeDeath.deathEvents ? this.props.homeDeath.deathEvents.map((event) => {
-                            let max = 0;
-                            event.involved.forEach((elem) => {
-                                if (max < elem.InjuryLevel) {
-                                    max = elem.InjuryLevel;
+                        markers={this.props.events.events ? this.props.events.events.map((event) => {
+                            /*let max = 1;
+                            event.envolvido.forEach((elem) => {
+                                if (max < elem.lesoes.id) {
+                                    max = elem.lesoes.id;
                                 }
-                            });
+                            });*/
                             return {
-                                position: {lat: parseFloat(event.general.lat), lng: parseFloat(event.general.lng)},
-                                icon: {url: icons[max - 1]}
+                                position: {
+                                    lat: parseFloat(event.dadosGerais.latitude),
+                                    lng: parseFloat(event.dadosGerais.longitude)
+                                }
                             }
                         }) : undefined}
                         loadingElement={<div style={{height: '50%'}}/>}
@@ -63,13 +64,20 @@ class Home extends Component {
 
 const mapStateToProps = state => {
     return {
-        homeDeath: state.death,
-        home: state.home
+        home: state.home,
+        events: state.events,
+        homeDeath: state.death
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        listEvents: (loading) => {
+            dispatch(EventsApi.listOpenEvents(loading));
+        },
+        listOptions: () => {
+            dispatch(EventsApi.listEventsOpts());
+        },
         listDeathEvents: (loading) => {
             dispatch(DeathApi.listDeaths(loading));
         },
