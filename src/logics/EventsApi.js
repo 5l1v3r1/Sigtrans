@@ -13,10 +13,20 @@ import {
     removeInvolved,
     removeVehicle,
     selectOpenEvent,
-    toggleEventsModal
+    toggleEventsModal,
+    addVia,
+    removeVia,
+    initializeEvent,
+    listAsync
 } from '../actions/actionCreator'
 
 export default class EventsApi {
+
+    static initializeEvent(){
+        return dispatch => {
+            return dispatch(initializeEvent())
+        }
+    }
 
 	static listOpenEvents(loading) {
 		return dispatch => {
@@ -34,7 +44,7 @@ export default class EventsApi {
                 .catch((err) => {
                     console.log(err);
                 });
-            dispatch(listOpenEvents(loading))
+            // dispatch(listOpenEvents(loading))
 
 		}
 	}
@@ -42,7 +52,6 @@ export default class EventsApi {
 	static listEventsOpts() {
 		return dispatch => {
 			fetch(getUrl('api')+'options')
-            // fetch(getUrl('options'))
                 .then(response => {
                     if (response.ok) {
                         response.json()
@@ -57,6 +66,29 @@ export default class EventsApi {
                 .catch((err) => {
                     console.log(err);
                 });
+        }
+    }
+
+    static asyncTypeaheadQuery(query, option){
+        return dispatch => {
+            this.onChangeInput(true, option+'IsLoading', null);
+            fetch(getUrl('api')+option+'/byname?nome='+query.toUpperCase())
+                .then(response => {
+                    if (response.ok) {
+                        response.json()
+                            .then(options => {
+                                // console.log(options);
+                                return dispatch(listAsync(options, option));
+                            })
+                    }
+                    else {
+                        console.log('Falha ao receber opcoes: ' + response.status);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            this.onChangeInput(false, option+'IsLoading', null);
         }
     }
 
@@ -114,4 +146,39 @@ export default class EventsApi {
 		}
 	}
 
+    static addVia() {
+        return dispatch => {
+            return dispatch(addVia());
+        }
+    }
+
+    static removeVia(Via) {
+        return dispatch => {
+            return dispatch(removeVia(Via));
+        }
+    }
+
+    static updateEvent(event) {
+        return dispatch => {
+        	fetch(getUrl('api') + 'ocorrencias/' + event.id, {
+                method: 'PUT',
+                headers: new Headers({'content-type': 'application/json'}),
+                body: JSON.stringify(event),
+            })
+                .then(response =>{
+                    if (response.ok)
+                        response.json()
+                            .then(response => {
+                                console.log(response);
+                                dispatch(this.listOpenEvents(true));
+                            });
+                    else {
+                        console.log('Falha ao receber dados: ' + response.status);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }
 }

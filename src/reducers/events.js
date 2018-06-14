@@ -14,6 +14,12 @@ export function events(state = new List(), action) {
         return Object.assign({}, state, {events, loading});
     }
 
+    if (action.type === 'LISTASYNC') {
+        const options = action.options;
+        const listType = action.listType;
+        return Object.assign({}, state, {[listType]:options});
+    }
+
     if (action.type === 'LISTEVENTSOPTIONS') {
         const options = action.options;
         return Object.assign({}, state, {options});
@@ -33,9 +39,12 @@ export function events(state = new List(), action) {
     }
 
     if (action.type === 'ONCHANGE') {
-        const selectedEvent = state.selectedEvent;
-        selectedEvent[action.subMenu][action.operator]=action.newValue;
-        return Object.assign({}, state, {selectedEvent});
+        if(action.subMenu) {
+            const selectedEvent = state.selectedEvent;
+            selectedEvent[action.subMenu][action.operator] = action.newValue;
+            return Object.assign({}, state, {selectedEvent});
+        }
+        return Object.assign({}, state, {[action.operator]:action.newValue});
     }
 
     if (action.type === 'ONCHANGEDROPDOWN') {
@@ -92,16 +101,16 @@ export function events(state = new List(), action) {
         return Object.assign({}, state, {selectedEvent});
     }
 
-    if (action.type === 'ADDVEHICLE') {
-        let selectedEvent = state.selectedEvent;
-        selectedEvent.veiculos.push({});
-        return Object.assign({}, state, {selectedEvent});
-    }
-
     if (action.type === 'REMOVEINVOLVED') {
         let selectedEvent = state.selectedEvent;
         const id = state.selectedEvent.envolvidos.indexOf(action.involved);
         selectedEvent.envolvidos.splice(id, 1);
+        return Object.assign({}, state, {selectedEvent});
+    }
+
+    if (action.type === 'ADDVEHICLE') {
+        let selectedEvent = state.selectedEvent;
+        selectedEvent.veiculos.push({});
         return Object.assign({}, state, {selectedEvent});
     }
 
@@ -112,6 +121,31 @@ export function events(state = new List(), action) {
         return Object.assign({}, state, {selectedEvent});
     }
 
+    if (action.type === 'ADDVIA') {
+        let selectedEvent = state.selectedEvent;
+        if(!selectedEvent.dadosEstatisticos.vias)
+            selectedEvent.dadosEstatisticos.vias=[];
+        selectedEvent.dadosEstatisticos.vias.push({});
+        return Object.assign({}, state, {selectedEvent});
+    }
+
+    if (action.type === 'REMOVEVIA') {
+        let selectedEvent = state.selectedEvent;
+        const id = selectedEvent.dadosEstatisticos.vias.indexOf(action.via);
+        selectedEvent.dadosEstatisticos.vias.splice(id, 1);
+        return Object.assign({}, state, {selectedEvent});
+    }
+
+    if (action.type === 'INITIALIZEEVENT'){
+        let selectedEvent = {
+            dadosGerais:{},
+            dadosEstatisticos:{},
+            veiculos:[],
+            envolvidos:[]
+        };
+        let municipioIsLoading=false;
+        return Object.assign({}, state, {selectedEvent,municipioIsLoading});
+    }
     return state;
 
 }

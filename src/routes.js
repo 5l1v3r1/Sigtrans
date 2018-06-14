@@ -5,7 +5,6 @@ import React from 'react';
 // import Cookies from 'js-cookie';
 //Components
 import App from './App';
-import EBox from './components/events/Event_old';
 import {Events, OpenEvents} from './components/events/Event';
 import GenericCRUD from './components/custom/GenericCRUD';
 import TestPage from './components/TestPage'
@@ -23,6 +22,7 @@ import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
 //Redux
 import {Provider} from 'react-redux';
 import PageNotFound from "./components/custom/PageNotFound";
+import {CreateEvent} from "./components/events/Event";
 
 // import Auth from "./components/auth0/Auth";
 // const auth = new Auth();
@@ -46,7 +46,7 @@ export const makeMainRoutes = (store) => {
                             <Route path="obitos" component={DeceasedReports}/>
                             <Route path="estatisticos" component={Statistic}/>
                         </Route>
-                        <Route path="criar" component={EBox}/>
+                        <Route path="criar" component={CreateEvent}/>
                         <Route path="cadastro">
                             <Route path="alteracoes" component={GenericCRUD}/>
                         </Route>

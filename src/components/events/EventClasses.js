@@ -6,9 +6,9 @@ import matchSorter from 'match-sorter';
 import Button from 'react-toolbox/lib/button/Button';
 import Dialog from "react-toolbox/lib/dialog/Dialog";
 import ReactTable from 'react-table';
-import {Accordion, AccordionItem} from 'react-sanfona';
+import {Accordion, AccordionItem} from "react-sanfona";
 import Map from "../map/Map";
-import {Typeahead} from 'react-bootstrap-typeahead';
+import {AsyncTypeahead, Typeahead} from "react-bootstrap-typeahead";
 
 //make new js file for both grids
 export class EventsGrid extends Component {
@@ -17,6 +17,11 @@ export class EventsGrid extends Component {
         this.props.handleToggleModal();
         this.props.selectEvent(id);
     };
+
+    updateEvent(){
+        this.props.handleToggleModal();
+        this.props.updateEvent(this.props.selectedEvent);
+    }
 
     render() {
         return (
@@ -97,7 +102,7 @@ export class EventsGrid extends Component {
                         <Dialog active={this.props.showModal === !(undefined)}
                                 actions={[
                                     {label: "Fechar", onClick: this.props.handleToggleModal},
-                                    {label: "Salvar", onClick: this.props.handleToggleModal}
+                                    {label: "Salvar", onClick: this.updateEvent.bind(this)}
                                 ]}
                                 className="custom-modal" type='fullscreen'
                                 onEscKeyDown={this.props.handleToggleModal}
@@ -107,11 +112,14 @@ export class EventsGrid extends Component {
                             <EventsForm selectedEvent={this.props.selectedEvent}
                                         selectedEventID={this.props.selectedEventID}
                                         options={this.props.options}
+                                        municipioIsLoading={this.props.municipioIsLoading}
+                                        municipios={this.props.municipios}
                                         onChangeDropdown={this.props.onChangeDropdown}
                                         onNestedInputChange={this.props.onNestedInputChange}
                                         onChangeInput={this.props.onChangeInput}
                                         addVehicle={this.props.addVehicle} removeVehicle={this.props.removeVehicle}
                                         addInvolved={this.props.addInvolved} removeInvolved={this.props.removeInvolved}
+                                        addVia={this.props.addVia} removeVia={this.props.removeVia}
                             />
                         </Dialog>
                     </div>
@@ -134,45 +142,50 @@ export class EventsForm extends Component {
                             <Tabs defaultActiveKey={1} id="event-form-tabs">
                                 <Tab eventKey={1} title="Geral">
                                     <General
-                                        data={this.props.selectedEvent.dadosGerais}
+                                        data={this.props.selectedEvent?this.props.selectedEvent.dadosGerais:{}}
                                         options={this.props.options}
+                                        municipios={this.props.municipios}
                                         onChangeInput={this.props.onChangeInput}
                                         onChangeDropdown={this.props.onChangeDropdown}
                                         onNestedInputChange={this.props.onNestedInputChange}
+                                        asyncTypeaheadQuery={this.props.asyncTypeaheadQuery}
+                                        municipioIsLoading={this.props.municipioIsLoading}
+                                        ruaIsLoading={this.props.ruaIsLoading}
                                         subMenu='dadosGerais'
                                     />
                                 </Tab>
                                 <Tab eventKey={2} title="Dados Estatisticos">
                                     <StatisticData
-                                        data={this.props.selectedEvent.dadosEstatisticos}
+                                        data={this.props.selectedEvent?this.props.selectedEvent.dadosEstatisticos:{}}
                                         options={this.props.options}
                                         onNestedInputChange={this.props.onNestedInputChange}
                                         onChangeDropdown={this.props.onChangeDropdown}
                                         onChangeInput={this.props.onChangeInput}
+                                        add={this.props.addVia} remove={this.props.removeVia}
                                         subMenu='dadosEstatisticos'
                                     />
                                 </Tab>
                                 <Tab eventKey={3} title="Veículos">
+                                    <br/><Button label='Adicionar' onClick={() => this.props.addVehicle()}/>
                                     <Vehicles
-                                        data={this.props.selectedEvent.veiculos}
+                                        data={this.props.selectedEvent?this.props.selectedEvent.veiculos:[]}
                                         options={this.props.options}
                                         onChangeInput={this.props.onChangeInput}
                                         onChangeDropdown={this.props.onChangeDropdown}
-                                        add={this.props.addVehicle}
-                                        remove={this.props.removeVehicle}
+                                        add={this.props.addVehicle} remove={this.props.removeVehicle}
                                         onNestedInputChange={this.props.onNestedInputChange}
                                         subMenu='veiculos'
                                     />
                                 </Tab>
                                 <Tab eventKey={4} title="Envolvidos">
+                                    <br/><Button label='Adicionar' onClick={() => this.props.addInvolved()}/>
                                     <Involved
-                                        data={this.props.selectedEvent.envolvidos}
-                                        veiculo={this.props.selectedEvent.veiculos}
+                                        data={this.props.selectedEvent?this.props.selectedEvent.envolvidos:[]}
+                                        veiculo={this.props.selectedEvent?this.props.selectedEvent.veiculos:[]}
                                         options={this.props.options}
                                         onChangeInput={this.props.onChangeInput}
                                         onChangeDropdown={this.props.onChangeDropdown}
-                                        add={this.props.addInvolved}
-                                        remove={this.props.removeInvolved}
+                                        add={this.props.addInvolved} remove={this.props.removeInvolved}
                                         onNestedInputChange={this.props.onNestedInputChange}
                                         subMenu='envolvidos'
                                     />
@@ -181,7 +194,7 @@ export class EventsForm extends Component {
                                     <Row>
                                         <br/>
                                         <Col md={12}>
-                                            <Input value={this.props.selectedEvent.dadosGerais.informacoesAdicionais||''}
+                                            <Input value={this.props.selectedEvent?this.props.selectedEvent.dadosGerais.informacoesAdicionais:''}
                                                    style={{height:'200px'}} componentClass='textarea'
                                                    id="informacoesAdicionais" label="Informações adicionais"
                                                    onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, 'dadosGerais')}/>
@@ -191,16 +204,20 @@ export class EventsForm extends Component {
                             </Tabs>
                         </Form>
                     </Col>
-                    <Col md={12}><pre>{JSON.stringify(this.props.selectedEvent, null, 4)}</pre></Col>
-                    <Col md={12}>
-                        <Row>
-                            <Col md={8}>Adicionado em: {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleDateString()} as {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleTimeString()}</Col>
-                            <Col md={4}>Ultima edição por: {this.props.selectedEvent.dadosGerais.parceiro} em DD/MM/AAAA as HH:MM</Col>
-                        </Row>
-                        <Row>
-                            <Col md={3}>RGO: {this.props.selectedEvent.dadosGerais.rgoBombeiros} / Protocolo (Bateu): {this.props.selectedEvent.dadosGerais.protocoloBateu}</Col>
-                        </Row>
-                    </Col>
+                    {this.props.selectedEvent.id ?
+                        <Col md={12}>
+                            <Row>
+                                <Col md={8}>Adicionado
+                                    em: {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleDateString()} as {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleTimeString()}</Col>
+                                <Col md={4}>Ultima edição por: {this.props.selectedEvent.dadosGerais.parceiro} em
+                                    DD/MM/AAAA as HH:MM</Col>
+                            </Row>
+                            <Row>
+                                <Col md={3}>RGO: {this.props.selectedEvent.dadosGerais.rgoBombeiros} / Protocolo
+                                    (Bateu): {this.props.selectedEvent.dadosGerais.protocoloBateu}</Col>
+                            </Row>
+                        </Col>:undefined
+                    }
                 </Grid>
             </div>
         )
@@ -238,17 +255,23 @@ class General extends Component {
                     <Select value={this.props.data.estado?this.props.data.estado.id:''}
                             id="estado" name="estado"
                             onChange={(e) => this.props.onChangeDropdown(e.target.value, e.target.id, this.props.subMenu)}
-                            options={this.props.options.estado}
+                            options={this.props.options?this.props.options.estado:[]}
                             label="Estado"/>
                 </Col>
-                <Col md={2}>
-                    <Select value={this.props.data.municipio?this.props.data.municipio.id:''}
-                            id="municipio" name="municipio"
-                            onChange={(e) => this.props.onChangeDropdown(e.target.value, e.target.id, this.props.subMenu)}
-                            options={this.props.options.municipio}
-                            label="Municipio"/>
+                <Col md={3}>
+                    <ControlLabel>Municipio</ControlLabel>
+                    <AsyncTypeahead
+                        maxResults={10} minLenght={4} useCache paginationText="Mais..."
+                        labelKey={option => `${option.nome}`}
+                        isLoading={this.props.municipioIsLoading}
+                        onSearch={query => this.props.asyncTypeaheadQuery(query, 'municipio')}
+                        defaultSelected={this.props.data.rua?[this.props.data.rua]:undefined}
+                        options={this.props.municipios?this.props.municipios:this.props.data.rua?this.props.data.rua:[]}
+                        searchText="Procurando..." promptText="Municipio" id='municipio'
+                    />
+                    {/*onChange={(e)=>this.handleTypeahead(e, 'municipio')}*/}
                 </Col>
-                <Col md={4}>
+                <Col md={3}>
                     <Input value={this.props.data.pontoReferencia||''} type="text"
                            id="referencia"
                            onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
@@ -260,7 +283,7 @@ class General extends Component {
                                id='rua' placeholder="Escolha uma Rua"
                                defaultSelected={this.props.data.rua?[this.props.data.rua]:undefined}
                                onChange={(e)=>this.handleTypeahead(e, 'rua')}
-                               options={this.props.options.rua}
+                               options={this.props.rua?this.props.rua:[{nome:'', id:'1'}]}
                     />
                 </Col>
                 <Col md={2}>
@@ -273,21 +296,26 @@ class General extends Component {
                     <Select value={this.props.data.bairro?this.props.data.bairro.id:''}
                             id="bairro" name="bairro"
                             onChange={(e) => this.props.onChangeDropdown(e.target.value, e.target.id, this.props.subMenu)}
-                            options={this.props.options.bairro}
+                            options={this.props.options?this.props.options.bairro:[]}
                             label="Bairro"/>
                 </Col>
                 <Col md={4}>
                     <ControlLabel>Cruzamento</ControlLabel>
+                    {/*<AsyncTypeahead*/}
+                        {/*maxResults={10} minLenght={4} useCache paginationText="Mais..."*/}
+                        {/*labelKey={option => `${option.nome}`}*/}
+                        {/*isLoading={this.props.municipioIsLoading}*/}
+                        {/*onSearch={query => this.props.asyncTypeaheadQuery(query, 'municipio')}*/}
+                        {/*defaultSelected={this.props.data.rua?[this.props.data.rua]:undefined}*/}
+                        {/*options={this.props.municipios?this.props.municipios:this.props.data.rua?this.props.data.rua:[]}*/}
+                        {/*searchText="Procurando..." promptText="Municipio" id='municipio'*/}
+                    {/*/>*/}
                     <Typeahead labelKey={option => `${option.nome}`}
                                defaultSelected={this.props.data.cruzamento?[this.props.data.cruzamento]:undefined}
                                id='cruzamento' placeholder="Escolha uma Rua"
                                onChange={(e)=>this.handleTypeahead(e, 'cruzamento')}
-                               options={this.props.options.rua}
+                               options={[{nome:'teste', id:'1'}]}
                     />
-                    {/*<Input value={this.props.data.cruzamento||''} type="text"*/}
-                           {/*id="cruzamento"*/}
-                           {/*onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}*/}
-                           {/*label="Cruzamento"/>*/}
                 </Col>
                 {this.props.data.latitude&&this.props.data.longitude ? (
                     <Col md={12}>
@@ -308,8 +336,9 @@ class General extends Component {
 
 class StatisticData extends Component {
     render() {
+        let i=1;
         return (
-            <Row>
+            <Row className="form-group">
                 <br/>
                 <Col md={12}>
                     <Row>
@@ -324,157 +353,173 @@ class StatisticData extends Component {
                             <Select value={this.props.data.acidenteTrabalho?this.props.data.acidenteTrabalho.id:''}
                                     id="acidenteTrabalho" name="acidenteTrabalho"
                                     onChange={(e) => this.props.onChangeDropdown(e.target.value, e.target.id, this.props.subMenu)}
-                                    options={this.props.options.acidenteTrabalho}
+                                    options={this.props.options?this.props.options.acidenteTrabalho:[]}
                                     label="Acidente de Trabalho"/>
                         </Col>
                         <Col md={3}>
                             <Select value={this.props.data.tipoAcidente?this.props.data.tipoAcidente.id:''}
                                     id="tipoAcidente" name="tipoAcidente"
                                     onChange={(e) => this.props.onChangeDropdown(e.target.value, e.target.id, this.props.subMenu)}
-                                    options={this.props.options.tipoAcidente}
+                                    options={this.props.options?this.props.options.tipoAcidente:[]}
                                     label="Tipo de Acidente"/>
                         </Col>
                         <Col md={3}>
                             <Select value={this.props.data.classificacaoAcidente?this.props.data.classificacaoAcidente.id:''}
                                     id="classificacaoAcidente" name="classificacaoAcidente"
                                     onChange={(e) => this.props.onChangeDropdown(e.target.value, e.target.id, this.props.subMenu)}
-                                    options={this.props.options.classificacaoAcidente}
+                                    options={this.props.options?this.props.options.classificacaoAcidente:[]}
                                     label="Classificação do acidente"/>
                         </Col>
                     </Row>
                     <Row>
-
-                        {
-                            this.props.data.vias?this.props.data.vias.map((via)=>{
-                                return(
-                                    <div key = {via.id}>
-                                        <h4 style={{borderBottom:'1px solid whitesmoke'}}>Quanto às Vias</h4>
-                                        <Col md={12} key={via.id}>
-                                            <Row style={{borderBottom:'1px solid whitesmoke'}}>
-                                                <h5>Via</h5>
-                                                <Col md={1}>
-                                                    <Input value={via.faixas} type="number" min="0"
-                                                           id="faixas"
-                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, false)}
-                                                           label="Faixas"/>
-                                                </Col>
-                                                <Col md={2}>
-                                                    <Input value={via.velocidadeMaxima} type="number" min="0"
-                                                           id="velocidadeMaxima"
-                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, false)}
-                                                           label="Velocidade Máxima"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.tipoVia?via.tipoVia.id:""}
-                                                            id="tipoVia" name="tipoVia"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.tipoVia}
-                                                            label="Tipo da Via"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.pavimentacao?via.pavimentacao.id:""}
-                                                            id="pavimentacao" name="pavimentacao"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.pavimentacao}
-                                                            label="Pavimentação"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.conservacaoVia?via.conservacaoVia.id:""}
-                                                            id="conservacaoVia" name="conservacaoVia"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.conservacaoVia}
-                                                            label="Conservação da Via"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.sentidoVia?via.sentidoVia.id:''}
-                                                            id="sentidoVia" name="sentidoVia"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.sentidoVia}
-                                                            label="Sentido da Via"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.semaforo?via.semaforo.id:""}
-                                                            id="semaforo" name="semaforo"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.semaforo}
-                                                            label="Semaforo"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.perfilPista?via.perfilPista.id:''}
-                                                            id="perfilPista" name="perfilPista"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.perfilPista}
-                                                            label="Perfil da Pista"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.superficie?via.superficie.id:""}
-                                                            id="superficie" name="superficie"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.superficie}
-                                                            label="Superficie"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.condicaoClimatica?via.condicaoClimatica.id:""}
-                                                            id="condicaoClimatica" name="condicaoClimatica"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.condicaoClimatica}
-                                                            label="Condições Climáticas"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.equipamentoControleTrafego?via.equipamentoControleTrafego.id:''}
-                                                            id="equipamentoControleTrafego" name="equipamentoControleTrafego"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.equipamentoControleTrafego}
-                                                            label="Equip. Controle Tráfego"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.separacaoPista?via.separacaoPista.id:''}
-                                                            id="separacaoPista" name="separacaoPista"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.separacaoPista}
-                                                            label="Separacao da Pista"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.visibilidade?via.visibilidade.id:''}
-                                                            id="visibilidade" name="visibilidade"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.visibilidade}
-                                                            label="Visibilidade"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.condicaoTecnica?via.condicaoTecnica.id:''}
-                                                            id="condicaoTecnica" name="condicaoTecnica"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.condicaoTecnica}
-                                                            label="Condição Técnica"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.acostamento?via.acostamento.id:''}
-                                                            id="acostamento" name="acostamento"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.acostamento}
-                                                            label="Acostamento"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.sinalizacao?via.sinalizacao.id:''}
-                                                            id="sinalizacao" name="sinalizacao"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.sinalizacao}
-                                                            label="Sinalização"/>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Select value={via.sinaisPneus?via.sinaisPneus.id:''}
-                                                            id="sinaisPneus" name="sinaisPneus"
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
-                                                            options={this.props.options.sinaisPneus}
-                                                            label="Sinais de Pneus"/>
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                    </div>
-                                )
-                          }):undefined
-                        }
+                        <Col md={12}>
+                            <Row>
+                                <h4 style={{borderBottom:'1px solid whitesmoke'}}>Quanto às Vias</h4>
+                                <Button label='Adicionar' onClick={() => this.props.add()}/>
+                            </Row>
+                            <Row>
+                                <br/>
+                                <Accordion allowMultiple>
+                                {
+                                    this.props.data.vias?this.props.data.vias.map((via)=>{
+                                        let key = via.id?via.id:i++;
+                                        return(
+                                            <AccordionItem title="Via" eventKey={key} key={key} collapsible>
+                                                <Row>
+                                                    <Col md={10}>
+                                                        <Row>
+                                                            <Col md={1}>
+                                                                <Input value={via.faixas} type="number" min="0"
+                                                                       id="faixas"
+                                                                       onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, false)}
+                                                                       label="Faixas"/>
+                                                            </Col>
+                                                            <Col md={2}>
+                                                                <Input value={via.velocidadeMaxima} type="number" min="0"
+                                                                       id="velocidadeMaxima"
+                                                                       onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, false)}
+                                                                       label="Velocidade Máxima"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.tipoVia?via.tipoVia.id:""}
+                                                                        id="tipoVia" name="tipoVia"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.tipoVia}
+                                                                        label="Tipo da Via"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.pavimentacao?via.pavimentacao.id:""}
+                                                                        id="pavimentacao" name="pavimentacao"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.pavimentacao}
+                                                                        label="Pavimentação"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.conservacaoVia?via.conservacaoVia.id:""}
+                                                                        id="conservacaoVia" name="conservacaoVia"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.conservacaoVia}
+                                                                        label="Conservação da Via"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.sentidoVia?via.sentidoVia.id:''}
+                                                                        id="sentidoVia" name="sentidoVia"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.sentidoVia}
+                                                                        label="Sentido da Via"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.semaforo?via.semaforo.id:""}
+                                                                        id="semaforo" name="semaforo"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.semaforo}
+                                                                        label="Semaforo"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.perfilPista?via.perfilPista.id:''}
+                                                                        id="perfilPista" name="perfilPista"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.perfilPista}
+                                                                        label="Perfil da Pista"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.superficie?via.superficie.id:""}
+                                                                        id="superficie" name="superficie"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.superficie}
+                                                                        label="Superficie"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.condicaoClimatica?via.condicaoClimatica.id:""}
+                                                                        id="condicaoClimatica" name="condicaoClimatica"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.condicaoClimatica}
+                                                                        label="Condições Climáticas"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.equipamentoControleTrafego?via.equipamentoControleTrafego.id:''}
+                                                                        id="equipamentoControleTrafego" name="equipamentoControleTrafego"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.equipamentoControleTrafego}
+                                                                        label="Equip. Controle Tráfego"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.separacaoPista?via.separacaoPista.id:''}
+                                                                        id="separacaoPista" name="separacaoPista"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.separacaoPista}
+                                                                        label="Separacao da Pista"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.visibilidade?via.visibilidade.id:''}
+                                                                        id="visibilidade" name="visibilidade"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.visibilidade}
+                                                                        label="Visibilidade"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.condicaoTecnica?via.condicaoTecnica.id:''}
+                                                                        id="condicaoTecnica" name="condicaoTecnica"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.condicaoTecnica}
+                                                                        label="Condição Técnica"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.acostamento?via.acostamento.id:''}
+                                                                        id="acostamento" name="acostamento"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.acostamento}
+                                                                        label="Acostamento"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.sinalizacao?via.sinalizacao.id:''}
+                                                                        id="sinalizacao" name="sinalizacao"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.sinalizacao}
+                                                                        label="Sinalização"/>
+                                                            </Col>
+                                                            <Col md={3}>
+                                                                <Select value={via.sinaisPneus?via.sinaisPneus.id:''}
+                                                                        id="sinaisPneus" name="sinaisPneus"
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        options={this.props.options.sinaisPneus}
+                                                                        label="Sinais de Pneus"/>
+                                                            </Col>
+                                                        </Row>
+                                                    </Col>
+                                                    <Col md={2}>
+                                                        <Button icon='close' onClick={() => this.props.remove(via)}>
+                                                            Remover
+                                                        </Button>
+                                                    </Col>
+                                                </Row>
+                                            </AccordionItem>
+                                        )
+                                  }):undefined
+                                }
+                                </Accordion>
+                            </Row>
+                        </Col>
                     </Row>
                 </Col>
             </Row>
@@ -486,22 +531,18 @@ class StatisticData extends Component {
 class Vehicles extends Component {
 
     render() {
+        let i=1;
         return (
             <Row className="form-group">
                 <br/>
-                <Col md={2} className="pull-right">
-                    <Button icon='add'
-                            label='Adicionar'
-                            onClick={() => this.props.add()}
-                    />
-                </Col>
                 <Col md={12}>
                     <Accordion allowMultiple>
                     {
                         this.props.data ? this.props.data.map(vehicle => {
+                            let eventKey = vehicle.id?vehicle.id:i++;
                             let header = vehicle.placa?vehicle.placa:'';
                             return (
-                                <AccordionItem title={`Veiculo: ${header}`} eventKey={vehicle.id} key={vehicle.id} collapsible>
+                                <AccordionItem title={`Veiculo: ${header}`} eventKey={eventKey} key={eventKey} collapsible>
                                     <Row>
                                         <Col md={10}>
                                             <Row>
@@ -609,12 +650,6 @@ class Involved extends Component {
         return (
             <Row className="form-group">
                 <br/>
-                <Col md={2} className="pull-right">
-                    <Button icon='add'
-                            label='Adicionar'
-                            onClick={() => this.props.add()}
-                    />
-                </Col>
                 <Col md={12}>
                     <Accordion allowMultiple>
                     {

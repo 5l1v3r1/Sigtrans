@@ -14,6 +14,10 @@ export function toggleS() {
 export function toggleEventsModal() {
     return {type: 'TOGGLEEVENTSMODAL'};
 }
+
+export function listAsync(options, listType) {
+    return {type: 'LISTASYNC', options, listType};
+}
 export function selectOpenEvent(id) {
     return {type: 'SELECTOPENEVENT', id};
 }
@@ -35,12 +39,22 @@ export function addVehicle(vehicle) {
 export function removeVehicle(vehicle) {
     return {type: 'REMOVEVEHICLE', vehicle}
 }
+export function addVia(via) {
+    return {type: 'ADDVIA', via}
+}
+export function removeVia(via) {
+    return {type: 'REMOVEVIA', via}
+}
 export function addInvolved() {
     return {type: 'ADDINVOLVED'}
 }
 export function removeInvolved(involved) {
     return {type: 'REMOVEINVOLVED', involved}
 }
+export function initializeEvent() {
+    return {type: 'INITIALIZEEVENT', }
+}
+
 
 //OPEN EVENTS
 export function listOpenEvents(loading, events) {
