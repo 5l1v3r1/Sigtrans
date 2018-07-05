@@ -61,7 +61,7 @@ export function events(state = new List(), action) {
         //é possivel melhorar essa joça
         if(action.operator){
             item = selectedEvent[action.subMenu][action.operator].find(item => {
-                return item.id === action.id;
+                return item === action.id;
             });
             if(!action.dropdown)
                 item[action.input]=action.value;
@@ -74,7 +74,7 @@ export function events(state = new List(), action) {
         }
         else {
             item = selectedEvent[action.subMenu].find(item => {
-                return item.id === action.id;
+                return item === action.id;
             });
             if(!action.dropdown)
                 item[action.input]=action.value;

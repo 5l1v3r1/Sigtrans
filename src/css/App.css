@@ -254,3 +254,8 @@ h1 small, h4 small {
 .react-sanfona-item-body-wrapper:hover .tooltip{
     opacity: 1;
 }
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}

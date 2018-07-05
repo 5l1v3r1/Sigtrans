@@ -204,7 +204,7 @@ export class EventsForm extends Component {
                             </Tabs>
                         </Form>
                     </Col>
-                    {this.props.selectedEvent.id ?
+                    {this.props.selectedEvent?this.props.selectedEvent.id?
                         <Col md={12}>
                             <Row>
                                 <Col md={8}>Adicionado
@@ -216,8 +216,15 @@ export class EventsForm extends Component {
                                 <Col md={3}>RGO: {this.props.selectedEvent.dadosGerais.rgoBombeiros} / Protocolo
                                     (Bateu): {this.props.selectedEvent.dadosGerais.protocoloBateu}</Col>
                             </Row>
-                        </Col>:undefined
+                        </Col>:undefined:undefined
                     }
+                    <Row>
+                        <Col md={12}>
+                            <pre>
+                                {JSON.stringify(this.props.selectedEvent, null, 4)}
+                            </pre>
+                        </Col>
+                    </Row>
                 </Grid>
             </div>
         )
@@ -227,11 +234,15 @@ export class EventsForm extends Component {
 
 class General extends Component {
 
-    handleTypeahead (e, type){
-        let value = '';
-        if(e[0]) value = this.props.options.rua.find(item=>item.id=e[0].id);
-        this.props.onChangeInput(value, type, this.props.subMenu );
-    };
+    // handleTypeahead (e, type){
+    //     //let value = '';
+    //     //if(e[0]) value = this.props.options.rua.find(item=>item.id===e[0].id);
+    //     this.props.onChangeInput(e[0].id, type, this.props.subMenu );
+    // };
+
+    handleAsyncTypeAhead(selected, name){
+        this[name]= selected;
+    }
 
     render() {
         let mapCenter = this.props.data.latitude ? {
@@ -242,14 +253,15 @@ class General extends Component {
             lng: 0
         };
         let marker=mapCenter.lat!==0?[{position:mapCenter}]:[];
-        return (
+
+        return(
             <Row className="form-group">
                 <br/>
                 <Col md={4}>
                     <Input value={this.props.data.dataHora} type="datetime-local"
-                           id="dataHora"
+                           id="dataHora" label="Data"
                            onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                           label="Data"/>
+                           />
                 </Col>
                 <Col md={2}>
                     <Select value={this.props.data.estado?this.props.data.estado.id:''}
@@ -261,13 +273,13 @@ class General extends Component {
                 <Col md={3}>
                     <ControlLabel>Municipio</ControlLabel>
                     <AsyncTypeahead
-                        maxResults={10} minLenght={4} useCache paginationText="Mais..."
-                        labelKey={option => `${option.nome}`}
-                        isLoading={this.props.municipioIsLoading}
-                        onSearch={query => this.props.asyncTypeaheadQuery(query, 'municipio')}
-                        defaultSelected={this.props.data.rua?[this.props.data.rua]:undefined}
-                        options={this.props.municipios?this.props.municipios:this.props.data.rua?this.props.data.rua:[]}
+                        disabled={this.props.data.estado===undefined}
+                        maxResults={10} minLenght={4} useCache={false} paginationText="Mais..."
+                        labelKey={option => `${option.nome}`} isLoading={this.props.municipioIsLoading}
+                        onSearch={query => this.props.asyncTypeaheadQuery(query, 'municipio', this.props.data.estado, 'estado')}
+                        options={this.props.municipios?this.props.municipios:this.props.data.rua?[].push(this.props.data.rua.municipio):[]}
                         searchText="Procurando..." promptText="Municipio" id='municipio'
+                        onChange={(selected)=>{this.handleAsyncTypeAhead(selected, 'municipio'); this.props.onChangeInput(selected[0], 'municipio', this.props.subMenu)}}
                     />
                     {/*onChange={(e)=>this.handleTypeahead(e, 'municipio')}*/}
                 </Col>
@@ -317,7 +329,7 @@ class General extends Component {
                                options={[{nome:'teste', id:'1'}]}
                     />
                 </Col>
-                {this.props.data.latitude&&this.props.data.longitude ? (
+                {this.props.data.latitude && this.props.data.longitude ? (
                     <Col md={12}>
                         <Row className="mapRow">
                             <Map center={mapCenter} markers={marker} defaultZoom={15} showMarkers={true}
@@ -332,6 +344,7 @@ class General extends Component {
             </Row>
         )
     }
+
 }
 
 class StatisticData extends Component {
@@ -382,7 +395,7 @@ class StatisticData extends Component {
                                 <Accordion allowMultiple>
                                 {
                                     this.props.data.vias?this.props.data.vias.map((via)=>{
-                                        let key = via.id?via.id:i++;
+                                        let key = i++;
                                         return(
                                             <AccordionItem title="Via" eventKey={key} key={key} collapsible>
                                                 <Row>
@@ -391,117 +404,117 @@ class StatisticData extends Component {
                                                             <Col md={1}>
                                                                 <Input value={via.faixas} type="number" min="0"
                                                                        id="faixas"
-                                                                       onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, false)}
+                                                                       onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, undefined)}
                                                                        label="Faixas"/>
                                                             </Col>
                                                             <Col md={2}>
                                                                 <Input value={via.velocidadeMaxima} type="number" min="0"
                                                                        id="velocidadeMaxima"
-                                                                       onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, false)}
+                                                                       onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, undefined)}
                                                                        label="Velocidade Máxima"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.tipoVia?via.tipoVia.id:""}
                                                                         id="tipoVia" name="tipoVia"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.tipoVia}
                                                                         label="Tipo da Via"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.pavimentacao?via.pavimentacao.id:""}
                                                                         id="pavimentacao" name="pavimentacao"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.pavimentacao}
                                                                         label="Pavimentação"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.conservacaoVia?via.conservacaoVia.id:""}
                                                                         id="conservacaoVia" name="conservacaoVia"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.conservacaoVia}
                                                                         label="Conservação da Via"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.sentidoVia?via.sentidoVia.id:''}
                                                                         id="sentidoVia" name="sentidoVia"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.sentidoVia}
                                                                         label="Sentido da Via"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.semaforo?via.semaforo.id:""}
                                                                         id="semaforo" name="semaforo"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.semaforo}
                                                                         label="Semaforo"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.perfilPista?via.perfilPista.id:''}
                                                                         id="perfilPista" name="perfilPista"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.perfilPista}
                                                                         label="Perfil da Pista"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.superficie?via.superficie.id:""}
                                                                         id="superficie" name="superficie"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.superficie}
                                                                         label="Superficie"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.condicaoClimatica?via.condicaoClimatica.id:""}
                                                                         id="condicaoClimatica" name="condicaoClimatica"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.condicaoClimatica}
                                                                         label="Condições Climáticas"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.equipamentoControleTrafego?via.equipamentoControleTrafego.id:''}
                                                                         id="equipamentoControleTrafego" name="equipamentoControleTrafego"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.equipamentoControleTrafego}
                                                                         label="Equip. Controle Tráfego"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.separacaoPista?via.separacaoPista.id:''}
                                                                         id="separacaoPista" name="separacaoPista"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.separacaoPista}
                                                                         label="Separacao da Pista"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.visibilidade?via.visibilidade.id:''}
                                                                         id="visibilidade" name="visibilidade"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.visibilidade}
                                                                         label="Visibilidade"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.condicaoTecnica?via.condicaoTecnica.id:''}
                                                                         id="condicaoTecnica" name="condicaoTecnica"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.condicaoTecnica}
                                                                         label="Condição Técnica"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.acostamento?via.acostamento.id:''}
                                                                         id="acostamento" name="acostamento"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.acostamento}
                                                                         label="Acostamento"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.sinalizacao?via.sinalizacao.id:''}
                                                                         id="sinalizacao" name="sinalizacao"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.sinalizacao}
                                                                         label="Sinalização"/>
                                                             </Col>
                                                             <Col md={3}>
                                                                 <Select value={via.sinaisPneus?via.sinaisPneus.id:''}
                                                                         id="sinaisPneus" name="sinaisPneus"
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, 'id')}
                                                                         options={this.props.options.sinaisPneus}
                                                                         label="Sinais de Pneus"/>
                                                             </Col>
@@ -549,7 +562,7 @@ class Vehicles extends Component {
                                                 <Col md={2}>
                                                     <Input value={vehicle.placa} type="text"
                                                            id="placa"  label="Placa"
-                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle.id, e.target.value, false)}
+                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle, e.target.value, false)}
                                                     />
                                                 </Col>
                                                 <Col md={4}>
@@ -557,7 +570,7 @@ class Vehicles extends Component {
                                                             id="marca" name="marca"
                                                             required='required' label="Marca"
                                                             options={this.props.options.marca}
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle.id, e.target.value, 'id')}
+                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle, e.target.value, 'id')}
                                                     />
                                                 </Col>
                                                 <Col md={4}>
@@ -565,7 +578,7 @@ class Vehicles extends Component {
                                                             id="modelo" name="modelo"
                                                             required='required' label="Modelo"
                                                             options={this.props.options.modelo}
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle.id, e.target.value, 'id')}
+                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle, e.target.value, 'id')}
                                                     />
                                                 </Col>
                                                 <Col md={4}>
@@ -573,28 +586,28 @@ class Vehicles extends Component {
                                                             id="categoriaVeiculo" name="categoriaVeiculo"
                                                             required='required' label="Categoria do veículo"
                                                             options={this.props.options.categoriaVeiculo}
-                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle.id, e.target.value, 'id')}
+                                                            onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle, e.target.value, 'id')}
                                                     />
                                                 </Col>
                                                 <Col md={2}>
                                                     <Input value={vehicle.numeroOcupantes} type="number" min="0"
                                                            id="numeroOcupantes"
                                                            label="Ocupantes"
-                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle.id, e.target.value, false)}
+                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle, e.target.value, false)}
                                                     />
                                                 </Col>
                                                 <Col md={2}>
                                                     <Input value={vehicle.numeroFeridos} type="number" min="0"
                                                            id="numeroFeridos"
                                                            label="Qtd. de Feridos"
-                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle.id, e.target.value, false)}
+                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle, e.target.value, false)}
                                                     />
                                                 </Col>
                                                 <Col md={2}>
                                                     <Input value={vehicle.numeroObitos} type="number" min="0"
                                                            id="numeroObitos"
                                                            label="Qtd. de Obitos"
-                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle.id, e.target.value, false)}
+                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle, e.target.value, false)}
                                                     />
                                                 </Col>
                                             </Row>
@@ -606,21 +619,21 @@ class Vehicles extends Component {
                                                     <Input value={vehicle.condutor?vehicle.condutor.nome:''}
                                                            type="text" id="nome"
                                                            label="Nome do Condutor"
-                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle.id, e.target.value, 'condutor')}
+                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle, e.target.value, 'condutor')}
                                                     />
                                                 </Col>
                                                 <Col md={3}>
                                                     <Input value={vehicle.condutor?vehicle.condutor.cnh:''}
                                                            type="number" id="cnh"
                                                            label="CNH do Condutor"
-                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle.id, e.target.value, 'condutor')}
+                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle, e.target.value, 'condutor')}
                                                     />
                                                 </Col>
                                                 <Col md={3}>
                                                     <Input value={vehicle.condutor?vehicle.condutor.validadeCNH:''}
                                                            type="date" id="validadeCNH"
                                                            label="Validade da CNH"
-                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle.id, e.target.value, 'condutor')}
+                                                           onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, vehicle, e.target.value, 'condutor')}
                                                     />
                                                 </Col>
                                             </Row>
@@ -663,44 +676,44 @@ class Involved extends Component {
                                                 <Row>
                                                     <Col md={4}>
                                                         <Input value={involved.nome} type="text" id="nome"
-                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                                label="Nome"/>
                                                     </Col>
                                                     <Col md={3}>
                                                         <Input value={involved.dataNasc} type="date"
                                                                id="dataNasc"
-                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                                label="Data Nasc."/>
                                                     </Col>
                                                     <Col md={2}>
                                                         <Input value={involved.idade} type="number"
                                                                id="idade"
-                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                                label="Idade"/>
                                                     </Col>
                                                     <Col md={3}>
                                                         <Select value={involved.sexo}
                                                                 id="sexo" name="sexo"
                                                                 options={[{id:"M", nome:"Masculino"},{id:"F", nome:"Feminino"},{id:"ND", nome:"Não Identificado"}]}
-                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                                 label="Sexo"/>
                                                     </Col>
                                                     <Col md={3}>
                                                         <Input value={involved.documento} type="text"
                                                                id="documento"
-                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                                label="Documento"/>
                                                     </Col>
                                                     <Col md={3}>
                                                         <Input value={involved.orgaoExp} type="text"
                                                                id="orgaoExp"
-                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                                label="Orgão Exp."/>
                                                     </Col>
                                                     <Col md={3}>
                                                         <Input value={involved.cpf} type="text"
                                                                id="cpf"
-                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                                label="CPF"/>
                                                     </Col>
                                                 </Row>
@@ -709,34 +722,34 @@ class Involved extends Component {
                                                         <Select value={involved.estado?involved.estado.id:''}
                                                                 id="estado" name="estado"
                                                                 options={this.props.options.estado}
-                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, 'id')}
                                                                 label="Estado"/>
                                                     </Col>
                                                     <Col md={4}>
                                                         <Select value={involved.municipio?involved.municipio.id:""}
                                                                 id="municipio" name="municipio"
                                                                 options={this.props.options.municipio}
-                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, 'id')}
                                                                 label="Municipio"/>
                                                     </Col>
                                                     <Col md={4}>
                                                         <Input value={involved.nomeMae} type="text"
                                                                id="nomeMae"
                                                                label="Nome da mãe"
-                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                         />
                                                     </Col>
                                                     <Col md={4}>
                                                         <Select value={involved.rua?involved.rua.id:''}
                                                                 id="rua" name="rua" label="Rua"
                                                                 options={this.props.options.rua}
-                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, 'id')}
                                                         />
                                                     </Col>
                                                     <Col md={3}>
                                                         <Input value={involved.numero} type="text"
                                                                id="numero"  label="Numero"
-                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                         />
                                                     </Col>
                                                 </Row>
@@ -746,28 +759,28 @@ class Involved extends Component {
                                                                 id="grauInstrucao" name="grauInstrucao"
                                                                 label="Grau de Instrução"
                                                                 options={this.props.options.grauInstrucao}
-                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, 'id')}
                                                         />
                                                     </Col>
                                                     <Col md={4}>
                                                         <Select value={involved.profissao?involved.profissao.id:''}
                                                                 id="profissao" name="profissao" label="Profissão"
                                                                 options={this.props.options.profissao}
-                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, 'id')}
                                                         />
                                                     </Col>
                                                     <Col md={4}>
                                                         <Input value={involved.nacionalidade} type="text"
                                                                id="nacionalidade"
                                                                label="Nacionalidade"
-                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                         />
                                                     </Col>
                                                     <Col md={4}>
                                                         <Input value={involved.naturalidade} type="text"
                                                                id="naturalidade"
                                                                label="Naturalidade"
-                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                         />
                                                     </Col>
                                                 </Row>
@@ -777,7 +790,7 @@ class Involved extends Component {
                                                                 id="veiculo" name="veiculo"
                                                                 label="Veiculo"
                                                                 options={this.props.veiculos}
-                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, 'id')}
                                                         />
                                                     </Col>
                                                     <Col md={4}>
@@ -785,7 +798,7 @@ class Involved extends Component {
                                                                 id="posicaoVeiculo" name="posicaoVeiculo"
                                                                 label="Posição no Veículo"
                                                                 options={this.props.options.posicaoVeiculo}
-                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, 'id')}
                                                         />
                                                     </Col>
                                                     <Col md={4}>
@@ -793,13 +806,13 @@ class Involved extends Component {
                                                                 id="condicaoSeguranca" name="condicaoSeguranca"
                                                                 label="Condição de segurança"
                                                                 options={this.props.options.condicaoSeguranca}
-                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                                onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, 'id')}
                                                         />
                                                     </Col>
                                                     <Col md={4}>
                                                         <Input value={involved.etilometria} type="number" step="0.01" min="0"
                                                                id="etilometria" label="Etilometria"
-                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                               onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                         />
                                                     </Col>
                                                 </Row>
@@ -811,7 +824,7 @@ class Involved extends Component {
                                                                         id="lesao" name="lesao"
                                                                         label="Gravidade da lesão"
                                                                         options={this.props.options.lesao}
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, 'id')}
                                                                 />
                                                             </Col>
                                                             <Col md={4}>
@@ -819,13 +832,13 @@ class Involved extends Component {
                                                                         id="localEncaminhado" name="localEncaminhado"
                                                                         label="Local Encaminhado"
                                                                         options={this.props.options.localEncaminhado}
-                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, 'id')}
+                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, 'id')}
                                                                 />
                                                             </Col>
                                                             <Col md={4}>
                                                                 <Input value={involved.aih} type="number"
                                                                        id="aih" name="aih" label="AIH"
-                                                                       onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved.id, e.target.value, false)}
+                                                                       onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
                                                                 />
                                                             </Col>
                                                         </Row>):<Row/>

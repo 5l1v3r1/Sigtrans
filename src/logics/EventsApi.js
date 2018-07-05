@@ -69,7 +69,7 @@ export default class EventsApi {
         }
     }
 
-    static asyncTypeaheadQuery(query, option){
+    static asyncTypeaheadQuery(query, option, parent, parentType){
         return dispatch => {
             this.onChangeInput(true, option+'IsLoading', null);
             fetch(getUrl('api')+option+'/byname?nome='+query.toUpperCase())
@@ -77,8 +77,17 @@ export default class EventsApi {
                     if (response.ok) {
                         response.json()
                             .then(options => {
+                                let newOptions=[];
+                                if(parent!==undefined){
+                                    // TODO treat in backend
+                                    options.forEach((item) => {
+                                        if (parent.id === item[parentType].id) {
+                                            newOptions.push(item);
+                                        }
+                                    })
+                                }
                                 // console.log(options);
-                                return dispatch(listAsync(options, option));
+                                return dispatch(listAsync(newOptions, option));
                             })
                     }
                     else {

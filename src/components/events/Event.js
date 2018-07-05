@@ -99,8 +99,7 @@ class EventFormContainer extends Component{
                             />
                         </Col>
                     ):(
-                        <Col xs={6} md={6} lg={6}
-                             xsOffset={4} lgOffset={6} mdOffset={6}>
+                        <Col xs={1} className="col-centered">
                             <BounceLoader
                                 color={'#123abc'}
                                 loading={true}
@@ -167,8 +166,8 @@ const mapDispatchToProps = dispatch => {
         onChangeInput: (newValue, operator, subMenu) => {
             dispatch(EventsApi.onChangeInput(newValue, operator, subMenu));
         },
-        asyncTypeaheadQuery: (query, option) => {
-            dispatch(EventsApi.asyncTypeaheadQuery(query, option))
+        asyncTypeaheadQuery: (query, option, parent, parentType) => {
+            dispatch(EventsApi.asyncTypeaheadQuery(query, option, parent, parentType))
         }
 
     }
