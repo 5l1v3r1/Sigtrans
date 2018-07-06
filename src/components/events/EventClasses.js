@@ -136,15 +136,14 @@ export class EventsForm extends Component {
         return (
             <div className='clearfix'>
                 <Grid>
-                    {/*style={{textAlign:'center'}}*/}
                     <Col md={12}>
                         <Form id="eventForm">
                             <Tabs defaultActiveKey={1} id="event-form-tabs">
                                 <Tab eventKey={1} title="Geral">
                                     <General
                                         data={this.props.selectedEvent?this.props.selectedEvent.dadosGerais:{}}
-                                        options={this.props.options}
-                                        municipios={this.props.municipios}
+                                        options={this.props.options} municipios={this.props.municipios}
+                                        ruas={this.props.ruas} cruzamentos={this.props.cruzamentos}
                                         onChangeInput={this.props.onChangeInput}
                                         onChangeDropdown={this.props.onChangeDropdown}
                                         onNestedInputChange={this.props.onNestedInputChange}
@@ -204,7 +203,7 @@ export class EventsForm extends Component {
                             </Tabs>
                         </Form>
                     </Col>
-                    {this.props.selectedEvent?this.props.selectedEvent.id?
+                    {typeof (this.props.selectedEvent)!=="undefined"?this.props.selectedEvent.id?
                         <Col md={12}>
                             <Row>
                                 <Col md={8}>Adicionado
@@ -240,9 +239,9 @@ class General extends Component {
     //     this.props.onChangeInput(e[0].id, type, this.props.subMenu );
     // };
 
-    handleAsyncTypeAhead(selected, name){
-        this[name]= selected;
-    }
+    // handleAsyncTypeAhead(selected, name){
+    //     this[name]= selected;
+    // }
 
     render() {
         let mapCenter = this.props.data.latitude ? {
@@ -274,28 +273,30 @@ class General extends Component {
                     <ControlLabel>Municipio</ControlLabel>
                     <AsyncTypeahead
                         disabled={this.props.data.estado===undefined}
-                        maxResults={10} minLenght={4} useCache={false} paginationText="Mais..."
-                        labelKey={option => `${option.nome}`} isLoading={this.props.municipioIsLoading}
+                        maxResults={10} minLength={3} useCache paginationText="Mais..."
+                        labelKey={option => `${option.nome}`} isLoading={this.props.municipioIsLoading === true}
                         onSearch={query => this.props.asyncTypeaheadQuery(query, 'municipio', this.props.data.estado, 'estado')}
-                        options={this.props.municipios?this.props.municipios:this.props.data.rua?[].push(this.props.data.rua.municipio):[]}
-                        searchText="Procurando..." promptText="Municipio" id='municipio'
-                        onChange={(selected)=>{this.handleAsyncTypeAhead(selected, 'municipio'); this.props.onChangeInput(selected[0], 'municipio', this.props.subMenu)}}
+                        options={this.props.municipios?this.props.municipios:this.props.data.municipio?[].push(this.props.data.municipio):undefined}
+                        searchText="Procurando..." promptText="Municipio" id='municipio' className='form-group'
+                        onChange={(selected)=>{this.props.onChangeInput(selected[0], 'municipio', this.props.subMenu)}}
                     />
-                    {/*onChange={(e)=>this.handleTypeahead(e, 'municipio')}*/}
                 </Col>
                 <Col md={3}>
-                    <Input value={this.props.data.pontoReferencia||''} type="text"
+                    <Input value={this.props.data.referencia||''} type="text"
                            id="referencia"
                            onChange={(e) => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
                            label="Ponto de Ref."/>
                 </Col>
                 <Col md={4}>
                     <ControlLabel>Rua</ControlLabel>
-                    <Typeahead labelKey={option => `${option.nome}`}
-                               id='rua' placeholder="Escolha uma Rua"
-                               defaultSelected={this.props.data.rua?[this.props.data.rua]:undefined}
-                               onChange={(e)=>this.handleTypeahead(e, 'rua')}
-                               options={this.props.rua?this.props.rua:[{nome:'', id:'1'}]}
+                    <AsyncTypeahead
+                        disabled={this.props.data.municipio===undefined}
+                        maxResults={10} minLength={3} useCache paginationText="Mais..."
+                        labelKey={option => `${option.nome}`} isLoading={this.props.ruaIsLoading===true}
+                        onSearch={query => this.props.asyncTypeaheadQuery(query, 'rua', this.props.data.municipio, 'municipio')}
+                        options={this.props.ruas?this.props.ruas:this.props.data.rua?[].push(this.props.data.rua):undefined}
+                        searchText="Procurando..." promptText="Rua" id='rua' className='form-group'
+                        onChange={(selected)=>{this.props.onChangeInput(selected[0], 'rua', this.props.subMenu)}}
                     />
                 </Col>
                 <Col md={2}>
@@ -313,21 +314,21 @@ class General extends Component {
                 </Col>
                 <Col md={4}>
                     <ControlLabel>Cruzamento</ControlLabel>
-                    {/*<AsyncTypeahead*/}
-                        {/*maxResults={10} minLenght={4} useCache paginationText="Mais..."*/}
-                        {/*labelKey={option => `${option.nome}`}*/}
-                        {/*isLoading={this.props.municipioIsLoading}*/}
-                        {/*onSearch={query => this.props.asyncTypeaheadQuery(query, 'municipio')}*/}
-                        {/*defaultSelected={this.props.data.rua?[this.props.data.rua]:undefined}*/}
-                        {/*options={this.props.municipios?this.props.municipios:this.props.data.rua?this.props.data.rua:[]}*/}
-                        {/*searchText="Procurando..." promptText="Municipio" id='municipio'*/}
-                    {/*/>*/}
-                    <Typeahead labelKey={option => `${option.nome}`}
-                               defaultSelected={this.props.data.cruzamento?[this.props.data.cruzamento]:undefined}
-                               id='cruzamento' placeholder="Escolha uma Rua"
-                               onChange={(e)=>this.handleTypeahead(e, 'cruzamento')}
-                               options={[{nome:'teste', id:'1'}]}
+                    <AsyncTypeahead
+                        disabled={this.props.data.municipio===undefined}
+                        maxResults={10} minLength={3} useCache paginationText="Mais..."
+                        labelKey={option => `${option.nome}`} isLoading={this.props.ruaIsLoading===true}
+                        onSearch={query => this.props.asyncTypeaheadQuery(query, 'cruzamento', this.props.data.municipio, 'municipio')}
+                        options={this.props.cruzamentos?this.props.cruzamentos:this.props.data.cruzamento?[].push(this.props.data.cruzamento):undefined}
+                        searchText="Procurando..." promptText="Cruzamento" id='municipio' className='form-group'
+                        onChange={(selected)=>{this.props.onChangeInput(selected[0], 'cruzamento', this.props.subMenu)}}
                     />
+                    {/*<Typeahead labelKey={option => `${option.nome}`}*/}
+                               {/*defaultSelected={this.props.data.cruzamento?[this.props.data.cruzamento]:undefined}*/}
+                               {/*id='cruzamento' placeholder="Escolha uma Rua"*/}
+                               {/*onChange={(e)=>this.handleTypeahead(e, 'cruzamento')}*/}
+                               {/*options={[{nome:'teste', id:'1'}]}*/}
+                    {/*/>*/}
                 </Col>
                 {this.props.data.latitude && this.props.data.longitude ? (
                     <Col md={12}>
@@ -401,13 +402,13 @@ class StatisticData extends Component {
                                                 <Row>
                                                     <Col md={10}>
                                                         <Row>
-                                                            <Col md={1}>
+                                                            <Col md={3}>
                                                                 <Input value={via.faixas} type="number" min="0"
                                                                        id="faixas"
                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, undefined)}
                                                                        label="Faixas"/>
                                                             </Col>
-                                                            <Col md={2}>
+                                                            <Col md={3}>
                                                                 <Input value={via.velocidadeMaxima} type="number" min="0"
                                                                        id="velocidadeMaxima"
                                                                        onChange={(e) => this.props.onNestedInputChange(this.props.subMenu, "vias", e.target.id, via, e.target.value, undefined)}

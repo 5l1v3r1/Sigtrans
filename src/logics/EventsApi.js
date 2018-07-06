@@ -72,32 +72,8 @@ export default class EventsApi {
     static asyncTypeaheadQuery(query, option, parent, parentType){
         return dispatch => {
             this.onChangeInput(true, option+'IsLoading', null);
-            fetch(getUrl('api')+option+'/byname?nome='+query.toUpperCase())
-                .then(response => {
-                    if (response.ok) {
-                        response.json()
-                            .then(options => {
-                                let newOptions=[];
-                                if(parent!==undefined){
-                                    // TODO treat in backend
-                                    options.forEach((item) => {
-                                        if (parent.id === item[parentType].id) {
-                                            newOptions.push(item);
-                                        }
-                                    })
-                                }
-                                // console.log(options);
-                                return dispatch(listAsync(newOptions, option));
-                            })
-                    }
-                    else {
-                        console.log('Falha ao receber opcoes: ' + response.status);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-            this.onChangeInput(false, option+'IsLoading', null);
+            this.fetchAsync(dispatch, query, option, parent, parentType);
+            this.onChangeInput(undefined, option+'IsLoading', null);
         }
     }
 
@@ -189,5 +165,33 @@ export default class EventsApi {
                     console.log(err);
                 });
         }
+    }
+
+    static fetchAsync(dispatch, query, option, parent, parentType){
+        fetch(getUrl('api')+(option==="cruzamento"?"rua":option)+'/byname?nome='+query.toUpperCase())
+            .then(response => {
+                if (response.ok) {
+                    response.json()
+                        .then(options => {
+                            let newOptions=[];
+                            if(parent!==undefined){
+                                // TODO treat in backend
+                                options.forEach((item) => {
+                                    if (parent.id === item[parentType].id) {
+                                        newOptions.push(item);
+                                    }
+                                });
+                            }
+                            // console.log(options);
+                            return dispatch(listAsync(newOptions, option));
+                        })
+                }
+                else {
+                    console.log('Falha ao receber opcoes: ' + response.status);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 }

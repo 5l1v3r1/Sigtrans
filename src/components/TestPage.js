@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {getUrl} from "../management/Management";
-import dataJson from './dadosModeloVeiculo ';
+import dataJson from './dadosLogradouro';
 
 class TestPage extends Component {
 
@@ -15,7 +15,7 @@ class TestPage extends Component {
         const start = async (listaDeConteudos) => {
             asyncForEach(listaDeConteudos, async (item) => {
                 // item.idParceiro=idp++;
-                await fetch(getUrl('api') + 'modeloveiculo', {
+                await fetch(getUrl('api') + 'rua', {
                     //o que vai ser feito na request aqui:
                     //metodo http
                     method: 'POST',

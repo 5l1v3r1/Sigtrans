@@ -2,18 +2,7 @@ import React, {Component} from "react";
 import Input from './CustomInput';
 import Button from 'react-toolbox/lib/button/Button';
 import Dialog from 'react-toolbox/lib/dialog/Dialog';
-import {
-    Button as Submit,
-    Col,
-    ControlLabel,
-    Form,
-    Grid,
-    MenuItem,
-    Navbar,
-    NavDropdown,
-    NavItem,
-    Row
-} from 'react-bootstrap';
+import {Button as Submit, Col, ControlLabel, Form, Grid, MenuItem, Navbar, NavDropdown, NavItem, Row} from 'react-bootstrap';
 import ReactTable from 'react-table';
 import {connect} from 'react-redux';
 import CrudApi from '../../logics/CrudApi';
@@ -564,11 +553,6 @@ class GenericCRUD extends Component {
                                                                 }) : undefined
                                                             }
                                                         </Row>
-                                                        {/*<Row>*/}
-                                                            {/*<pre>*/}
-                                                                {/*{JSON.stringify(this.props.genericProps.form, null, 4)}*/}
-                                                            {/*</pre>*/}
-                                                        {/*</Row>*/}
                                                     </Col>
                                                 </Grid>
                                             </Dialog>

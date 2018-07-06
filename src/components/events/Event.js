@@ -3,7 +3,7 @@ import EventsApi from '../../logics/EventsApi'
 import {PageHeader} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {EventsGrid} from './EventClasses';
-import {BounceLoader} from "react-spinners";
+// import {BounceLoader} from "react-spinners";
 import {EventsForm} from "./EventClasses";
 import {Col, Grid, Row} from 'react-bootstrap';
 
@@ -71,42 +71,32 @@ class Event extends Component {
 class EventFormContainer extends Component{
 
     componentWillMount(){
-        this.props.listEventsOptions();
         this.props.initializeEvent();
+        this.props.listEventsOptions();
     }
 
     render(){
         return(
             <Grid>
                 <Row>
-                {
-                    this.props.events.options?(
-                        <Col md={12} style={{minHeight:"80vh"}}>
-                            <EventsForm selectedEvent={this.props.events.selectedEvent}
-                                        selectedEventID={this.props.events.selectedEventID}
-                                        options={this.props.events.options}
-                                        municipios={this.props.events.municipio}
-                                        ruas={this.props.events.rua}
-                                        municipioIsLoading={this.props.events.municipioIsLoading}
-                                        ruaIsLoading={this.props.events.ruaIsLoading}
-                                        onChangeDropdown={this.props.onChangeDropdown}
-                                        onNestedInputChange={this.props.onNestedInputChange}
-                                        onChangeInput={this.props.onChangeInput}
-                                        asyncTypeaheadQuery={this.props.asyncTypeaheadQuery}
-                                        addVehicle={this.props.addVehicle} removeVehicle={this.props.removeVehicle}
-                                        addInvolved={this.props.addInvolved} removeInvolved={this.props.removeInvolved}
-                                        addVia={this.props.addVia} removeVia={this.props.removeVia}
-                            />
-                        </Col>
-                    ):(
-                        <Col xs={1} className="col-centered">
-                            <BounceLoader
-                                color={'#123abc'}
-                                loading={true}
-                            />
-                        </Col>
-                    )
-                }
+                    <Col md={12} style={{minHeight:"80vh"}}>
+                        <EventsForm selectedEvent={this.props.events.selectedEvent}
+                                    selectedEventID={this.props.events.selectedEventID}
+                                    options={this.props.events.options}
+                                    municipios={this.props.events.municipio}
+                                    ruas={this.props.events.rua}
+                                    cruzamentos={this.props.events.cruzamento}
+                                    municipioIsLoading={this.props.events.municipioIsLoading}
+                                    ruaIsLoading={this.props.events.ruaIsLoading}
+                                    onChangeDropdown={this.props.onChangeDropdown}
+                                    onNestedInputChange={this.props.onNestedInputChange}
+                                    onChangeInput={this.props.onChangeInput}
+                                    asyncTypeaheadQuery={this.props.asyncTypeaheadQuery}
+                                    addVehicle={this.props.addVehicle} removeVehicle={this.props.removeVehicle}
+                                    addInvolved={this.props.addInvolved} removeInvolved={this.props.removeInvolved}
+                                    addVia={this.props.addVia} removeVia={this.props.removeVia}
+                        />
+                    </Col>
                 </Row>
             </Grid>
         )

@@ -143,9 +143,9 @@ export function events(state = new List(), action) {
             veiculos:[],
             envolvidos:[]
         };
-        let municipioIsLoading=false;
-        return Object.assign({}, state, {selectedEvent,municipioIsLoading});
+        return Object.assign({}, state, {selectedEvent});
     }
+
     return state;
 
 }
