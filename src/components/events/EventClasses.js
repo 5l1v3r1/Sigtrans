@@ -8,7 +8,7 @@ import Dialog from "react-toolbox/lib/dialog/Dialog";
 import ReactTable from 'react-table';
 import {Accordion, AccordionItem} from "react-sanfona";
 import Map from "../map/Map";
-import {AsyncTypeahead, Typeahead} from "react-bootstrap-typeahead";
+import {AsyncTypeahead} from "react-bootstrap-typeahead";
 
 //make new js file for both grids
 export class EventsGrid extends Component {
@@ -150,7 +150,7 @@ export class EventsForm extends Component {
                                         asyncTypeaheadQuery={this.props.asyncTypeaheadQuery}
                                         municipioIsLoading={this.props.municipioIsLoading}
                                         ruaIsLoading={this.props.ruaIsLoading}
-                                        subMenu='dadosGerais'
+                                        subMenu='dadosGerais' fetchDependentOptions={this.props.fetchDependentOptions}
                                     />
                                 </Tab>
                                 <Tab eventKey={2} title="Dados Estatisticos">
@@ -207,7 +207,7 @@ export class EventsForm extends Component {
                         <Col md={12}>
                             <Row>
                                 <Col md={8}>Adicionado
-                                    em: {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleDateString()} as {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleTimeString()}</Col>
+                                    em: {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleDateString('pt-BR')} as {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleTimeString('pt-BR')}</Col>
                                 <Col md={4}>Ultima edição por: {this.props.selectedEvent.dadosGerais.parceiro} em
                                     DD/MM/AAAA as HH:MM</Col>
                             </Row>
@@ -232,16 +232,6 @@ export class EventsForm extends Component {
 }
 
 class General extends Component {
-
-    // handleTypeahead (e, type){
-    //     //let value = '';
-    //     //if(e[0]) value = this.props.options.rua.find(item=>item.id===e[0].id);
-    //     this.props.onChangeInput(e[0].id, type, this.props.subMenu );
-    // };
-
-    // handleAsyncTypeAhead(selected, name){
-    //     this[name]= selected;
-    // }
 
     render() {
         let mapCenter = this.props.data.latitude ? {
@@ -278,7 +268,7 @@ class General extends Component {
                         onSearch={query => this.props.asyncTypeaheadQuery(query, 'municipio', this.props.data.estado, 'estado')}
                         options={this.props.municipios?this.props.municipios:this.props.data.municipio?[].push(this.props.data.municipio):undefined}
                         searchText="Procurando..." promptText="Municipio" id='municipio' className='form-group'
-                        onChange={(selected)=>{this.props.onChangeInput(selected[0], 'municipio', this.props.subMenu)}}
+                        onChange={selected => {this.props.fetchDependentOptions(selected[0], 'bairro') ; this.props.onChangeInput(selected[0], 'municipio', this.props.subMenu)}}
                     />
                 </Col>
                 <Col md={3}>
@@ -323,12 +313,6 @@ class General extends Component {
                         searchText="Procurando..." promptText="Cruzamento" id='municipio' className='form-group'
                         onChange={(selected)=>{this.props.onChangeInput(selected[0], 'cruzamento', this.props.subMenu)}}
                     />
-                    {/*<Typeahead labelKey={option => `${option.nome}`}*/}
-                               {/*defaultSelected={this.props.data.cruzamento?[this.props.data.cruzamento]:undefined}*/}
-                               {/*id='cruzamento' placeholder="Escolha uma Rua"*/}
-                               {/*onChange={(e)=>this.handleTypeahead(e, 'cruzamento')}*/}
-                               {/*options={[{nome:'teste', id:'1'}]}*/}
-                    {/*/>*/}
                 </Col>
                 {this.props.data.latitude && this.props.data.longitude ? (
                     <Col md={12}>

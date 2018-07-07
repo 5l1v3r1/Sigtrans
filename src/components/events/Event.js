@@ -3,9 +3,9 @@ import EventsApi from '../../logics/EventsApi'
 import {PageHeader} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {EventsGrid} from './EventClasses';
-// import {BounceLoader} from "react-spinners";
 import {EventsForm} from "./EventClasses";
 import {Col, Grid, Row} from 'react-bootstrap';
+import {Button as Submit} from 'react-bootstrap';
 
 class OpenEvent extends Component {
 
@@ -95,7 +95,13 @@ class EventFormContainer extends Component{
                                     addVehicle={this.props.addVehicle} removeVehicle={this.props.removeVehicle}
                                     addInvolved={this.props.addInvolved} removeInvolved={this.props.removeInvolved}
                                     addVia={this.props.addVia} removeVia={this.props.removeVia}
+                                    fetchDependentOptions={this.props.fetchDependentOptions}
                         />
+                    </Col>
+                    <Col>
+                        <Submit bsStyle="primary" type="submit" onClick={(e) => {e.preventDefault();this.props.saveEvent(this.props.events.selectedEvent)}}>
+                            Adicionar
+                        </Submit>
                     </Col>
                 </Row>
             </Grid>
@@ -158,8 +164,13 @@ const mapDispatchToProps = dispatch => {
         },
         asyncTypeaheadQuery: (query, option, parent, parentType) => {
             dispatch(EventsApi.asyncTypeaheadQuery(query, option, parent, parentType))
+        },
+        fetchDependentOptions: (dependency, type) => {
+            dispatch(EventsApi.fetchDependentOptions(dependency, type));
+        },
+        saveEvent: (event) => {
+            dispatch(EventsApi.saveEvent(event));
         }
-
     }
 };
 

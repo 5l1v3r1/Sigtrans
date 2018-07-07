@@ -17,7 +17,8 @@ import {
     addVia,
     removeVia,
     initializeEvent,
-    listAsync
+    listAsync,
+    listDependentOption
 } from '../actions/actionCreator'
 
 export default class EventsApi {
@@ -167,6 +168,103 @@ export default class EventsApi {
         }
     }
 
+    static saveEvent(event){
+        return dispatch => {
+            let veiculosId=[], envolvidosId=[];
+
+            event.veiculos.forEach(veiculo=>{
+                fetch(getUrl('api') + 'veiculo', {
+                    method: 'POST',
+                    headers: new Headers({'content-type': 'application/json'}),
+                    body: JSON.stringify(veiculo),
+                })
+                    .then(response =>{
+                        if (response.ok)
+                            response.json()
+                                .then(response => {
+                                    console.log(response);
+                                    veiculosId.push(response.data.id)
+                                });
+                        else {
+                            alert('Falha ao inserir veiculo ' + veiculo.placa + ': response.status');
+                            throw new Error('Falha ao inserir veiculo ' + veiculo.placa + ': response.status')
+                        }
+                    })
+                    .catch((err) => {
+                        throw new Error(JSON.stringify(err));
+                    });
+            });
+
+            event.envolvidos.forEach(envolvido=>{
+                fetch(getUrl('api') + 'envolvido', {
+                    method: 'POST',
+                    headers: new Headers({'content-type': 'application/json'}),
+                    body: JSON.stringify(envolvido),
+                })
+                    .then(response =>{
+                        if (response.ok)
+                            response.json()
+                                .then(response => {
+                                    console.log(response);
+                                    envolvidosId.push(response.data.id)
+                                });
+                        else {
+                            alert('Falha ao inserir envolvido');
+                            throw new Error('Falha ao inserir envolvido');
+                        }
+                    })
+                    .catch((err) => {
+                        throw new Error(JSON.stringify(err));
+                    });
+            });
+
+            event.veiculos=veiculosId;
+            event.envolvidos=envolvidosId;
+            console.log(JSON.stringify(event, null, 4));
+
+            fetch(getUrl('api') + 'ocorrencias/', {
+                method: 'POST',
+                headers: new Headers({'content-type': 'application/json'}),
+                body: JSON.stringify(event),
+            })
+                .then(response =>{
+                    if (response.ok)
+                        response.json()
+                            .then(response => {
+                                console.log(response);
+                            });
+                    else {
+                        alert('Falha ao inserir ocorrencia');
+                        throw new Error('Falha ao inserir ocorrencia');
+                    }
+                })
+                .catch((err) => {
+                    throw new Error(JSON.stringify(err));
+                });
+        }
+    }
+
+    static fetchDependentOptions(dependency, type){
+
+        return dispatch => {
+            fetch(getUrl('api') + type +'/byname?municipioId='+dependency.id)
+                .then(response => {
+                    if (response.ok) {
+                        response.json()
+                            .then(options => {
+                                return dispatch(listDependentOption(options, 'bairro'));
+                            })
+                    }
+                    else {
+                        console.log('Falha ao receber opcoes: ' + response.status);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }
+
     static fetchAsync(dispatch, query, option, parent, parentType){
         fetch(getUrl('api')+(option==="cruzamento"?"rua":option)+'/byname?nome='+query.toUpperCase())
             .then(response => {
@@ -194,4 +292,6 @@ export default class EventsApi {
                 console.log(err);
             });
     }
+
+
 }

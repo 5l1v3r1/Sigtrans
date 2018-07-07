@@ -20,6 +20,14 @@ export function events(state = new List(), action) {
         return Object.assign({}, state, {[listType]:options});
     }
 
+    if (action.type === 'LISTDEPENDENTOPTION') {
+        const listType = action.listType;
+        const option = action.options;
+        const options = Object.assign({}, state.options, {[listType]:option});
+
+        return Object.assign({}, state, { options });
+    }
+
     if (action.type === 'LISTEVENTSOPTIONS') {
         const options = action.options;
         return Object.assign({}, state, {options});

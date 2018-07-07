@@ -15,6 +15,10 @@ export function toggleEventsModal() {
     return {type: 'TOGGLEEVENTSMODAL'};
 }
 
+export function listDependentOption(options, listType){
+    return {type:'LISTDEPENDENTOPTION', options, listType}
+}
+
 export function listAsync(options, listType) {
     return {type: 'LISTASYNC', options, listType};
 }
