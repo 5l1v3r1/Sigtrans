@@ -8,7 +8,7 @@ import Dialog from "react-toolbox/lib/dialog/Dialog";
 import ReactTable from 'react-table';
 import {Accordion, AccordionItem} from "react-sanfona";
 import Map from "../map/Map";
-import {AsyncTypeahead, Typeahead} from "react-bootstrap-typeahead";
+import {AsyncTypeahead} from "react-bootstrap-typeahead";
 
 //make new js file for both grids
 export class EventsGrid extends Component {
@@ -323,12 +323,6 @@ class General extends Component {
                         searchText="Procurando..." promptText="Cruzamento" id='municipio' className='form-group'
                         onChange={(selected)=>{this.props.onChangeInput(selected[0], 'cruzamento', this.props.subMenu)}}
                     />
-                    {/*<Typeahead labelKey={option => `${option.nome}`}*/}
-                               {/*defaultSelected={this.props.data.cruzamento?[this.props.data.cruzamento]:undefined}*/}
-                               {/*id='cruzamento' placeholder="Escolha uma Rua"*/}
-                               {/*onChange={(e)=>this.handleTypeahead(e, 'cruzamento')}*/}
-                               {/*options={[{nome:'teste', id:'1'}]}*/}
-                    {/*/>*/}
                 </Col>
                 {this.props.data.latitude && this.props.data.longitude ? (
                     <Col md={12}>
