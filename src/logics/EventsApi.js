@@ -21,6 +21,44 @@ import {
     listDependentOption
 } from '../actions/actionCreator'
 
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array)
+    }
+}
+async function start(listaDeConteudos, link) {
+    let returnArray=[];
+    console.log('link ', link)
+    const res = await asyncForEach(listaDeConteudos, async (item) => {
+        await fetch(getUrl('api') + link, {
+            method: 'POST',
+            headers: new Headers({'Content-Type': 'application/json'}),
+            body: JSON.stringify(item),
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.log(JSON.stringify(item));
+                    throw new Error("erro");
+                }
+            })
+            .then(responseValues => {
+                returnArray.push({ id : responseValues.data.id });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    });
+    console.log(await res);
+    return returnArray;
+}
+async function handleSyncedAsync(data, link) {
+    const retorno = await start(data, link);
+    console.log("RETORNO ", await retorno);
+    return await retorno;
+}
+
 export default class EventsApi {
 
     static initializeEvent(){
@@ -169,60 +207,12 @@ export default class EventsApi {
     }
 
     static saveEvent(event){
-        return dispatch => {
-            let veiculosId=[], envolvidosId=[];
-
-            event.veiculos.forEach(veiculo=>{
-                fetch(getUrl('api') + 'veiculo', {
-                    method: 'POST',
-                    headers: new Headers({'content-type': 'application/json'}),
-                    body: JSON.stringify(veiculo),
-                })
-                    .then(response =>{
-                        if (response.ok)
-                            response.json()
-                                .then(response => {
-                                    console.log(response);
-                                    veiculosId.push(response.data.id)
-                                });
-                        else {
-                            alert('Falha ao inserir veiculo ' + veiculo.placa + ': response.status');
-                            throw new Error('Falha ao inserir veiculo ' + veiculo.placa + ': response.status')
-                        }
-                    })
-                    .catch((err) => {
-                        throw new Error(JSON.stringify(err));
-                    });
-            });
-
-            event.envolvidos.forEach(envolvido=>{
-                fetch(getUrl('api') + 'envolvido', {
-                    method: 'POST',
-                    headers: new Headers({'content-type': 'application/json'}),
-                    body: JSON.stringify(envolvido),
-                })
-                    .then(response =>{
-                        if (response.ok)
-                            response.json()
-                                .then(response => {
-                                    console.log(response);
-                                    envolvidosId.push(response.data.id)
-                                });
-                        else {
-                            alert('Falha ao inserir envolvido');
-                            throw new Error('Falha ao inserir envolvido');
-                        }
-                    })
-                    .catch((err) => {
-                        throw new Error(JSON.stringify(err));
-                    });
-            });
-
-            event.veiculos=veiculosId;
-            event.envolvidos=envolvidosId;
-            console.log(JSON.stringify(event, null, 4));
-
-            fetch(getUrl('api') + 'ocorrencias/', {
+        return async dispatch => {
+            const veiculosId = await handleSyncedAsync(event.veiculos, 'veiculo');
+            console.log('eitaporra ', await veiculosId);
+            event.veiculos = await veiculosId;
+            console.log(event);
+            const resp = await fetch(getUrl('api') + 'ocorrencias', {
                 method: 'POST',
                 headers: new Headers({'content-type': 'application/json'}),
                 body: JSON.stringify(event),
@@ -241,6 +231,7 @@ export default class EventsApi {
                 .catch((err) => {
                     throw new Error(JSON.stringify(err));
                 });
+            return await resp;
         }
     }
 
@@ -292,6 +283,5 @@ export default class EventsApi {
                 console.log(err);
             });
     }
-
 
 }

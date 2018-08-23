@@ -39,7 +39,7 @@ export class EventsGrid extends Component {
                                         Header: 'Data',
                                         id: 'data',
                                         accessor: d => {
-                                            return new Date(d.dadosGerais.dataHora).toLocaleDateString();
+                                            return d.dadosGerais?d.dadosGerais.dataHora?new Date().toLocaleDateString():new Date().toLocaleDateString():'';
                                         },
                                         filterMethod: (filter, rows) =>
                                             matchSorter(rows, filter.value, {keys: ["data"]}),
@@ -47,14 +47,14 @@ export class EventsGrid extends Component {
                                     }, {
                                         Header: 'Cidade',
                                         id: 'municipio',
-                                        accessor: d => d.dadosGerais.municipio?d.dadosGerais.municipio.nome:'',
+                                        accessor: d => d.dadosGerais?(d.dadosGerais.municipio?d.dadosGerais.municipio.nome:''):'',
                                         filterMethod: (filter, rows) =>
                                             matchSorter(rows, filter.value, {keys: ["municipio"]}),
                                         filterAll: true
                                     }, {
                                         Header: 'Rua',
                                         id: 'rua',
-                                        accessor: d => d.dadosGerais.rua?d.dadosGerais.rua.nome:'',
+                                        accessor: d => d.dadosGerais?d.dadosGerais.rua?d.dadosGerais.rua.nome:'':'',
                                         filterMethod: (filter, rows) =>
                                             matchSorter(rows, filter.value, {keys: ["rua"]}),
                                         filterAll: true
@@ -62,27 +62,27 @@ export class EventsGrid extends Component {
                                     }, {
                                         Header: 'Numero/KM',
                                         id: 'numero',
-                                        accessor: d => d.dadosGerais.numero,
+                                        accessor: d => d.dadosGerais?d.dadosGerais.numero:'',
                                         filterMethod: (filter, row) =>
                                             row[filter.id].startsWith(filter.value)
                                     }, {
                                         Header: 'Cruzamento com',
                                         id: 'cruzamento',
-                                        accessor: d => d.dadosGerais.cruzamento?d.dadosGerais.cruzamento.nome:'',
+                                        accessor: d => d.dadosGerais?d.dadosGerais.cruzamento?d.dadosGerais.cruzamento.nome:'':'',
                                         filterMethod: (filter, rows) =>
                                             matchSorter(rows, filter.value, {keys: ["cruzamento"]}),
                                         filterAll: true
                                     }, {
                                         Header: 'Bairro',
                                         id: 'bairro',
-                                        accessor: d => d.dadosGerais.bairro?d.dadosGerais.bairro.nome:"",
+                                        accessor: d => d.dadosGerais?d.dadosGerais.bairro?d.dadosGerais.bairro.nome:'':'',
                                         filterMethod: (filter, rows) =>
                                             matchSorter(rows, filter.value, {keys: ["bairro"]}),
                                         filterAll: true
                                     }, {
                                         Header: 'Referencia',
                                         id: 'referencia',
-                                        accessor: d => d.dadosGerais.pontoReferencia,
+                                        accessor: d => d.dadosGerais?d.dadosGerais.pontoReferencia:"",
                                         filterMethod: (filter, rows) =>
                                             matchSorter(rows, filter.value, {keys: ["referencia"]}),
                                         filterAll: true
@@ -217,13 +217,13 @@ export class EventsForm extends Component {
                             </Row>
                         </Col>:undefined:undefined
                     }
-                    <Row>
-                        <Col md={12}>
-                            <pre>
-                                {JSON.stringify(this.props.selectedEvent, null, 4)}
-                            </pre>
-                        </Col>
-                    </Row>
+                    {/*<Row>*/}
+                        {/*<Col md={12}>*/}
+                            {/*<pre>*/}
+                                {/*{JSON.stringify(this.props.selectedEvent, null, 4)}*/}
+                            {/*</pre>*/}
+                        {/*</Col>*/}
+                    {/*</Row>*/}
                 </Grid>
             </div>
         )

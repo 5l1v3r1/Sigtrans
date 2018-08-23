@@ -28,16 +28,17 @@ class Death extends Component {
 			<div>
 				<PageHeader>Ocorrencias fatais</PageHeader>
 				<div className="content" id="content">
-					<DeathEventsGrid data={this.props.deaths.deathEvents}
-									 deathAnalysis={this.props.deaths.selectedEvent?this.props.deaths.selectedEvent.deathAnalysis:{}}
-									 options={this.props.deaths.deathOptions}
-									 loading={this.props.deaths.loading}
-									 showModal={this.props.deaths.showModal}
-									 selectedEvent={this.props.deaths.selectedEvent}
-									 selectedEventID={this.props.deaths.selectedEventID}
-									 handleToggleModal={this.props.handleToggleModal}
-									 selectEvent={this.props.selectEvent}
-                                     onChangeInput={this.props.onChangeInput}
+					<DeathEventsGrid
+						data={this.props.deaths.deathEvents}
+						deathAnalysis={this.props.deaths.selectedEvent?this.props.deaths.selectedEvent.deathAnalysis:{}}
+						options={this.props.deaths.deathOptions}
+						loading={this.props.deaths.loading}
+						showModal={this.props.deaths.showModal}
+						selectedEvent={this.props.deaths.selectedEvent}
+						selectedEventID={this.props.deaths.selectedEventID}
+						handleToggleModal={this.props.handleToggleModal}
+						selectEvent={this.props.selectEvent}
+						onChangeInput={this.props.onChangeInput}
 					/>
 				</div>
 			</div>
@@ -55,11 +56,6 @@ class DeathEventsGrid extends Component {
 	}
 
 	render() {
-
-        //         	{
-        //             	let date = new Date(d.general.date);
-        //				return date.getFullYear() + '/' + date.getDate() + '/' + date.getMonth()
-        // 			}
 
 		const columns = [
 			{
