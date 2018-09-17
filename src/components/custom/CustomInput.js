@@ -1,14 +1,12 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-import {ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
+import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 
-export default class CustomInput extends Component {
-    render() {
-        return (
-            <FormGroup controlId={this.props.id}>
-                <ControlLabel>{this.props.label}</ControlLabel>
-                <FormControl {...this.props}/>
-            </FormGroup>
-        );
-    }
-}
+const CustomInput = ({ id, label, ...props }) => (
+  <FormGroup controlId={id}>
+    <ControlLabel>{label}</ControlLabel>
+    <FormControl {...props} />
+  </FormGroup>
+);
+
+export default CustomInput;

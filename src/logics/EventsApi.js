@@ -26,10 +26,10 @@ async function asyncForEach(array, callback) {
         await callback(array[index], index, array)
     }
 }
-async function start(listaDeConteudos, link) {
+async function start(content, link) {
     let returnArray=[];
     console.log('link ', link)
-    const res = await asyncForEach(listaDeConteudos, async (item) => {
+    const res = await asyncForEach(content, async (item) => {
         await fetch(getUrl('api') + link, {
             method: 'POST',
             headers: new Headers({'Content-Type': 'application/json'}),
@@ -55,7 +55,6 @@ async function start(listaDeConteudos, link) {
 }
 async function handleSyncedAsync(data, link) {
     const retorno = await start(data, link);
-    console.log("RETORNO ", await retorno);
     return await retorno;
 }
 
@@ -69,7 +68,7 @@ export default class EventsApi {
 
 	static listOpenEvents(loading) {
 		return dispatch => {
-            fetch(getUrl('api')+'ocorrencias')
+            fetch(getUrl('api') + 'ocorrencias')
                 .then(response => {
                     if (response.ok)
                         response.json()
@@ -83,8 +82,6 @@ export default class EventsApi {
                 .catch((err) => {
                     console.log(err);
                 });
-            // dispatch(listOpenEvents(loading))
-
 		}
 	}
 
