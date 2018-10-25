@@ -14,13 +14,12 @@ export function events(state = new List(), action) {
   }
 
   if (action.type === 'LISTASYNC') {
-    const options = action.options;
-    const listType = action.listType;
+    const { options, listType } = action;
     return Object.assign({}, state, { [listType]: options });
   }
 
   if (action.type === 'LISTDEPENDENTOPTION') {
-    const listType = action.listType;
+    const { listType } = action;
     const option = action.options;
     const options = Object.assign({}, state.options, { [listType]: option });
 
@@ -28,12 +27,13 @@ export function events(state = new List(), action) {
   }
 
   if (action.type === 'LISTEVENTSOPTIONS') {
-    const options = action.options;
+    const { options } = action;
     return Object.assign({}, state, { options });
   }
 
   if (action.type === 'SELECTOPENEVENT') {
     const selectedEvent = state.events.find(item => item.id === action.id);
+    selectedEvent.dadosGerais.dataHora = new Date(selectedEvent.dadosGerais.dataHora).toISOString().replace('Z', '');
     const selectedEventID = selectedEvent.id;
     return Object.assign({}, state, { selectedEvent, selectedEventID });
   }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {getUrl} from "../management/Management";
-import dataJson from './dadosMarcaVeiculo';
+import dataJson from './Ocorrencias';
 
 class TestPage extends Component {
 
@@ -13,7 +13,7 @@ class TestPage extends Component {
         }
         const start = async (listaDeConteudos) => {
             asyncForEach(listaDeConteudos, async (item) => {
-                await fetch(getUrl('api') + 'marcaveiculo', {
+                await fetch(getUrl('api') + 'ocorrencias', {
                     method: 'POST',
                     headers: new Headers({'Content-Type': 'application/json'}),
                     body: JSON.stringify(item),
@@ -42,7 +42,7 @@ class TestPage extends Component {
             <div>
                 <form onSubmit={(e)=>this.handleSubmit(e)}
                       ref={form => this.form = form}>
-                    <input type="submit" value="Submeter"/>
+                    <input type="submit" value="Submit"/>
                 </form>
             </div>
         );
