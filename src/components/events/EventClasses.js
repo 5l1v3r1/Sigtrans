@@ -11,6 +11,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import Map from '../map/Map';
 import Select from '../custom/CustomSelect';
 import Input from '../custom/CustomInput';
+import {DeathAnalysis} from "../death/Death";
 
 // make new js file for both grids
 export class EventsGrid extends Component {
@@ -26,118 +27,117 @@ export class EventsGrid extends Component {
 
   render() {
     return (
-      <div>
-        <div className="content" id="content">
-          <ReactTable
-            previousText="Anterior"
-            nextText="Proximo"
-            ofText="de"
-            rowsText="linhas"
-            pageText="Pagina"
-            loadingText="Carregando..."
-            noDataText="Opa, Algo deu errado!"
-            className="-striped -highlight"
-            data={this.props.data}
-            loading={(this.props.loading === undefined)}
-            defaultPageSize={10}
-            filterable
-            defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
-            getTdProps={() => ({ style: { textAlign: 'center' } })}
-            columns={[
-              {
-                Header: 'Data',
-                id: 'data',
-                accessor: d => (d.dadosGerais ? d.dadosGerais.dataHora ? new Date(d.dadosGerais.dataHora).toLocaleDateString('pt-BR') : new Date().toLocaleDateString() : ''),
-                filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['data'] }),
-                filterAll: true,
-              }, {
-                Header: 'Cidade',
-                id: 'municipio',
-                accessor: d => (d.dadosGerais ? (d.dadosGerais.municipio ? d.dadosGerais.municipio.nome : '') : ''),
-                filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['municipio'] }),
-                filterAll: true,
-              }, {
-                Header: 'Rua',
-                id: 'rua',
-                accessor: d => (d.dadosGerais ? d.dadosGerais.rua ? d.dadosGerais.rua.nome : '' : ''),
-                filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['rua'] }),
-                filterAll: true,
+      <div className="content" id="content">
+        <ReactTable
+          previousText="Anterior"
+          nextText="Proximo"
+          ofText="de"
+          rowsText="linhas"
+          pageText="Pagina"
+          loadingText="Carregando..."
+          noDataText="Opa, Algo deu errado!"
+          className="-striped -highlight"
+          data={this.props.data}
+          loading={(this.props.loading === undefined)}
+          defaultPageSize={10}
+          filterable
+          defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
+          getTdProps={() => ({ style: { textAlign: 'center' } })}
+          columns={[
+            {
+              Header: 'Data',
+              id: 'data',
+              accessor: d => (d.dadosGerais ? d.dadosGerais.dataHora ? new Date(d.dadosGerais.dataHora).toLocaleDateString('pt-BR') : new Date().toLocaleDateString() : ''),
+              filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['data'] }),
+              filterAll: true,
+            }, {
+              Header: 'Cidade',
+              id: 'municipio',
+              accessor: d => (d.dadosGerais ? (d.dadosGerais.municipio ? d.dadosGerais.municipio.nome : '') : ''),
+              filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['municipio'] }),
+              filterAll: true,
+            }, {
+              Header: 'Rua',
+              id: 'rua',
+              accessor: d => (d.dadosGerais ? d.dadosGerais.rua ? d.dadosGerais.rua.nome : '' : ''),
+              filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['rua'] }),
+              filterAll: true,
 
-              }, {
-                Header: 'Numero/KM',
-                id: 'numero',
-                accessor: d => (d.dadosGerais ? d.dadosGerais.numero : ''),
-                filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
-              }, {
-                Header: 'Cruzamento com',
-                id: 'cruzamento',
-                accessor: d => (d.dadosGerais ? d.dadosGerais.cruzamento ? d.dadosGerais.cruzamento.nome : '' : ''),
-                filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['cruzamento'] }),
-                filterAll: true,
-              }, {
-                Header: 'Bairro',
-                id: 'bairro',
-                accessor: d => (d.dadosGerais ? d.dadosGerais.bairro ? d.dadosGerais.bairro.nome : '' : ''),
-                filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['bairro'] }),
-                filterAll: true,
-              }, {
-                Header: 'Referencia',
-                id: 'referencia',
-                accessor: d => (d.dadosGerais ? d.dadosGerais.pontoReferencia : ''),
-                filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['referencia'] }),
-                filterAll: true,
-              }, {
-                Header: 'Detalhar',
-                accessor: 'id',
-                filterable: false,
-                sortable: false,
-                Cell: props => (
-                  <Button
-                    icon="edit"
-                    primary
-                    id={props.value}
-                    onClick={() => this.buttonToggleModal(props.value)}
-                  />
-                ),
-              },
+            }, {
+              Header: 'Numero/KM',
+              id: 'numero',
+              accessor: d => (d.dadosGerais ? d.dadosGerais.numero : ''),
+              filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
+            }, {
+              Header: 'Cruzamento com',
+              id: 'cruzamento',
+              accessor: d => (d.dadosGerais ? d.dadosGerais.cruzamento ? d.dadosGerais.cruzamento.nome : '' : ''),
+              filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['cruzamento'] }),
+              filterAll: true,
+            }, {
+              Header: 'Bairro',
+              id: 'bairro',
+              accessor: d => (d.dadosGerais ? d.dadosGerais.bairro ? d.dadosGerais.bairro.nome : '' : ''),
+              filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['bairro'] }),
+              filterAll: true,
+            }, {
+              Header: 'Referencia',
+              id: 'referencia',
+              accessor: d => (d.dadosGerais ? d.dadosGerais.pontoReferencia : ''),
+              filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['referencia'] }),
+              filterAll: true,
+            }, {
+              Header: 'Detalhar',
+              accessor: 'id',
+              filterable: false,
+              sortable: false,
+              Cell: props => (
+                <Button
+                  icon="edit"
+                  primary
+                  id={props.value}
+                  onClick={() => this.buttonToggleModal(props.value)}
+                />
+              ),
+            },
+          ]}
+        />
+        <div className="modal-container">
+          <Dialog
+            active={this.props.showModal === !(undefined)}
+            actions={[
+              { label: 'Fechar', onClick: this.props.handleToggleModal },
+              { label: 'Salvar', onClick: this.updateEvent.bind(this) },
             ]}
-          />
-          <div className="modal-container">
-            <Dialog
-              active={this.props.showModal === !(undefined)}
-              actions={[
-                { label: 'Fechar', onClick: this.props.handleToggleModal },
-                { label: 'Salvar', onClick: this.updateEvent.bind(this) },
-              ]}
-              className="custom-modal"
-              type="fullscreen"
-              onEscKeyDown={this.props.handleToggleModal}
-              onOverlayClick={this.props.handleToggleModal}
-              title="Ocorrência"
-            >
-              <EventsForm
-                selectedEvent={this.props.selectedEvent}
-                selectedEventID={this.props.selectedEventID}
-                options={this.props.options}
-                municipios={this.props.municipio}
-                ruas={this.props.rua}
-                cruzamentos={this.props.cruzamento}
-                municipioIsLoading={this.props.municipioIsLoading}
-                ruaIsLoading={this.props.ruaIsLoading}
-                onChangeDropdown={this.props.onChangeDropdown}
-                onNestedInputChange={this.props.onNestedInputChange}
-                onChangeInput={this.props.onChangeInput}
-                asyncTypeaheadQuery={this.props.asyncTypeaheadQuery}
-                addVehicle={this.props.addVehicle}
-                removeVehicle={this.props.removeVehicle}
-                addInvolved={this.props.addInvolved}
-                removeInvolved={this.props.removeInvolved}
-                addVia={this.props.addVia}
-                removeVia={this.props.removeVia}
-                fetchDependentOptions={this.props.fetchDependentOptions}
-              />
-            </Dialog>
-          </div>
+            className="custom-modal"
+            type="fullscreen"
+            onEscKeyDown={this.props.handleToggleModal}
+            onOverlayClick={this.props.handleToggleModal}
+            title="Ocorrência"
+          >
+            <EventsForm
+              selectedEvent={this.props.selectedEvent}
+              selectedEventID={this.props.selectedEventID}
+              options={this.props.options}
+              municipios={this.props.municipio}
+              ruas={this.props.rua}
+              cruzamentos={this.props.cruzamento}
+              municipioIsLoading={this.props.municipioIsLoading}
+              ruaIsLoading={this.props.ruaIsLoading}
+              onChangeDropdown={this.props.onChangeDropdown}
+              onNestedInputChange={this.props.onNestedInputChange}
+              onChangeInput={this.props.onChangeInput}
+              asyncTypeaheadQuery={this.props.asyncTypeaheadQuery}
+              addVehicle={this.props.addVehicle}
+              removeVehicle={this.props.removeVehicle}
+              addInvolved={this.props.addInvolved}
+              removeInvolved={this.props.removeInvolved}
+              addVia={this.props.addVia}
+              removeVia={this.props.removeVia}
+              fetchDependentOptions={this.props.fetchDependentOptions}
+              deathAnalysis={this.props.deathAnalysis}
+            />
+          </Dialog>
         </div>
       </div>
     );
@@ -146,6 +146,7 @@ export class EventsGrid extends Component {
 
 export class EventsForm extends Component {
   render() {
+    let data = this.props.selectedEvent.dadosEstatisticos || {};
     return (
       <div className="clearfix">
         <Grid>
@@ -171,7 +172,7 @@ export class EventsForm extends Component {
                 </Tab>
                 <Tab eventKey={2} title="Dados Estatisticos">
                   <StatisticData
-                    data={this.props.selectedEvent ? this.props.selectedEvent.dadosEstatisticos : {}}
+                    data={data}
                     options={this.props.options}
                     onNestedInputChange={this.props.onNestedInputChange}
                     onChangeDropdown={this.props.onChangeDropdown}
@@ -225,6 +226,19 @@ export class EventsForm extends Component {
                     </Col>
                   </Row>
                 </Tab>
+                {
+                  !!this.props.deathAnalysis ? (
+                    <Tab eventKey={6} title="An. Óbito">
+                      <DeathAnalysis
+                        onChangeInput={this.props.onChangeDeathInput}
+                        onChangeDeathInput={this.props.onChangeDeathInput}
+                        selectedEvent={this.props.selectedEvent}
+                        options={this.props.options}
+                        deathAnalysis={this.props.deathAnalysis}
+                      />
+                    </Tab>
+                  ) : null
+                }
               </Tabs>
             </Form>
           </Col>
@@ -233,28 +247,15 @@ export class EventsForm extends Component {
               <Col md={12}>
                 <Row>
                   <Col md={8}>
-Adicionado
-                                    em:
-                    {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleDateString('pt-BR')}
-                    {' '}
-as
-                    {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleTimeString('pt-BR')}
+                    Adicionado em: {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleDateString('pt-BR')}{' '} as {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleTimeString('pt-BR')}
                   </Col>
                   <Col md={4}>
-Ultima edição por:
-                    {this.props.selectedEvent.dadosGerais.parceiro}
-                    {' '}
-em
-                                    DD/MM/AAAA as HH:MM
+                    Ultima edição por: {this.props.selectedEvent.dadosGerais.parceiro} {' '} em  DD/MM/AAAA as HH:MM
                   </Col>
                 </Row>
                 <Row>
                   <Col md={3}>
-RGO:
-                    {this.props.selectedEvent.dadosGerais.rgoBombeiros}
-                    {' '}
-/ Protocolo
-                                    (Bateu):
+                    RGO: {this.props.selectedEvent.dadosGerais.rgoBombeiros}{' '} / Protocolo (Bateu):
                     {this.props.selectedEvent.dadosGerais.protocoloBateu}
                   </Col>
                 </Row>

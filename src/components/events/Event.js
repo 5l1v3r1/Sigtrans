@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap';
 import { EventsGrid, EventsForm } from './EventClasses';
 import EventsApi from '../../logics/EventsApi';
+import DeathApi from '../../logics/DeathApi';
 
 class OpenEvent extends Component {
   componentWillMount() {
@@ -51,6 +52,65 @@ class OpenEvent extends Component {
           asyncTypeaheadQuery={this.props.asyncTypeaheadQuery}
           fetchDependentOptions={this.props.fetchDependentOptions}
           ruaIsLoading={this.props.events.ruaIsLoading}
+        />
+      </div>
+    );
+  }
+}
+
+class DeathEvent extends Component {
+  componentWillMount() {
+    this.props.listEventsOptions();
+    this.props.listEvents(this.props.events.loading);
+  }
+
+  render() {
+    // const deathOptions = {
+    //   deathAnalysis: this.props.selectedEvent ? this.props.deaths.selectedEvent.deathAnalysis : {},
+    //   deathOptions: this.props.deathOptions,
+    //   showModal: this.props.showModal,
+    //   selectedEvent: this.props.selectedEvent,
+    //   selectedEventID: this.props.selectedEventID,
+    //   handleToggleModal: this.props.handleToggleModal,
+    //   selectEvent: this.props.selectEvent,
+    //   onChangeInput: this.props.onChangeDeathInput,
+    // };
+    return (
+      <div>
+        <PageHeader>
+          Ocorrencias
+          {' '}
+          <small>
+            Fatais
+          </small>
+        </PageHeader>
+        <EventsGrid
+          data={this.props.events.events}
+          options={this.props.events.options}
+          municipios={this.props.events.municipio}
+          ruas={this.props.events.rua}
+          cruzamentos={this.props.events.cruzamento}
+          loading={this.props.events.loading}
+          showModal={this.props.events.showModal}
+          selectedEvent={this.props.events.selectedEvent}
+          selectedEventID={this.props.events.selectedEventID}
+          onChangeDropdown={this.props.onChangeDropdown}
+          handleToggleModal={this.props.handleToggleModal}
+          onNestedInputChange={this.props.onNestedInputChange}
+          selectEvent={this.props.selectEvent}
+          onChangeInput={this.props.onChangeInput}
+          addVehicle={this.props.addVehicle}
+          removeVehicle={this.props.removeVehicle}
+          addInvolved={this.props.addInvolved}
+          removeInvolved={this.props.removeInvolved}
+          addVia={this.props.addVia}
+          removeVia={this.props.removeVia}
+          updateEvent={this.props.updateEvent}
+          asyncTypeaheadQuery={this.props.asyncTypeaheadQuery}
+          fetchDependentOptions={this.props.fetchDependentOptions}
+          ruaIsLoading={this.props.events.ruaIsLoading}
+          onChangeDeathInput={this.props.onChangeDeathInput}
+          deathAnalysis={this.props.selectedEvent?this.props.selectedEvent.analiseObito:{}}
         />
       </div>
     );
@@ -205,6 +265,9 @@ const mapDispatchToProps = dispatch => ({
   saveEvent: (event) => {
     dispatch(EventsApi.saveEvent(event));
   },
+  onChangeDeathInput: (newValue, operator, subMenu) => {
+    dispatch(DeathApi.onChangeInput(newValue, operator, subMenu));
+  },
 });
 
 export const OpenEvents = connect(mapStateToProps, mapDispatchToProps)(OpenEvent);
@@ -212,3 +275,5 @@ export const OpenEvents = connect(mapStateToProps, mapDispatchToProps)(OpenEvent
 export const Events = connect(mapStateToProps, mapDispatchToProps)(Event);
 
 export const CreateEvent = connect(mapStateToProps, mapDispatchToProps)(EventFormContainer);
+
+export const DeathEvents = connect(mapStateToProps, mapDispatchToProps)(DeathEvent);

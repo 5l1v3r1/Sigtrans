@@ -136,5 +136,45 @@ export function events(state = new List(), action) {
     return Object.assign({}, state, { selectedEvent });
   }
 
+  // deathEvents
+  if (action.type === 'LISTDEATHEVENTS') {
+    const events = action.deathEvents;
+    const loading = !action.loading;
+    return Object.assign({}, state, { events, loading });
+  }
+
+  // if (action.type === 'LISTDEATHOPTIONS') {
+  //   const deathOptions = action.deathOptions;
+  //   return Object.assign({}, state, {deathOptions});
+  // }
+
+  // if (action.type === 'TOGGLEDEATHMODAL') {
+  //   const showModal = !state.showModal;
+  //   return Object.assign({}, state, {showModal});
+  // }
+
+  // if (action.type === 'SELECTDEATHEVENT') {
+  //   const selectedEvent = state.deathEvents.find(item => {
+  //     return item.id === action.id;
+  //   });
+  //   const selectedEventID = selectedEvent.id;
+  //   return Object.assign({}, state, {selectedEvent, selectedEventID});
+  // }
+
+  if (action.type === 'HANDLEDEATHINPUT') {
+    const { selectedEvent } = state;
+    const deathAnalysis = selectedEvent.analiseObito ? selectedEvent.analiseObito : {};
+    if (!deathAnalysis[action.subMenu]) {
+      deathAnalysis[action.subMenu] = {};
+    }
+    deathAnalysis[action.subMenu][action.operator] = action.newValue;
+    if ((!action.newValue || action.newValue <= 0)) {
+      if (action.operator === 'weight' || action.operator === 'amount') deathAnalysis[action.subMenu] = null;
+      if (action.subMenu === 'additionalInfos') deathAnalysis[action.subMenu][action.operator] = null;
+    }
+    selectedEvent.analiseObito = deathAnalysis;
+    return Object.assign({}, state, { selectedEvent });
+  }
+
   return state;
 }

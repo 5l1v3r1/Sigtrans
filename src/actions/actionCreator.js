@@ -2,142 +2,152 @@
  * Created by natal on 01/06/17.
  */
 
-//NAVIGATION
+// NAVIGATION
 export function toggleD() {
-    return {type: 'TOGGLEDRAWER'};
+  return { type: 'TOGGLEDRAWER' };
 }
 export function toggleS() {
-    return {type: 'TOGGLESIDEBAR'};
+  return { type: 'TOGGLESIDEBAR' };
 }
 
-//EVENTS
+// EVENTS
 export function toggleEventsModal() {
-    return {type: 'TOGGLEEVENTSMODAL'};
+  return { type: 'TOGGLEEVENTSMODAL' };
 }
 
-export function listDependentOption(options, listType){
-    return {type:'LISTDEPENDENTOPTION', options, listType}
+export function listDependentOption(options, listType) {
+  return { type: 'LISTDEPENDENTOPTION', options, listType };
 }
 
 export function listAsync(options, listType) {
-    return {type: 'LISTASYNC', options, listType};
+  return { type: 'LISTASYNC', options, listType };
 }
 export function selectOpenEvent(id) {
-    return {type: 'SELECTOPENEVENT', id};
+  return { type: 'SELECTOPENEVENT', id };
 }
 export function changeInput(newValue, operator, subMenu) {
-    return {type: 'ONCHANGE', newValue, operator, subMenu};
+  return {
+    type: 'ONCHANGE', newValue, operator, subMenu,
+  };
 }
 
 export function changeDropdown(newValue, operator, subMenu) {
-    return {type: 'ONCHANGEDROPDOWN', newValue, operator, subMenu};
+  return {
+    type: 'ONCHANGEDROPDOWN', newValue, operator, subMenu,
+  };
 }
 
-export function nestedInputChange(subMenu, operator, input, id, value, dropdown){
-    return {type:'NESTEDINPUTCHANGE', subMenu, operator, input, id, value, dropdown}
+export function nestedInputChange(subMenu, operator, input, id, value, dropdown) {
+  return {
+    type: 'NESTEDINPUTCHANGE', subMenu, operator, input, id, value, dropdown,
+  };
 }
 
 export function addVehicle(vehicle) {
-    return {type: 'ADDVEHICLE', vehicle}
+  return { type: 'ADDVEHICLE', vehicle };
 }
 export function removeVehicle(vehicle) {
-    return {type: 'REMOVEVEHICLE', vehicle}
+  return { type: 'REMOVEVEHICLE', vehicle };
 }
 export function addVia(via) {
-    return {type: 'ADDVIA', via}
+  return { type: 'ADDVIA', via };
 }
 export function removeVia(via) {
-    return {type: 'REMOVEVIA', via}
+  return { type: 'REMOVEVIA', via };
 }
 export function addInvolved() {
-    return {type: 'ADDINVOLVED'}
+  return { type: 'ADDINVOLVED' };
 }
 export function removeInvolved(involved) {
-    return {type: 'REMOVEINVOLVED', involved}
+  return { type: 'REMOVEINVOLVED', involved };
 }
 export function initializeEvent() {
-    return {type: 'INITIALIZEEVENT', }
+  return { type: 'INITIALIZEEVENT' };
 }
 
 
-//OPEN EVENTS
+// OPEN EVENTS
 export function listOpenEvents(loading, events) {
-    return {type: 'LISTOPENEVENTS', loading, events};
+  return { type: 'LISTOPENEVENTS', loading, events };
 }
 export function listEventsOptions(options) {
-    return {type: 'LISTEVENTSOPTIONS', options};
+  return { type: 'LISTEVENTSOPTIONS', options };
 }
 
-//CLOSED EVENTS
+// CLOSED EVENTS
 
-//DEATH
-export function listDeathEvents(loading, deathEvents) {
-    return {type: 'LISTDEATHEVENTS', loading, deathEvents};
-}
-export function listDeathOptions(deathOptions) {
-    return {type: 'LISTDEATHOPTIONS', deathOptions};
-}
-
-export function toggleDeathModal(showModal, id) {
-    return {type: 'TOGGLEDEATHMODAL', showModal, id};
-}
-
-export function selectDeathEvent(id) {
-    return {type: 'SELECTDEATHEVENT', id};
-}
+// DEATH
+// export function listDeathEvents(loading, deathEvents) {
+//   return { type: 'LISTDEATHEVENTS', loading, deathEvents };
+// }
+// export function listDeathOptions(deathOptions) {
+//   return { type: 'LISTDEATHOPTIONS', deathOptions };
+// }
+//
+// export function toggleDeathModal(showModal, id) {
+//   return { type: 'TOGGLEDEATHMODAL', showModal, id };
+// }
+//
+// export function selectDeathEvent(id) {
+//   return { type: 'SELECTDEATHEVENT', id };
+// }
 export function changeDeathInput(newValue, operator, subMenu) {
-    return {type: 'HANDLEDEATHINPUT', newValue, operator, subMenu};
+  return {
+    type: 'HANDLEDEATHINPUT', newValue, operator, subMenu,
+  };
 }
-//AUTH
+// AUTH
 export function authERR(msg) {
-    return {type: 'AUTHERR', msg};
+  return { type: 'AUTHERR', msg };
 }
 
-//REPORTS
+// REPORTS
 export function makeReportsData(reportData, reportType) {
-    return {type: 'MAKEREPORTSDATA', reportData, reportType};
+  return { type: 'MAKEREPORTSDATA', reportData, reportType };
 }
 
 export function changeReportsType(value) {
-    return {type: 'CHANGEREPORTTYPE', value};
+  return { type: 'CHANGEREPORTTYPE', value };
 }
 
 export function initializeReportsData(reportTypes) {
-    return {type: 'INITIALIZEREPORTSDATA', reportTypes};
+  return { type: 'INITIALIZEREPORTSDATA', reportTypes };
 }
 
 export function handleDatePicker(value, picker) {
-    return {type: 'HANDLEDATEPICKER', value, picker};
+  return { type: 'HANDLEDATEPICKER', value, picker };
 }
 
-//FILES
+// FILES
 export function handleFiles(files) {
-    return {type: 'HANDLEFILES', files};
+  return { type: 'HANDLEFILES', files };
 }
 
-//HOME
+// HOME
 
-export function delayedShowMarkers(){
-    return {type:"SHOWMARKERS"};
+export function delayedShowMarkers() {
+  return { type: 'SHOWMARKERS' };
 }
 
-//CRUD AT
-export function listGenericType(data, selectedType){
-    return {type:"LISTACCIDENTTYPES", data, selectedType};
+// CRUD AT
+export function listGenericType(data, selectedType) {
+  return { type: 'LISTACCIDENTTYPES', data, selectedType };
 }
 
-export function onChangeCrudInput(value, input){
-    return {type:"ONCHANGECRUDINPUT", value, input};
+export function onChangeCrudInput(value, input) {
+  return { type: 'ONCHANGECRUDINPUT', value, input };
 }
 
-export function onChangeCrudFormInput(value, input, option){
-    return {type:"ONCHANGECRUDFORMINPUT", value, input, option};
+export function onChangeCrudFormInput(value, input, option) {
+  return {
+    type: 'ONCHANGECRUDFORMINPUT', value, input, option,
+  };
 }
 
 export function toggleATModal() {
-    return {type: 'TOGGLEATMODAL'};
+  return { type: 'TOGGLEATMODAL' };
 }
 
 export function cleanForm() {
-    return {type: 'CLEANFORM'};
+  return { type: 'CLEANFORM' };
 }
