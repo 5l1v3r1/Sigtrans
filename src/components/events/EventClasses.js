@@ -1,15 +1,17 @@
-import React, {Component} from 'react';
-import {Col, ControlLabel, Form, Grid, Row, Tab, Tabs,} from 'react-bootstrap';
+import React, { Component } from 'react';
+import {
+  Col, ControlLabel, Form, Grid, Row, Tab, Tabs,
+} from 'react-bootstrap';
 import matchSorter from 'match-sorter';
 import Button from 'react-toolbox/lib/button/Button';
 import Dialog from 'react-toolbox/lib/dialog/Dialog';
 import ReactTable from 'react-table';
-import {Accordion, AccordionItem} from 'react-sanfona';
-import {AsyncTypeahead} from 'react-bootstrap-typeahead';
+import { Accordion, AccordionItem } from 'react-sanfona';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import Map from '../map/Map';
 import Select from '../custom/CustomSelect';
 import Input from '../custom/CustomInput';
-import {DeathAnalysis} from "../death/Death";
+import { DeathAnalysis } from '../death/Death';
 
 // make new js file for both grids
 export class EventsGrid extends Component {
@@ -45,7 +47,7 @@ export class EventsGrid extends Component {
               Header: 'RGO',
               id: 'rgo',
               accessor: d => d.dadosGerais.rgoBombeiros,
-              filterMethod: (filter, rows) => matchSorter(rows, filter.value, {keys: ['rgoBombeiros']}),
+              filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['rgo'] }),
               filterAll: true,
             },
             {
@@ -57,37 +59,37 @@ export class EventsGrid extends Component {
             }, {
               Header: 'Cidade',
               id: 'municipio',
-              accessor: d => (d.dadosGerais ? (d.dadosGerais.municipio ? d.dadosGerais.municipio.nome : '') : ''),
+              accessor: d => (d.dadosGerais ? (d.dadosGerais.municipio ? d.dadosGerais.municipio.nome : '-') : '-'),
               filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['municipio'] }),
               filterAll: true,
             }, {
               Header: 'Rua',
               id: 'rua',
-              accessor: d => (d.dadosGerais ? d.dadosGerais.rua ? d.dadosGerais.rua.nome : '' : ''),
+              accessor: d => (d.dadosGerais ? d.dadosGerais.rua ? d.dadosGerais.rua.nome : '-' : '-'),
               filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['rua'] }),
               filterAll: true,
 
             }, {
               Header: 'Numero/KM',
               id: 'numero',
-              accessor: d => (d.dadosGerais ? d.dadosGerais.numero : ''),
-              filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
+              accessor: d => (d.dadosGerais ? d.dadosGerais.numero ? d.dadosGerais.numero : '-' : '-'),
+              filterMethod: (filter, row) => row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase()),
             }, {
               Header: 'Cruzamento com',
               id: 'cruzamento',
-              accessor: d => (d.dadosGerais ? d.dadosGerais.cruzamento ? d.dadosGerais.cruzamento.nome : '' : ''),
+              accessor: d => (d.dadosGerais ? d.dadosGerais.cruzamento ? d.dadosGerais.cruzamento.nome : '-' : '-'),
               filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['cruzamento'] }),
               filterAll: true,
             }, {
               Header: 'Bairro',
               id: 'bairro',
-              accessor: d => (d.dadosGerais ? d.dadosGerais.bairro ? d.dadosGerais.bairro.nome : '' : ''),
+              accessor: d => (d.dadosGerais ? d.dadosGerais.bairro ? d.dadosGerais.bairro.nome : '-' : '-'),
               filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['bairro'] }),
               filterAll: true,
             }, {
               Header: 'Referencia',
               id: 'referencia',
-              accessor: d => (d.dadosGerais ? d.dadosGerais.pontoReferencia : ''),
+              accessor: d => (d.dadosGerais ? d.dadosGerais.pontoReferencia ? d.dadosGerais.pontoReferencia : '-' : '-'),
               filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ['referencia'] }),
               filterAll: true,
             }, {
@@ -152,7 +154,7 @@ export class EventsGrid extends Component {
 
 export class EventsForm extends Component {
   render() {
-    let data = this.props.selectedEvent.dadosEstatisticos || {};
+    const data = this.props.selectedEvent.dadosEstatisticos || {};
     return (
       <div className="clearfix">
         <Grid>
@@ -233,7 +235,7 @@ export class EventsForm extends Component {
                   </Row>
                 </Tab>
                 {
-                  !!this.props.deathAnalysis ? (
+                  this.props.deathAnalysis ? (
                     <Tab eventKey={6} title="An. Óbito">
                       <DeathAnalysis
                         FCGAList={this.props.FCGAList}
@@ -255,28 +257,45 @@ export class EventsForm extends Component {
               <Col md={12}>
                 <Row>
                   <Col md={8}>
-                    Adicionado em: {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleDateString('pt-BR')}{' '} as {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleTimeString('pt-BR')}
+                    Adicionado em:
+                    {' '}
+                    {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleDateString('pt-BR')}
+                    {' '}
+                    {' '}
+as
+                    {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleTimeString('pt-BR')}
                   </Col>
                   <Col md={4}>
-                    Ultima edição por: {this.props.selectedEvent.dadosGerais.parceiro} {' '} em  DD/MM/AAAA as HH:MM
+                    Ultima edição por:
+                    {' '}
+                    {this.props.selectedEvent.dadosGerais.parceiro}
+                    {' '}
+                    {' '}
+                    {' '}
+em  DD/MM/AAAA as HH:MM
                   </Col>
                 </Row>
                 <Row>
                   <Col md={3}>
-                    RGO: {this.props.selectedEvent.dadosGerais.rgoBombeiros}{' '} / Protocolo (Bateu):
+                    RGO:
+                    {' '}
+                    {this.props.selectedEvent.dadosGerais.rgoBombeiros}
+                    {' '}
+                    {' '}
+/ Protocolo (Bateu):
                     {this.props.selectedEvent.dadosGerais.protocoloBateu}
                   </Col>
                 </Row>
               </Col>
             ) : undefined : undefined
             }
-          {/*<Row>*/}
-          {/*<Col md={12}>*/}
-          {/*<pre>*/}
-          {/*{JSON.stringify(this.props.selectedEvent, null, 4)}*/}
-          {/*</pre>*/}
-          {/*</Col>*/}
-          {/*</Row>*/}
+          {/* <Row> */}
+          {/* <Col md={12}> */}
+          {/* <pre> */}
+          {/* {JSON.stringify(this.props.selectedEvent, null, 4)} */}
+          {/* </pre> */}
+          {/* </Col> */}
+          {/* </Row> */}
         </Grid>
       </div>
     );
@@ -405,8 +424,7 @@ class General extends Component {
             paginationText="Mais..."
             labelKey={option => `${option.nome}`}
             isLoading={this.props.ruaIsLoading === true}
-            onSearch={query =>
-              this.props.asyncTypeaheadQuery(query, 'cruzamento', this.props.data.municipio, 'municipio')
+            onSearch={query => this.props.asyncTypeaheadQuery(query, 'cruzamento', this.props.data.municipio, 'municipio')
             }
             options={this.cruzamentos}
             selected={this.props.data.cruzamento ? [this.props.data.cruzamento] : undefined}
