@@ -55,7 +55,7 @@ class OpenEvent extends Component {
 class DeathEvent extends Component {
   componentWillMount() {
     this.props.listEventsOptions();
-    this.props.listEvents(this.props.events.loading);
+    this.props.listEvents(this.props.events.loading, 'obitos');
     this.props.getFCGA("2018")
   }
 

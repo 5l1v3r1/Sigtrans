@@ -1,8 +1,10 @@
 /**
  * Created by natal on 05/06/17.
  */
-import {changeDeathInput, listDeathFCGA, listFCGA, mountDeathYearFCGAForm,} from '../actions/actionCreator';
-import {getUrl} from '../management/Management';
+import {
+  changeDeathInput, listDeathFCGA, listFCGA, mountDeathYearFCGAForm,
+} from '../actions/actionCreator';
+import { getUrl } from '../management/Management';
 
 export default class DeathApi {
   static onChangeInput(newValue, FCGAId, group, subGroup) {
@@ -47,7 +49,7 @@ export default class DeathApi {
     return (dispatch) => {
       fetch(`${getUrl('api')}fatoresano`, {
         method: 'POST',
-        headers: new Headers({'content-type': 'application/json'}),
+        headers: new Headers({ 'content-type': 'application/json' }),
         body: JSON.stringify(form),
       })
         .then((response) => {

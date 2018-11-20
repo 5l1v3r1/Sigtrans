@@ -2,12 +2,13 @@
  * Created by natal on 01/06/17.
  */
 
-import {List} from 'immutable';
+import { List } from 'immutable';
 
 export function events(state = new List(), action) {
   if (action.type === 'LISTOPENEVENTS') {
-    const {events, loading} = action;
-    return Object.assign({}, state, {events, loading: !loading});
+    const { events, loading } = action;
+    console.log(events)
+    return Object.assign({}, state, { events, loading: !loading });
   }
 
   if (action.type === 'LISTASYNC') {
@@ -42,7 +43,7 @@ export function events(state = new List(), action) {
 
   if (action.type === 'ONCHANGE') {
     if (action.subMenu) {
-      const {selectedEvent} = state;
+      const { selectedEvent } = state;
       selectedEvent[action.subMenu][action.operator] = action.newValue;
       return Object.assign({}, state, { selectedEvent });
     }
@@ -50,14 +51,14 @@ export function events(state = new List(), action) {
   }
 
   if (action.type === 'ONCHANGEDROPDOWN') {
-    const {selectedEvent} = state;
+    const { selectedEvent } = state;
     if (!selectedEvent[action.subMenu][action.operator]) selectedEvent[action.subMenu][action.operator] = {};
     selectedEvent[action.subMenu][action.operator].id = action.newValue;
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'NESTEDINPUTCHANGE') {
-    const {selectedEvent} = state;
+    const { selectedEvent } = state;
     let item;
     // é possivel melhorar essa joça
     if (action.operator) {
@@ -84,40 +85,40 @@ export function events(state = new List(), action) {
   }
 
   if (action.type === 'ADDINVOLVED') {
-    const {selectedEvent} = state;
+    const { selectedEvent } = state;
     selectedEvent.envolvidos.push({});
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'REMOVEINVOLVED') {
-    const {selectedEvent} = state;
+    const { selectedEvent } = state;
     const id = state.selectedEvent.envolvidos.indexOf(action.involved);
     selectedEvent.envolvidos.splice(id, 1);
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'ADDVEHICLE') {
-    const {selectedEvent} = state;
+    const { selectedEvent } = state;
     selectedEvent.veiculos.push({});
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'REMOVEVEHICLE') {
-    const {selectedEvent} = state;
+    const { selectedEvent } = state;
     const id = selectedEvent.veiculos.indexOf(action.vehicle);
     selectedEvent.veiculos.splice(id, 1);
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'ADDVIA') {
-    const {selectedEvent} = state;
+    const { selectedEvent } = state;
     if (!selectedEvent.dadosEstatisticos.vias) selectedEvent.dadosEstatisticos.vias = [];
     selectedEvent.dadosEstatisticos.vias.push({});
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'REMOVEVIA') {
-    const {selectedEvent} = state;
+    const { selectedEvent } = state;
     const id = selectedEvent.dadosEstatisticos.vias.indexOf(action.via);
     selectedEvent.dadosEstatisticos.vias.splice(id, 1);
     return Object.assign({}, state, { selectedEvent });
@@ -161,7 +162,7 @@ export function events(state = new List(), action) {
       deathAnalysis[group] = [];
       deathAnalysis[group].push(FatorCondutaGravidadeAno);
       selectedEvent.analiseObito = deathAnalysis;
-      return Object.assign({}, state, {selectedEvent});
+      return Object.assign({}, state, { selectedEvent });
     }
 
     const index = deathAnalysis[group]
@@ -170,18 +171,18 @@ export function events(state = new List(), action) {
     if (index === -1) {
       deathAnalysis[group].push(FatorCondutaGravidadeAno);
       selectedEvent.analiseObito = deathAnalysis;
-      return Object.assign({}, state, {selectedEvent});
+      return Object.assign({}, state, { selectedEvent });
     }
 
     deathAnalysis[group][index].valor = newValue;
 
     selectedEvent.analiseObito = deathAnalysis;
-    return Object.assign({}, state, {selectedEvent});
+    return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'LISTFCGA') {
     const FCGAList = action.list;
-    return Object.assign({}, state, {FCGAList});
+    return Object.assign({}, state, { FCGAList });
   }
 
   return state;

@@ -1,7 +1,7 @@
 /**
  * Created by natal on 05/06/17.
  */
-import {getUrl} from '../management/Management';
+import { getUrl } from '../management/Management';
 import {
   addInvolved,
   addVehicle,
@@ -62,13 +62,15 @@ export default class EventsApi {
     return dispatch => dispatch(initializeEvent());
   }
 
-  static listOpenEvents(loading) {
+  static listOpenEvents(loading, type) {
+    let link = `${getUrl('api')}ocorrencias${type ? `/${type}` : ''}`;
+    link += '?pageSize=1000';
     return (dispatch) => {
-      fetch(`${getUrl('api')}ocorrencias?pageSize=1000`)
+      fetch(link)
         .then((response) => {
           if (response.ok) {
             response.json()
-              .then(events => dispatch(listOpenEvents(loading, events.values)));
+              .then(events => dispatch(listOpenEvents(loading, events.values.length ? events.values : events)));
           } else {
             console.log(`Falha ao receber dados: ${response.status}`);
           }
