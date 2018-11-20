@@ -91,9 +91,27 @@ export function listEventsOptions(options) {
 // export function selectDeathEvent(id) {
 //   return { type: 'SELECTDEATHEVENT', id };
 // }
-export function changeDeathInput(newValue, operator, subMenu) {
+export function changeDeathInput(newValue, FCGAId, group, subGroup) {
   return {
-    type: 'HANDLEDEATHINPUT', newValue, operator, subMenu,
+    type: 'HANDLEDEATHINPUT', newValue, FCGAId, group, subGroup,
+  };
+}
+
+export function listFCGA(list) {
+  return {
+    type: 'LISTFCGA', list,
+  };
+}
+
+export function listDeathFCGA(list, selectedType) {
+  return {
+    type: 'LISTDEATHFCGA', list, selectedType,
+  };
+}
+
+export function mountDeathYearFCGAForm(selectedType, values) {
+  return {
+    type: 'mountDeathYearFCGAForm'.toUpperCase(), values, selectedType,
   };
 }
 // AUTH

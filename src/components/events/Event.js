@@ -1,13 +1,7 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import {
-  PageHeader,
-  Col,
-  Grid,
-  Row,
-  Button as Submit,
-} from 'react-bootstrap';
-import { EventsGrid, EventsForm } from './EventClasses';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Button as Submit, Col, Grid, PageHeader, Row,} from 'react-bootstrap';
+import {EventsForm, EventsGrid} from './EventClasses';
 import EventsApi from '../../logics/EventsApi';
 import DeathApi from '../../logics/DeathApi';
 
@@ -62,19 +56,10 @@ class DeathEvent extends Component {
   componentWillMount() {
     this.props.listEventsOptions();
     this.props.listEvents(this.props.events.loading);
+    this.props.getFCGA("2018")
   }
 
   render() {
-    // const deathOptions = {
-    //   deathAnalysis: this.props.selectedEvent ? this.props.deaths.selectedEvent.deathAnalysis : {},
-    //   deathOptions: this.props.deathOptions,
-    //   showModal: this.props.showModal,
-    //   selectedEvent: this.props.selectedEvent,
-    //   selectedEventID: this.props.selectedEventID,
-    //   handleToggleModal: this.props.handleToggleModal,
-    //   selectEvent: this.props.selectEvent,
-    //   onChangeInput: this.props.onChangeDeathInput,
-    // };
     return (
       <div>
         <PageHeader>
@@ -110,7 +95,8 @@ class DeathEvent extends Component {
           fetchDependentOptions={this.props.fetchDependentOptions}
           ruaIsLoading={this.props.events.ruaIsLoading}
           onChangeDeathInput={this.props.onChangeDeathInput}
-          deathAnalysis={this.props.selectedEvent?this.props.selectedEvent.analiseObito:{}}
+          deathAnalysis
+          FCGAList={this.props.events.FCGAList}
         />
       </div>
     );
@@ -265,8 +251,11 @@ const mapDispatchToProps = dispatch => ({
   saveEvent: (event) => {
     dispatch(EventsApi.saveEvent(event));
   },
-  onChangeDeathInput: (newValue, operator, subMenu) => {
-    dispatch(DeathApi.onChangeInput(newValue, operator, subMenu));
+  onChangeDeathInput: (newValue, FCGAId, group, subGroup) => {
+    dispatch(DeathApi.onChangeInput(newValue, FCGAId, group, subGroup));
+  },
+  getFCGA: (year) => {
+    dispatch(DeathApi.getFCGA(year));
   },
 });
 

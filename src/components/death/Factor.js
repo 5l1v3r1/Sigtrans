@@ -1,41 +1,51 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Slider from 'react-toolbox/lib/slider/Slider';
-import { Col } from 'react-bootstrap';
+import {Col} from 'react-bootstrap';
 import Select from '../custom/CustomSelect';
 
 export default class Factor extends Component {
   render() {
-    const specification = this.props.itemId === 'speed' ? [
-      { id: 1, value: 'Excessiva' },
-      { id: 2, value: 'Inadequada' }]
-      : this.props.itemId === 'infrastructure' ? [
-        { id: 1, value: 'Inadequada' },
-        { id: 2, value: 'Inexistente' },
-      ] : null;
-
+    const {
+      itemId, subGroup, group, values, max, step, factor, responsible, onChangeDeathInput, options,
+    } = this.props;
+    let specification = null;
+    if (factor === 'Velocidade') {
+      specification = [
+        {id: 1, nome: 'Excessiva'},
+        {id: 2, nome: 'Inadequada'},
+      ];
+    }
+    if (factor === 'Infraestrutura') {
+      specification = [
+        {id: 1, nome: 'Inadequada'},
+        {id: 2, nome: 'Inexistente'},
+      ];
+    }
+    let sliderValue = values ? values.find(x => x[subGroup].id === itemId) : null;
+    sliderValue = sliderValue ? !(sliderValue.valor % step) ? sliderValue.valor : sliderValue.valor + step : 0;
     return (
       <div>
         <Col md={8} style={this.props.style}>
-          <p>{this.props.factor}</p>
+          <p>{factor}</p>
           <Slider
             pinned
             snaps
             editable
             min={0}
-            max={this.props.max}
-            step={this.props.step}
-            value={this.props.values ? this.props.values.weight : 0}
-            onChange={newValue => this.props.onChangeDeathInput(newValue, 'weight', this.props.itemId)}
+            max={max}
+            step={step}
+            value={sliderValue}
+            onChange={newValue => onChangeDeathInput(newValue, itemId, group, subGroup)}
           />
         </Col>
         {
-          this.props.responsible
+          responsible
             ? (
               <Col md={2} style={this.props.style}>
                 <Select
                   value={this.props.values ? (this.props.values.weight > 0 ? this.props.values.responsible : 0) : 0}
-                  options={this.props.options}
-                  disabled={this.props.values ? this.props.values.weight <= 0 : true}
+                  options={options}
+                  disabled={sliderValue ? sliderValue <= 0 : true}
                   onChange={e => this.props.onChangeDeathInput(e.target.value, 'responsible', this.props.itemId)}
                   label="Usuário Contributívo"
                 />
@@ -54,7 +64,7 @@ export default class Factor extends Component {
                       : 0)
                     : 0}
                   options={specification}
-                  disabled={this.props.values ? this.props.values.weight <= 0 : true}
+                  disabled={sliderValue ? sliderValue <= 0 : true}
                   onChange={e => this.props.onChangeDeathInput(e.target.value, 'specification', this.props.itemId)}
                   label="Especificação"
                 />

@@ -4,14 +4,13 @@ import React from 'react';
 // Cookies
 // import Cookies from 'js-cookie';
 // Components
-import {
-  browserHistory, IndexRoute, Redirect, Route, Router,
-} from 'react-router';
+import {browserHistory, IndexRoute, Redirect, Route, Router,} from 'react-router';
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import App from './App';
-import { Events, OpenEvents, DeathEvents as Death, CreateEvent } from './components/events/Event';
+import {CreateEvent, DeathEvents as Death, Events, OpenEvents,} from './components/events/Event';
 import GenericCRUD from './components/custom/GenericCRUD';
+import YearSelect from './components/death/YearSelect';
 import TestPage from './components/TestPage';
 import Home from './components/home/Home';
 import Login from './components/Login';
@@ -49,6 +48,7 @@ export const makeMainRoutes = store => (
           <Route path="criar" component={CreateEvent} />
           <Route path="cadastro">
             <Route path="alteracoes" component={GenericCRUD} />
+            <Route path="analiseobitos" component={YearSelect}/>
           </Route>
           <Route path="404" component={PageNotFound} />
           <Redirect from="*" to="404" />

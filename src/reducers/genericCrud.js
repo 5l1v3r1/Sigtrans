@@ -1,4 +1,4 @@
-import { List } from 'immutable';
+import {List} from 'immutable';
 
 export function genericCrud(state = new List(), action) {
   if (action.type === 'ONCHANGECRUDINPUT') {
@@ -38,8 +38,8 @@ export function genericCrud(state = new List(), action) {
     return Object.assign({}, state, { selectedType });
   }
   if (action.type === 'CLEANFORM') {
-    const form = Object.keys(state.form).map(item => state.form[item] = undefined);
-    return Object.assign({}, state, form);
+    let form = {};
+    return Object.assign({}, state, {form});
   }
 
   return state;

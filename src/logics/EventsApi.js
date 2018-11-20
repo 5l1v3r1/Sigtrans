@@ -1,24 +1,24 @@
 /**
  * Created by natal on 05/06/17.
  */
-import { getUrl } from '../management/Management';
+import {getUrl} from '../management/Management';
 import {
   addInvolved,
   addVehicle,
+  addVia,
   changeDropdown,
   changeInput,
+  initializeEvent,
+  listAsync,
+  listDependentOption,
   listEventsOptions,
   listOpenEvents,
   nestedInputChange,
   removeInvolved,
   removeVehicle,
+  removeVia,
   selectOpenEvent,
   toggleEventsModal,
-  addVia,
-  removeVia,
-  initializeEvent,
-  listAsync,
-  listDependentOption,
 } from '../actions/actionCreator';
 
 async function asyncForEach(array, callback) {
@@ -64,7 +64,7 @@ export default class EventsApi {
 
   static listOpenEvents(loading) {
     return (dispatch) => {
-      fetch(`${getUrl('api')}ocorrencias`)
+      fetch(`${getUrl('api')}ocorrencias?pageSize=1000`)
         .then((response) => {
           if (response.ok) {
             response.json()
@@ -150,8 +150,8 @@ export default class EventsApi {
 
   static updateEvent(event) {
     return async (dispatch) => {
-      const veiculosId = await handleSyncedAsync(event.veiculos, 'veiculo', 'PUT');
-      event.veiculos = await veiculosId;
+      // const veiculosId = await handleSyncedAsync(event.veiculos, 'veiculo', 'PUT');
+      // event.veiculos = await veiculosId;
       event.dadosGerais.dataHora = new Date(event.dadosGerais.dataHora);
       const resp = await fetch(`${getUrl('api')}ocorrencias/${event.id}`, {
         method: 'PUT',

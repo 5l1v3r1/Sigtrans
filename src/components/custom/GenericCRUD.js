@@ -1,14 +1,23 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Button from 'react-toolbox/lib/button/Button';
 import Dialog from 'react-toolbox/lib/dialog/Dialog';
 import {
-  Button as Submit, Col, ControlLabel, Form, Grid, MenuItem, Navbar, NavDropdown, NavItem, Row,
+  Button as Submit,
+  Col,
+  ControlLabel,
+  Form,
+  Grid,
+  MenuItem,
+  Navbar,
+  NavDropdown,
+  NavItem,
+  Row,
 } from 'react-bootstrap';
 import ReactTable from 'react-table';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import matchSorter from 'match-sorter';
 import Nav from 'react-bootstrap/es/Nav';
-import { Typeahead } from 'react-bootstrap-typeahead';
+import {Typeahead} from 'react-bootstrap-typeahead';
 import CrudApi from '../../logics/CrudApi';
 import Input from './CustomInput';
 import EventsApi from '../../logics/EventsApi';
@@ -398,11 +407,41 @@ class GenericCRUD extends Component {
         ],
       }, {
         id: 'fatorrisco',
-        name: 'Fator/Risco',
+        name: 'Fator de Risco',
         fields: [
           {
             id: 'nome',
             name: 'Fator',
+          }, {
+            id: 'dataInsercao',
+            type: 'date',
+            disabled: true,
+            value: today.toISOString().split('T')[0],
+            name: 'Data de Inserção',
+          },
+        ],
+      }, {
+        id: 'condutarisco',
+        name: 'Conduta de risco',
+        fields: [
+          {
+            id: 'nome',
+            name: 'Conduta',
+          }, {
+            id: 'dataInsercao',
+            type: 'date',
+            disabled: true,
+            value: today.toISOString().split('T')[0],
+            name: 'Data de Inserção',
+          },
+        ],
+      }, {
+        id: 'fatorgravidade',
+        name: 'Fator/Gravidade',
+        fields: [
+          {
+            id: 'nome',
+            name: 'Fator/Gravidade',
           }, {
             id: 'dataInsercao',
             type: 'date',
@@ -422,21 +461,20 @@ class GenericCRUD extends Component {
         );
       });
     });
-    const columns = genericProps.type ? genericProps.type.fields.map((field) => ({
-          Header: field.name,
-          id: field.id,
-          accessor: d => d.id,
-          Cell: (props) => {
-            const value = genericProps[genericProps.type.id][props.index][props.column.id]
+    const columns = genericProps.type ? genericProps.type.fields.map(field => ({
+      Header: field.name,
+      id: field.id,
+      accessor: d => d.id,
+      Cell: (props) => {
+        const value = genericProps[genericProps.type.id][props.index][props.column.id]
             && (
               genericProps[genericProps.type.id][props.index][props.column.id].nome
               || genericProps[genericProps.type.id][props.index][props.column.id].value
               || genericProps[genericProps.type.id][props.index][props.column.id]
             );
-            return <div>{value}</div>;
-          },
-        })
-    ) : [];
+        return <div>{value}</div>;
+      },
+    })) : [];
     columns.push({
       Header: 'Editar',
       id: 'edit',

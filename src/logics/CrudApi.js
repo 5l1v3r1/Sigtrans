@@ -5,7 +5,9 @@ import {
   onChangeCrudInput,
   toggleATModal,
 } from '../actions/actionCreator';
-import { getUrl } from '../management/Management';
+import {getUrl} from '../management/Management';
+
+const today = new Date();
 
 export default class CrudApi {
   static onChangeInput(newValue, input) {
@@ -21,6 +23,8 @@ export default class CrudApi {
   }
 
   static addType(form, selectedType, pageSize, page) {
+    const newForm = form;
+    newForm.dataInsercao = today;
     return (dispatch) => {
       fetch(getUrl('api') + selectedType, {
         method: 'POST',

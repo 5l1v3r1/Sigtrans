@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {getUrl} from "../management/Management";
-import dataJson from './Ocorrencias';
+import dataJson from './agoravai';
 
 class TestPage extends Component {
 

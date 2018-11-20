@@ -2,15 +2,12 @@
  * Created by natal on 01/06/17.
  */
 
-import { List } from 'immutable';
-
-// import update from 'immutability-helper';
+import {List} from 'immutable';
 
 export function events(state = new List(), action) {
   if (action.type === 'LISTOPENEVENTS') {
-    const events = action.events;
-    const loading = !action.loading;
-    return Object.assign({}, state, { events, loading });
+    const {events, loading} = action;
+    return Object.assign({}, state, {events, loading: !loading});
   }
 
   if (action.type === 'LISTASYNC') {
@@ -45,7 +42,7 @@ export function events(state = new List(), action) {
 
   if (action.type === 'ONCHANGE') {
     if (action.subMenu) {
-      const selectedEvent = state.selectedEvent;
+      const {selectedEvent} = state;
       selectedEvent[action.subMenu][action.operator] = action.newValue;
       return Object.assign({}, state, { selectedEvent });
     }
@@ -53,14 +50,14 @@ export function events(state = new List(), action) {
   }
 
   if (action.type === 'ONCHANGEDROPDOWN') {
-    const selectedEvent = state.selectedEvent;
+    const {selectedEvent} = state;
     if (!selectedEvent[action.subMenu][action.operator]) selectedEvent[action.subMenu][action.operator] = {};
     selectedEvent[action.subMenu][action.operator].id = action.newValue;
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'NESTEDINPUTCHANGE') {
-    const selectedEvent = state.selectedEvent;
+    const {selectedEvent} = state;
     let item;
     // é possivel melhorar essa joça
     if (action.operator) {
@@ -87,40 +84,40 @@ export function events(state = new List(), action) {
   }
 
   if (action.type === 'ADDINVOLVED') {
-    const selectedEvent = state.selectedEvent;
+    const {selectedEvent} = state;
     selectedEvent.envolvidos.push({});
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'REMOVEINVOLVED') {
-    const selectedEvent = state.selectedEvent;
+    const {selectedEvent} = state;
     const id = state.selectedEvent.envolvidos.indexOf(action.involved);
     selectedEvent.envolvidos.splice(id, 1);
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'ADDVEHICLE') {
-    const selectedEvent = state.selectedEvent;
+    const {selectedEvent} = state;
     selectedEvent.veiculos.push({});
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'REMOVEVEHICLE') {
-    const selectedEvent = state.selectedEvent;
+    const {selectedEvent} = state;
     const id = selectedEvent.veiculos.indexOf(action.vehicle);
     selectedEvent.veiculos.splice(id, 1);
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'ADDVIA') {
-    const selectedEvent = state.selectedEvent;
+    const {selectedEvent} = state;
     if (!selectedEvent.dadosEstatisticos.vias) selectedEvent.dadosEstatisticos.vias = [];
     selectedEvent.dadosEstatisticos.vias.push({});
     return Object.assign({}, state, { selectedEvent });
   }
 
   if (action.type === 'REMOVEVIA') {
-    const selectedEvent = state.selectedEvent;
+    const {selectedEvent} = state;
     const id = selectedEvent.dadosEstatisticos.vias.indexOf(action.via);
     selectedEvent.dadosEstatisticos.vias.splice(id, 1);
     return Object.assign({}, state, { selectedEvent });
@@ -130,50 +127,61 @@ export function events(state = new List(), action) {
     const selectedEvent = {
       dadosGerais: {},
       dadosEstatisticos: {},
+      analiseObito: {},
       veiculos: [],
       envolvidos: [],
     };
     return Object.assign({}, state, { selectedEvent });
   }
 
-  // deathEvents
-  if (action.type === 'LISTDEATHEVENTS') {
-    const events = action.deathEvents;
-    const loading = !action.loading;
-    return Object.assign({}, state, { events, loading });
-  }
-
-  // if (action.type === 'LISTDEATHOPTIONS') {
-  //   const deathOptions = action.deathOptions;
-  //   return Object.assign({}, state, {deathOptions});
-  // }
-
-  // if (action.type === 'TOGGLEDEATHMODAL') {
-  //   const showModal = !state.showModal;
-  //   return Object.assign({}, state, {showModal});
-  // }
-
-  // if (action.type === 'SELECTDEATHEVENT') {
-  //   const selectedEvent = state.deathEvents.find(item => {
-  //     return item.id === action.id;
-  //   });
-  //   const selectedEventID = selectedEvent.id;
-  //   return Object.assign({}, state, {selectedEvent, selectedEventID});
-  // }
-
   if (action.type === 'HANDLEDEATHINPUT') {
     const { selectedEvent } = state;
     const deathAnalysis = selectedEvent.analiseObito ? selectedEvent.analiseObito : {};
-    if (!deathAnalysis[action.subMenu]) {
-      deathAnalysis[action.subMenu] = {};
+    const {
+      newValue, FCGAId, group, subGroup,
+    } = action;
+
+    if (!newValue || newValue <= 0) {
+      // if (operator === 'weight' || operator === 'amount'){
+      //   deathAnalysis[subMenu] = null;
+      // }
+      if (group === 'additionalInfos') {
+        deathAnalysis.additionalInfos[subGroup] = null;
+      }
     }
-    deathAnalysis[action.subMenu][action.operator] = action.newValue;
-    if ((!action.newValue || action.newValue <= 0)) {
-      if (action.operator === 'weight' || action.operator === 'amount') deathAnalysis[action.subMenu] = null;
-      if (action.subMenu === 'additionalInfos') deathAnalysis[action.subMenu][action.operator] = null;
+
+    const FatorCondutaGravidadeAno = {
+      [subGroup]: {
+        id: FCGAId,
+      },
+      valor: newValue,
+    };
+
+    if (!deathAnalysis[group]) {
+      deathAnalysis[group] = [];
+      deathAnalysis[group].push(FatorCondutaGravidadeAno);
+      selectedEvent.analiseObito = deathAnalysis;
+      return Object.assign({}, state, {selectedEvent});
     }
+
+    const index = deathAnalysis[group]
+      .findIndex(x => x[subGroup].id === FatorCondutaGravidadeAno[subGroup].id);
+
+    if (index === -1) {
+      deathAnalysis[group].push(FatorCondutaGravidadeAno);
+      selectedEvent.analiseObito = deathAnalysis;
+      return Object.assign({}, state, {selectedEvent});
+    }
+
+    deathAnalysis[group][index].valor = newValue;
+
     selectedEvent.analiseObito = deathAnalysis;
-    return Object.assign({}, state, { selectedEvent });
+    return Object.assign({}, state, {selectedEvent});
+  }
+
+  if (action.type === 'LISTFCGA') {
+    const FCGAList = action.list;
+    return Object.assign({}, state, {FCGAList});
   }
 
   return state;

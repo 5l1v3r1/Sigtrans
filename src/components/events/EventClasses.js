@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
-import {
-  Col, ControlLabel, Form, Grid, Row, Tab, Tabs,
-} from 'react-bootstrap';
+import React, {Component} from 'react';
+import {Col, ControlLabel, Form, Grid, Row, Tab, Tabs,} from 'react-bootstrap';
 import matchSorter from 'match-sorter';
 import Button from 'react-toolbox/lib/button/Button';
 import Dialog from 'react-toolbox/lib/dialog/Dialog';
 import ReactTable from 'react-table';
-import { Accordion, AccordionItem } from 'react-sanfona';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import {Accordion, AccordionItem} from 'react-sanfona';
+import {AsyncTypeahead} from 'react-bootstrap-typeahead';
 import Map from '../map/Map';
 import Select from '../custom/CustomSelect';
 import Input from '../custom/CustomInput';
@@ -21,7 +19,6 @@ export class EventsGrid extends Component {
   }
 
   updateEvent() {
-    this.props.handleToggleModal();
     this.props.updateEvent(this.props.selectedEvent);
   }
 
@@ -44,6 +41,13 @@ export class EventsGrid extends Component {
           defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
           getTdProps={() => ({ style: { textAlign: 'center' } })}
           columns={[
+            {
+              Header: 'RGO',
+              id: 'rgo',
+              accessor: d => d.dadosGerais.rgoBombeiros,
+              filterMethod: (filter, rows) => matchSorter(rows, filter.value, {keys: ['rgoBombeiros']}),
+              filterAll: true,
+            },
             {
               Header: 'Data',
               id: 'data',
@@ -116,6 +120,7 @@ export class EventsGrid extends Component {
             title="Ocorrência"
           >
             <EventsForm
+              onChangeDeathInput={this.props.onChangeDeathInput}
               selectedEvent={this.props.selectedEvent}
               selectedEventID={this.props.selectedEventID}
               options={this.props.options}
@@ -136,6 +141,7 @@ export class EventsGrid extends Component {
               removeVia={this.props.removeVia}
               fetchDependentOptions={this.props.fetchDependentOptions}
               deathAnalysis={this.props.deathAnalysis}
+              FCGAList={this.props.FCGAList}
             />
           </Dialog>
         </div>
@@ -230,11 +236,13 @@ export class EventsForm extends Component {
                   !!this.props.deathAnalysis ? (
                     <Tab eventKey={6} title="An. Óbito">
                       <DeathAnalysis
+                        FCGAList={this.props.FCGAList}
                         onChangeInput={this.props.onChangeDeathInput}
                         onChangeDeathInput={this.props.onChangeDeathInput}
                         selectedEvent={this.props.selectedEvent}
                         options={this.props.options}
                         deathAnalysis={this.props.deathAnalysis}
+                        analiseObito={this.props.selectedEvent.analiseObito}
                       />
                     </Tab>
                   ) : null
@@ -262,6 +270,13 @@ export class EventsForm extends Component {
               </Col>
             ) : undefined : undefined
             }
+          {/*<Row>*/}
+          {/*<Col md={12}>*/}
+          {/*<pre>*/}
+          {/*{JSON.stringify(this.props.selectedEvent, null, 4)}*/}
+          {/*</pre>*/}
+          {/*</Col>*/}
+          {/*</Row>*/}
         </Grid>
       </div>
     );
@@ -422,18 +437,6 @@ class General extends Component {
             </Row>
           </Col>
         ) : <div />}
-        <Row>
-          <Col md={12}>
-            <pre>
-              {JSON.stringify(this.props.data, null, 4)}
-            </pre>
-          </Col>
-          <Col md={12}>
-            <pre>
-              {JSON.stringify(this.props.municipios, null, 4)}
-            </pre>
-          </Col>
-        </Row>
       </Row>
     );
   }
