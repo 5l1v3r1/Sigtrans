@@ -7,8 +7,8 @@ import {
 import { getUrl } from '../management/Management';
 
 export default class DeathApi {
-  static onChangeInput(newValue, FCGAId, group, subGroup) {
-    return dispatch => dispatch(changeDeathInput(newValue, FCGAId, group, subGroup));
+  static onChangeInput(newValue, FCGAId, group, subGroup, input) {
+    return dispatch => dispatch(changeDeathInput(newValue, FCGAId, group, subGroup, input));
   }
 
   static getFCGA(year) {

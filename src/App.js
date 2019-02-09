@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import NavDrawer from 'react-toolbox/lib/layout/NavDrawer';
 import RouterLink from 'react-metismenu-router-link';
 // import Navigation from "react-toolbox/lib/navigation/Navigation";
@@ -10,7 +10,7 @@ import FontIcon from 'react-toolbox/lib/font_icon';
 import Sidebar from 'react-toolbox/lib/layout/Sidebar';
 import IconButton from 'react-toolbox/lib/button/IconButton';
 import MetisMenu from 'react-metismenu';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import NavegationApi from './logics/NavigationApi';
 
@@ -98,21 +98,25 @@ class App extends Component {
                 className="app-bar"
                 title="Sigtrans"
                 flat
-                leftIcon={<FontIcon className="md-24 md-dark"
-                                    value={this.props.menus.drawer ? 'chevron_left' : 'menu'}/>}
-                rightIcon={<FontIcon className="md-24 md-dark" value="account_circle"/>}
+                leftIcon={(
+                  <FontIcon
+                    className="md-24 md-dark"
+                    value={this.props.menus.drawer ? 'chevron_left' : 'menu'}
+                  />
+)}
+                rightIcon={<FontIcon className="md-24 md-dark" value="account_circle" />}
                 onLeftIconClick={this.props.toggleDrawer}
                 onRightIconClick={this.props.toggleSidebar}
               />
-              <div style={{flex: 1, overflowY: 'auto', padding: '1.8rem'}}>
+              <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem' }}>
                 <div className="content-interior">
                   {this.props.children}
                 </div>
               </div>
             </Panel>
             <Sidebar pinned={this.props.menus.sidebar} width={5}>
-              <div><IconButton icon="close" onClick={this.props.toggleSidebar}/></div>
-              <div style={{flex: 1}}>
+              <div><IconButton icon="close" onClick={this.props.toggleSidebar} /></div>
+              <div style={{ flex: 1 }}>
                 <p>Em construção</p>
               </div>
             </Sidebar>

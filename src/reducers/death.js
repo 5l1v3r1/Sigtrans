@@ -8,13 +8,13 @@ import { List } from 'immutable';
 
 export function death(state = new List(), action) {
   if (action.type === 'LISTDEATHEVENTS') {
-    const deathEvents = action.deathEvents;
+    const { deathEvents } = action;
     const loading = !action.loading;
     return Object.assign({}, state, { deathEvents, loading });
   }
 
   if (action.type === 'LISTDEATHOPTIONS') {
-    const deathOptions = action.deathOptions;
+    const { deathOptions } = action;
     return Object.assign({}, state, { deathOptions });
   }
 

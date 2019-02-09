@@ -91,9 +91,9 @@ export function listEventsOptions(options) {
 // export function selectDeathEvent(id) {
 //   return { type: 'SELECTDEATHEVENT', id };
 // }
-export function changeDeathInput(newValue, FCGAId, group, subGroup) {
+export function changeDeathInput(newValue, FCGAId, group, subGroup, input) {
   return {
-    type: 'HANDLEDEATHINPUT', newValue, FCGAId, group, subGroup,
+    type: 'HANDLEDEATHINPUT', newValue, FCGAId, group, subGroup, input,
   };
 }
 

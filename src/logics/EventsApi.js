@@ -63,8 +63,7 @@ export default class EventsApi {
   }
 
   static listOpenEvents(loading, type) {
-    let link = `${getUrl('api')}ocorrencias${type ? `/${type}` : ''}`;
-    link += '?pageSize=1000';
+    const link = `${getUrl('api')}ocorrencias${type ? `/${type}` : ''}?pageSize=1000`;
     return (dispatch) => {
       fetch(link)
         .then((response) => {

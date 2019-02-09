@@ -13,6 +13,8 @@ import Select from '../custom/CustomSelect';
 import Input from '../custom/CustomInput';
 import { DeathAnalysis } from '../death/Death';
 
+const zonaOptions = [{ id: 'Urbano', nome: 'Urbana' }, { id: 'Rural', nome: 'Rural' }];
+
 // make new js file for both grids
 export class EventsGrid extends Component {
   buttonToggleModal(id) {
@@ -257,13 +259,7 @@ export class EventsForm extends Component {
               <Col md={12}>
                 <Row>
                   <Col md={8}>
-                    Adicionado em:
-                    {' '}
-                    {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleDateString('pt-BR')}
-                    {' '}
-                    {' '}
-as
-                    {new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleTimeString('pt-BR')}
+                    {`Adicionado em: ${new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleDateString('pt-BR')} as ${new Date(this.props.selectedEvent.dadosGerais.dataHoraSigtrans).toLocaleTimeString('pt-BR')}`}
                   </Col>
                   <Col md={4}>
                     Ultima edição por:
@@ -474,7 +470,7 @@ class StatisticData extends Component {
                 id="zona"
                 name="zona"
                 onChange={e => this.props.onChangeInput(e.target.value, e.target.id, this.props.subMenu)}
-                options={[{ id: 'URBANA', nome: 'Urbana' }, { id: 'RURAL', nome: 'Rural' }]}
+                options={zonaOptions}
                 label="Zona"
               />
             </Col>
@@ -873,7 +869,7 @@ class Involved extends Component {
                         <Row>
                           <Col md={4}>
                             <Input
-                              value={involved.nome}
+                              value={involved.nome||''}
                               type="text"
                               id="nome"
                               onChange={e => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
@@ -882,7 +878,7 @@ class Involved extends Component {
                           </Col>
                           <Col md={3}>
                             <Input
-                              value={involved.dataNasc}
+                              value={involved.dataNasc||''}
                               type="date"
                               id="dataNasc"
                               onChange={e => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
@@ -891,7 +887,7 @@ class Involved extends Component {
                           </Col>
                           <Col md={2}>
                             <Input
-                              value={involved.idade}
+                              value={involved.idade||''}
                               type="number"
                               id="idade"
                               onChange={e => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
@@ -900,7 +896,7 @@ class Involved extends Component {
                           </Col>
                           <Col md={3}>
                             <Select
-                              value={involved.sexo}
+                              value={involved.sexo||''}
                               id="sexo"
                               name="sexo"
                               options={[{ id: 'M', nome: 'Masculino' }, { id: 'F', nome: 'Feminino' }, { id: 'ND', nome: 'Não Identificado' }]}
@@ -910,7 +906,7 @@ class Involved extends Component {
                           </Col>
                           <Col md={3}>
                             <Input
-                              value={involved.documento}
+                              value={involved.documento||''}
                               type="text"
                               id="documento"
                               onChange={e => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
@@ -919,7 +915,7 @@ class Involved extends Component {
                           </Col>
                           <Col md={3}>
                             <Input
-                              value={involved.orgaoExp}
+                              value={involved.orgaoExp||''}
                               type="text"
                               id="orgaoExp"
                               onChange={e => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
@@ -928,7 +924,7 @@ class Involved extends Component {
                           </Col>
                           <Col md={3}>
                             <Input
-                              value={involved.cpf}
+                              value={involved.cpf||''}
                               type="text"
                               id="cpf"
                               onChange={e => this.props.onNestedInputChange(this.props.subMenu, null, e.target.id, involved, e.target.value, false)}
@@ -959,7 +955,7 @@ class Involved extends Component {
                           </Col>
                           <Col md={4}>
                             <Input
-                              value={involved.nomeMae}
+                              value={involved.nomeMae||''}
                               type="text"
                               id="nomeMae"
                               label="Nome da mãe"
@@ -978,7 +974,7 @@ class Involved extends Component {
                           </Col>
                           <Col md={3}>
                             <Input
-                              value={involved.numero}
+                              value={involved.numero||''}
                               type="text"
                               id="numero"
                               label="Numero"
@@ -1009,7 +1005,7 @@ class Involved extends Component {
                           </Col>
                           <Col md={4}>
                             <Input
-                              value={involved.nacionalidade}
+                              value={involved.nacionalidade||''}
                               type="text"
                               id="nacionalidade"
                               label="Nacionalidade"
@@ -1018,7 +1014,7 @@ class Involved extends Component {
                           </Col>
                           <Col md={4}>
                             <Input
-                              value={involved.naturalidade}
+                              value={involved.naturalidade||''}
                               type="text"
                               id="naturalidade"
                               label="Naturalidade"
@@ -1059,7 +1055,7 @@ class Involved extends Component {
                           </Col>
                           <Col md={4}>
                             <Input
-                              value={involved.etilometria}
+                              value={involved.etilometria||''}
                               type="number"
                               step="0.01"
                               min="0"
@@ -1094,7 +1090,7 @@ class Involved extends Component {
                               </Col>
                               <Col md={4}>
                                 <Input
-                                  value={involved.aih}
+                                  value={involved.aih||''}
                                   type="number"
                                   id="aih"
                                   name="aih"

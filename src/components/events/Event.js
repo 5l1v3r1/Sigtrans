@@ -55,7 +55,7 @@ class OpenEvent extends Component {
 class DeathEvent extends Component {
   componentWillMount() {
     this.props.listEventsOptions();
-    this.props.listEvents(this.props.events.loading, 'obitos');
+    this.props.listEvents(this.props.events.loading, 'obitos/porlesao');
     this.props.getFCGA("2018")
   }
 
@@ -106,7 +106,7 @@ class DeathEvent extends Component {
 class Event extends Component {
   componentDidMount() {
     this.props.listEventsOptions();
-    this.props.listEvents(this.props.events.loading);
+    this.props.listEvents(this.props.events.loading, 'geral');
   }
 
   render() {
@@ -251,8 +251,8 @@ const mapDispatchToProps = dispatch => ({
   saveEvent: (event) => {
     dispatch(EventsApi.saveEvent(event));
   },
-  onChangeDeathInput: (newValue, FCGAId, group, subGroup) => {
-    dispatch(DeathApi.onChangeInput(newValue, FCGAId, group, subGroup));
+  onChangeDeathInput: (newValue, FCGAId, group, subGroup, input) => {
+    dispatch(DeathApi.onChangeInput(newValue, FCGAId, group, subGroup, input));
   },
   getFCGA: (year) => {
     dispatch(DeathApi.getFCGA(year));
